@@ -2,6 +2,8 @@
 #pragma once
 
 #include <cmath>
+#include <array>
+#include <chrono>
 
 //I didn't wanna make PLAYER_SIZE, ENEMY_SIZE, BULLET_SIZE, so I just defined the base size.
 constexpr unsigned char BASE_SIZE = 16;
@@ -42,8 +44,8 @@ constexpr unsigned short ENEMY_SHOOT_CHANCE = 4096;
 constexpr unsigned short ENEMY_SHOOT_CHANCE_INCREASE = 64;
 constexpr unsigned short ENEMY_SHOOT_CHANCE_MIN = 1024;
 constexpr unsigned short POWERUP_DURATION = 512;
-constexpr unsigned short SCREEN_HEIGHT = 180;
-constexpr unsigned short SCREEN_WIDTH = 320;
+constexpr unsigned short SCREEN_HEIGHT = 640;
+constexpr unsigned short SCREEN_WIDTH = 480;
 //The UFO will appear after this number of frames.
 constexpr unsigned short UFO_TIMER_MAX = 1024;
 constexpr unsigned short UFO_TIMER_MIN = 768;
