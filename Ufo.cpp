@@ -24,9 +24,9 @@ Ufo::Ufo(std::mt19937_64& i_random_engine) :
 
 bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectangle& i_bullet_hitbox)
 {
-	if (0 == dead)
+	if (!dead)
 	{
-		if (1 == CheckCollisionRecs(get_hitbox(), i_bullet_hitbox))
+		if (!CheckCollisionRecs(get_hitbox(), i_bullet_hitbox))
 		{
 			dead = 1;
 
@@ -107,7 +107,7 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 	}
 	else
 	{
-		if (0 == dead_animation_over)
+		if (!dead_animation_over)
 		{
 			dead_animation_over = explosion.update();
 		}

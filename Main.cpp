@@ -28,37 +28,32 @@ int main()
 	std::chrono::steady_clock::time_point previous_time;
 
 	//Setting a random seed to make sure the random engine will randomly generate random numbers.
-	//Random.
 	std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
-	//sf::Event event;
-
 	//sf::RenderWindow window(sf::VideoMode(SCREEN_RESIZE * SCREEN_WIDTH, SCREEN_RESIZE * SCREEN_HEIGHT), "Space Invaders", sf::Style::Close);
-	raylib::Window window(SCREEN_RESIZE * SCREEN_WIDTH, SCREEN_RESIZE * SCREEN_HEIGHT, 60, "Space Invaders");
+	raylib::Window window(/*SCREEN_RESIZE * */SCREEN_WIDTH, /*SCREEN_RESIZE * */SCREEN_HEIGHT, 60, "Space Invaders");
 
 	//Resizing the screen.
 	//window.setView(sf::View(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)));
 
 	Texture2D background_sprite;
-	Texture2D powerup_bar_sprite;
-
 	Texture2D background_texture;
 	background_texture = ::LoadTexture("Resources/Images/Background.png");
+	background_sprite = background_texture;
 
 	Texture2D font_texture;
 	font_texture = ::LoadTexture("Resources/Images/Font.png");
 
+	Texture2D powerup_bar_sprite;
 	Texture2D powerup_bar_texture;
 	powerup_bar_texture = ::LoadTexture("Resources/Images/PowerupBar.png");
+	powerup_bar_sprite = powerup_bar_texture;
 
 	EnemyManager enemy_manager;
 
 	Player player;
 
 	Ufo ufo(random_engine);
-
-	background_sprite = background_texture;
-	powerup_bar_sprite = powerup_bar_texture;
 
 	previous_time = std::chrono::steady_clock::now();
 
@@ -146,8 +141,7 @@ int main()
 			if (FRAME_DURATION > lag)
 			{
 				raylib::DrawSession ds(BLACK);
-
-				ds.DrawTexture(background_sprite, 0, 0, BLACK);
+				ds.DrawTexture(background_texture, 0, 0, BLACK);
 
 				//When the player dies, we won't show anything but the player.
 				if (0 == player.get_dead())
@@ -164,12 +158,12 @@ int main()
 						//powerup_bar_sprite.setTextureRect(Rectangle(0, 0, powerup_bar_texture.getSize().x, BASE_SIZE));
 						//window.draw(powerup_bar_sprite);
 
-						Vector2 dest{ SCREEN_WIDTH - powerup_bar_texture.width - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE };
-						Rectangle source{0, 0, powerup_bar_texture.width, BASE_SIZE };
+						Vector2 dest{ SCREEN_WIDTH - powerup_bar_sprite.width - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE };
+						Rectangle source{0, 0, powerup_bar_sprite.width, BASE_SIZE };
 						ds.DrawTexture(powerup_bar_sprite, source, dest, WHITE);
 
-						dest = Vector2(SCREEN_WIDTH - powerup_bar_texture.width - 0.125f * BASE_SIZE, 0.25f * BASE_SIZE);
-						source = Rectangle(0.125f * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(powerup_bar_texture.width - 0.25f * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE);
+						dest = Vector2(SCREEN_WIDTH - powerup_bar_sprite.width - 0.125f * BASE_SIZE, 0.25f * BASE_SIZE);
+						source = Rectangle(0.125f * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(powerup_bar_sprite.width - 0.25f * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE);
 
 						Color powerupbar = WHITE;
 						switch (player.get_current_power())
@@ -177,19 +171,16 @@ int main()
 							case 1:
 							{
 								powerupbar = Color(0, 146, 255);
-
 								break;
 							}
 							case 2:
 							{
 								powerupbar = Color(255, 0, 0);
-
 								break;
 							}
 							case 3:
 							{
 								powerupbar = Color(255, 219, 0);
-
 								break;
 							}
 							case 4:
@@ -207,12 +198,12 @@ int main()
 
 				draw_text(0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level), ds, font_texture);
 
-				if (1 == game_over)
+				if (game_over)
 				{
 					//I was too lazy to add center alignment, so I just wrote numbers instead.
 					draw_text(0.5f * (SCREEN_WIDTH - 5 * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Game over!", ds, font_texture);
 				}
-				else if (1 == next_level)
+				else if (next_level)
 				{
 					draw_text(0.5f * (SCREEN_WIDTH - 5.5f * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Next level!", ds, font_texture);
 				}

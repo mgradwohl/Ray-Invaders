@@ -15,6 +15,9 @@ void draw_text(short i_x, short i_y, const std::string& i_text, raylib::DrawSess
 
 	Texture2D character_sprite(i_font_texture);
 
+	Rectangle source{ 0,0, character_width, character_height };
+	Vector2 dest{ character_x, character_y };
+
 	for (std::string::const_iterator a = i_text.begin(); a != i_text.end(); a++)
 	{
 		if ('\n' == *a)
@@ -30,9 +33,12 @@ void draw_text(short i_x, short i_y, const std::string& i_text, raylib::DrawSess
 		//character_x += character_width;
 		//i_window.draw(character_sprite);
 
-		Rectangle source{ character_width * (*a - 32), 0, character_width, character_height };
-		Vector2 dest{ character_x, character_y};
-		
+		dest.x = character_x;
+		dest.y = character_y;
+		source.x = character_width * (*a - 32);
+		source.y = 0;
+		character_x += character_width;
+
 		ds.DrawTexture(character_sprite, source, dest, WHITE);
 	}
 }
