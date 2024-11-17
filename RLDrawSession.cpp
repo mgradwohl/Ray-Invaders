@@ -6,21 +6,21 @@
 #include "RLDrawSession.h"
 namespace raylib
 {
-    DrawSession::DrawSession(Color clearColor)
+    DrawSession::DrawSession(RenderTexture2D& backbuffer, Color clearColor)
     {
-        BeginDrawing();
+        BeginTextureMode(backbuffer);
 
         ClearBackground(clearColor);
     }
 
-    DrawSession::DrawSession()
+    DrawSession::DrawSession(RenderTexture2D& backbuffer)
     {
-        BeginDrawing();
+        BeginTextureMode(backbuffer);
     }
 
     DrawSession::~DrawSession()
     {
-        EndDrawing();
+        EndTextureMode();
     }
 
     void DrawSession::DrawRectangle(int x, int y, int width, int height, Color color)

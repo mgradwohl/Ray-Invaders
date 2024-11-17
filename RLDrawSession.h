@@ -7,8 +7,8 @@ namespace raylib
 	class DrawSession
 	{
 	public:
-		DrawSession();
-		DrawSession(Color clearColor);
+		DrawSession(RenderTexture2D& backbuffer);
+		DrawSession(RenderTexture2D& backbuffer, Color clearColor);
 
 		~DrawSession();
 
@@ -24,6 +24,5 @@ namespace raylib
 		void DrawTexture(Texture2D texture, int x, int y, Color color);
 		void DrawTexture(Texture2D texture, float x, float y, float width, float height, Vector2 pos, Color color);
 		void DrawTexture(Texture2D texture, Rectangle source, Vector2 pos, Color color);
-
 	};
 } // namespace raylib

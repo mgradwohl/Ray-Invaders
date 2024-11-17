@@ -31,7 +31,7 @@ int main()
 	std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
 	//sf::RenderWindow window(sf::VideoMode(SCREEN_RESIZE * SCREEN_WIDTH, SCREEN_RESIZE * SCREEN_HEIGHT), "Space Invaders", sf::Style::Close);
-	raylib::Window window(320, 180, 60, "Space Invaders");
+	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
 
 	Texture2D background_sprite;
 	background_sprite = ::LoadTexture("Resources/Images/Background.png");
@@ -135,34 +135,37 @@ int main()
 
 			if (FRAME_DURATION > lag)
 			{
-				raylib::DrawSession ds(BLACK);
-				ds.DrawTexture(background_sprite, 0, 0, BLACK);
+				RenderTexture2D backbuffer = ::LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-				//When the player dies, we won't show anything but the player.
-				if (0 == player.get_dead())
 				{
-					enemy_manager.draw(ds);
+					raylib::DrawSession ds(backbuffer, BLACK);
+					ds.DrawTexture(background_sprite, 0, 0, BLACK);
 
-					ufo.draw(ds);
-
-					//So much code just to show the duration of the powerup (or power-DOWN!).
-					if (0 < player.get_current_power())
+					//When the player dies, we won't show anything but the player.
+					if (0 == player.get_dead())
 					{
-						//powerup_bar_sprite.setColor(Color(255, 255, 255));
-						//powerup_bar_sprite.setPosition(SCREEN_WIDTH - powerup_bar_texture.getSize().x - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE);
-						//powerup_bar_sprite.setTextureRect(Rectangle(0, 0, powerup_bar_texture.getSize().x, BASE_SIZE));
-						//window.draw(powerup_bar_sprite);
+						enemy_manager.draw(ds);
 
-						Vector2 dest{ SCREEN_WIDTH - powerup_bar_sprite.width - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE };
-						Rectangle source{0, 0, powerup_bar_sprite.width, BASE_SIZE };
-						ds.DrawTexture(powerup_bar_sprite, source, dest, WHITE);
+						ufo.draw(ds);
 
-						dest = Vector2(SCREEN_WIDTH - powerup_bar_sprite.width - 0.125f * BASE_SIZE, 0.25f * BASE_SIZE);
-						source = Rectangle(0.125f * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(powerup_bar_sprite.width - 0.25f * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE);
-
-						Color powerupbar = WHITE;
-						switch (player.get_current_power())
+						//So much code just to show the duration of the powerup (or power-DOWN!).
+						if (0 < player.get_current_power())
 						{
+							//powerup_bar_sprite.setColor(Color(255, 255, 255));
+							//powerup_bar_sprite.setPosition(SCREEN_WIDTH - powerup_bar_texture.getSize().x - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE);
+							//powerup_bar_sprite.setTextureRect(Rectangle(0, 0, powerup_bar_texture.getSize().x, BASE_SIZE));
+							//window.draw(powerup_bar_sprite);
+
+							Vector2 dest{ SCREEN_WIDTH - powerup_bar_sprite.width - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE };
+							Rectangle source{ 0, 0, powerup_bar_sprite.width, BASE_SIZE };
+							ds.DrawTexture(powerup_bar_sprite, source, dest, WHITE);
+
+							dest = Vector2(SCREEN_WIDTH - powerup_bar_sprite.width - 0.125f * BASE_SIZE, 0.25f * BASE_SIZE);
+							source = Rectangle(0.125f * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(powerup_bar_sprite.width - 0.25f * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE);
+
+							Color powerupbar = WHITE;
+							switch (player.get_current_power())
+							{
 							case 1:
 							{
 								powerupbar = Color(0, 146, 255);
@@ -182,25 +185,50 @@ int main()
 							{
 								powerupbar = Color(219, 0, 255);
 							}
-						}
+							}
 
-						//window.draw(powerup_bar_sprite);
-						ds.DrawTexture(powerup_bar_sprite, source, dest, powerupbar);
+							//window.draw(powerup_bar_sprite);
+							ds.DrawTexture(powerup_bar_sprite, source, dest, powerupbar);
+						}
+					}
+
+					player.draw(ds);
+
+					draw_text(0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level), ds, font_texture);
+
+					if (game_over)
+					{
+						//I was too lazy to add center alignment, so I just wrote numbers instead.
+						draw_text(0.5f * (SCREEN_WIDTH - 5 * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Game over!", ds, font_texture);
+					}
+					else if (next_level)
+					{
+						draw_text(0.5f * (SCREEN_WIDTH - 5.5f * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Next level!", ds, font_texture);
 					}
 				}
-
-				player.draw(ds);
-
-				draw_text(0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level), ds, font_texture);
-
-				if (game_over)
 				{
-					//I was too lazy to add center alignment, so I just wrote numbers instead.
-					draw_text(0.5f * (SCREEN_WIDTH - 5 * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Game over!", ds, font_texture);
-				}
-				else if (next_level)
-				{
-					draw_text(0.5f * (SCREEN_WIDTH - 5.5f * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Next level!", ds, font_texture);
+					// draw the backbuffer from DrawSession to the Window
+					{
+						// flip it
+						Vector2 pos{ 0,0 };
+
+						RenderTexture2D screen = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
+						BeginTextureMode(screen);
+							Rectangle source = { 0, 0, backbuffer.texture.width, backbuffer.texture.height };
+							DrawTextureRec(backbuffer.texture, source, pos, WHITE);
+						EndTextureMode();
+						UnloadRenderTexture(backbuffer);
+
+						BeginDrawing();
+							//Rectangle dest = { 0, 0, source.width * SCREEN_RESIZE, source.height * SCREEN_RESIZE };
+							//Vector2 pos{ -source.width * SCREEN_RESIZE,0 };
+							//Vector2 pos{ 0,-source.height * SCREEN_RESIZE };
+							//DrawTexturePro(backbuffer.texture, source, dest, pos, 0.0f, WHITE);
+							//DrawTextureRec(backbuffer.texture, source, (Vector2) { 0, 0 }, WHITE);
+							DrawTextureEx(screen.texture, pos, 0.0f, SCREEN_RESIZE, WHITE);  // Draw a Texture2D with extended parameters
+						EndDrawing();
+						UnloadRenderTexture(screen);
+					}
 				}
 			}
 		}
