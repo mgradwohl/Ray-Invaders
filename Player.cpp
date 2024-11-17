@@ -64,6 +64,7 @@ void Player::draw(raylib::DrawSession& ds)
 
 		Vector2 dest{ x, y};
 		Rectangle source{ BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE };
+		ds.DrawTexture(sprite, source, dest, RAYWHITE);
 
 		for (const Bullet& bullet : bullets)
 		{
@@ -75,7 +76,6 @@ void Player::draw(raylib::DrawSession& ds)
 			ds.DrawTexture(bullet_sprite, source, dest, BLUE);
 		}
 		//i_window.draw(sprite);
-		ds.DrawTexture(sprite, source, dest, RAYWHITE);
 
 		if (0 == shield_animation_over)
 		{
