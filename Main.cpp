@@ -34,7 +34,7 @@ int main()
 	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
 
 	Texture2D background_sprite;
-	background_sprite = ::LoadTexture("Resources/Images/Background.png");
+	background_sprite = ::LoadTexture("Resources/Images/Background2.png");
 
 	Texture2D font_texture;
 	font_texture = ::LoadTexture("Resources/Images/Font.png");
@@ -139,7 +139,7 @@ int main()
 
 				{
 					raylib::DrawSession ds(backbuffer, BLACK);
-					ds.DrawTexture(background_sprite, 0, 0, BLACK);
+					ds.DrawTexture(background_sprite, 0, 0, WHITE);
 
 					//When the player dies, we won't show anything but the player.
 					if (0 == player.get_dead())

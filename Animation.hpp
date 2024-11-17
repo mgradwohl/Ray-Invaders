@@ -17,7 +17,6 @@ class Animation
 	unsigned short total_frames;
 
 	Texture2D sprite;
-	Texture2D texture;
 public:
 	Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location);
 

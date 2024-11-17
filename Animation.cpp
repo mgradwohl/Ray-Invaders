@@ -10,10 +10,9 @@ Animation::Animation(unsigned short i_animation_speed, unsigned short i_frame_wi
 	current_frame(0),
 	frame_width(i_frame_width)
 {
-	texture = ::LoadTexture(i_texture_location.c_str());
-	sprite = texture;
+	sprite = ::LoadTexture(i_texture_location.c_str());
 
-	total_frames = texture.width / frame_width;
+	total_frames = sprite.width / frame_width;
 }
 
 //This is for the enemies.
@@ -63,8 +62,8 @@ void Animation::draw(short i_x, short i_y, raylib::DrawSession& ds, const Color&
 	//i_window.draw(sprite);
 
 	Vector2 dest{ i_x, i_y };
-	Rectangle source{current_frame * frame_width, 0.0f, frame_width, texture.height };
-	ds.DrawTexture(texture, source, dest, i_color);
+	Rectangle source{current_frame * frame_width, 0.0f, frame_width, sprite.height };
+	ds.DrawTexture(sprite, source, dest, i_color);
 }
 
 void Animation::reset()
