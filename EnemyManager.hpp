@@ -24,7 +24,7 @@ public:
 
 	bool reached_player(unsigned short i_player_y) const;
 
-	void draw(raylib::Window& i_window);
+	void draw(raylib::DrawSession& ds);
 	void reset(unsigned short i_level);
 	void update(std::mt19937_64& i_random_engine);
 

@@ -37,7 +37,7 @@ public:
 	unsigned short get_y() const;
 
 	void die();
-	void draw(raylib::Window& i_window);
+	void draw(raylib::DrawSession& ds);
 	void reset();
 	void update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_enemy_bullets, std::vector<Enemy>& i_enemies, Ufo& i_ufo);
 

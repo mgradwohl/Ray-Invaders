@@ -4,6 +4,7 @@
 #include <raylib.h>
 
 #include "RLWindow.h"
+#include "RLDrawSession.h"
 
 #include "Animation.hpp"
 #include "Global.hpp"
@@ -16,8 +17,8 @@ Player::Player() :
 {
 	reset();
 
-	bullet_texture = LoadTexture("Resources/Images/PlayerBullet.png");
-	texture = LoadTexture("Resources/Images/Player.png");
+	bullet_texture = ::LoadTexture("Resources/Images/PlayerBullet.png");
+	texture = ::LoadTexture("Resources/Images/Player.png");
 
 	bullet_sprite = bullet_texture;
 	sprite = texture;
@@ -54,40 +55,37 @@ void Player::die()
 	dead = 1;
 }
 
-void Player::draw(raylib::Window& i_window)
+void Player::draw(raylib::DrawSession& ds)
 {
 	if (0 == dead)
 	{
 		//sprite.setPosition(x, y);
 		//sprite.setTextureRect(sf::IntRect(BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE));
 
+		Vector2 dest{ x, y};
 		Rectangle source{ BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE };
-		Rectangle dest{ x, y, BASE_SIZE, BASE_SIZE};
-		Vector2 origin{ 0.0f, 0.0f };
-
 
 		for (const Bullet& bullet : bullets)
 		{
 			//bullet_sprite.setPosition(bullet.x, bullet.y);
 			//i_window.draw(bullet_sprite);
 
-			source.x = bullet.x;
-			source.y = bullet.y;
-			DrawTexturePro(bullet_sprite, source, dest, origin, 0.0f, BLUE);
+			dest.x = bullet.x;
+			dest.y = bullet.y;
+			ds.DrawTexture(bullet_sprite, source, dest, BLUE);
 		}
-
 		//i_window.draw(sprite);
-		DrawTexturePro(bullet_sprite, source, dest, origin, 0.0f, BLUE);
+		ds.DrawTexture(bullet_sprite, source, dest, BLUE);
 
 		if (0 == shield_animation_over)
 		{
 			//Once we get hit while having a shield, the shield will be destroyed. We'll show a blue explosion.
-			explosion.draw(x, y, i_window, Color(0, 109, 255));
+			explosion.draw(x, y, ds, Color(0, 109, 255));
 		}
 	}
 	else if (0 == dead_animation_over)
 	{
-		explosion.draw(x, y, i_window, Color(255, 36, 0));
+		explosion.draw(x, y, ds, Color(255, 36, 0));
 	}
 }
 

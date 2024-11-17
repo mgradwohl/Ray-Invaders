@@ -2,6 +2,7 @@
 #include <string>
 #include <raylib.h>
 #include "RLWindow.h"
+#include "RLDrawSession.h"
 
 class Animation
 {
@@ -24,6 +25,6 @@ public:
 	bool change_current_frame();
 	bool update();
 
-	void draw(short i_x, short i_y, raylib::Window& i_window, const Color& i_color = WHITE);
+	void draw(short i_x, short i_y, raylib::DrawSession& ds, const Color& i_color = WHITE);
 	void reset();
 };

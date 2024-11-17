@@ -57,21 +57,21 @@ unsigned char Ufo::check_powerup_collision(const Rectangle& i_player_hitbox)
 	return 0;
 }
 
-void Ufo::draw(raylib::Window& i_window)
+void Ufo::draw(raylib::DrawSession& ds)
 {
 	if (0 == dead)
 	{
-		animation.draw(x, y, i_window);
+		animation.draw(x, y, ds);
 	}
 
 	if (0 == dead_animation_over)
 	{
-		explosion.draw(explosion_x, y - 0.5f * BASE_SIZE, i_window, Color(255, 36, 0));
+		explosion.draw(explosion_x, y - 0.5f * BASE_SIZE, ds, Color(255, 36, 0));
 	}
 
 	for (Powerup& powerup : powerups)
 	{
-		powerup_animations[powerup.type].draw(powerup.x, powerup.y, i_window);
+		powerup_animations[powerup.type].draw(powerup.x, powerup.y, ds);
 	}
 }
 

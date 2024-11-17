@@ -1,5 +1,6 @@
 //I didn't use the constants from "Global.hpp" to make this class more universal.
 #include <raylib.h>
+#include "RLDrawSession.h"
 
 #include "Animation.hpp"
 
@@ -9,7 +10,7 @@ Animation::Animation(unsigned short i_animation_speed, unsigned short i_frame_wi
 	current_frame(0),
 	frame_width(i_frame_width)
 {
-	texture = LoadTexture(i_texture_location.c_str());
+	texture = ::LoadTexture(i_texture_location.c_str());
 
 	total_frames = texture.width / frame_width;
 }
@@ -51,7 +52,7 @@ bool Animation::update()
 	return output;
 }
 
-void Animation::draw(short i_x, short i_y, raylib::Window& i_window, const Color& i_color)
+void Animation::draw(short i_x, short i_y, raylib::DrawSession& ds, const Color& i_color)
 {
 	//I added coloring for the explosions.
 	//sprite.setColor(i_color);
@@ -60,11 +61,9 @@ void Animation::draw(short i_x, short i_y, raylib::Window& i_window, const Color
 	//sprite.setTextureRect(sf::IntRect(current_frame * frame_width, 0, frame_width, texture.getSize().y));
 	//i_window.draw(sprite);
 
-//
+	Vector2 dest{ i_x, i_y };
 	Rectangle source{current_frame * frame_width, 0.0f, frame_width, sprite.height };
-	Rectangle dest{i_x, i_y, sprite.height, sprite.height };
-	Vector2 origin{ 0.0f, 0.0f };
-	DrawTexturePro(sprite, source, dest, origin, 0.0f, i_color);
+	ds.DrawTexture(sprite, source, dest, i_color);
 }
 
 void Animation::reset()

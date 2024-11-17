@@ -1,4 +1,5 @@
 #pragma once
+#include "RLDrawSession.h"
 
 class Ufo
 {
@@ -29,7 +30,7 @@ public:
 
 	unsigned char check_powerup_collision(const Rectangle& i_player_hitbox);
 
-	void draw(raylib::Window& i_window);
+	void draw(raylib::DrawSession& ds);
 	void reset(bool i_dead, std::mt19937_64& i_random_engine);
 	void update(std::mt19937_64& i_random_engine);
 

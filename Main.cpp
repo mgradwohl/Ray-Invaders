@@ -43,13 +43,13 @@ int main()
 	Texture2D powerup_bar_sprite;
 
 	Texture2D background_texture;
-	background_texture = LoadTexture("Resources/Images/Background.png");
+	background_texture = ::LoadTexture("Resources/Images/Background.png");
 
 	Texture2D font_texture;
-	font_texture = LoadTexture("Resources/Images/Font.png");
+	font_texture = ::LoadTexture("Resources/Images/Font.png");
 
 	Texture2D powerup_bar_texture;
-	powerup_bar_texture = LoadTexture("Resources/Images/PowerupBar.png");
+	powerup_bar_texture = ::LoadTexture("Resources/Images/PowerupBar.png");
 
 	EnemyManager enemy_manager;
 
@@ -145,61 +145,65 @@ int main()
 
 			if (FRAME_DURATION > lag)
 			{
-				window.clear();
-				
-				window.draw(background_sprite);
+				raylib::DrawSession ds;
+
+				ds.DrawTexture(background_sprite, 0, 0, WHITE);
 
 				//When the player dies, we won't show anything but the player.
 				if (0 == player.get_dead())
 				{
-					enemy_manager.draw(window);
+					enemy_manager.draw(ds);
 
-					ufo.draw(window);
+					ufo.draw(ds);
 
 					//So much code just to show the duration of the powerup (or power-DOWN!).
 					if (0 < player.get_current_power())
 					{
-						powerup_bar_sprite.setColor(Color(255, 255, 255));
-						powerup_bar_sprite.setPosition(SCREEN_WIDTH - powerup_bar_texture.getSize().x - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE);
-						powerup_bar_sprite.setTextureRect(Rectangle(0, 0, powerup_bar_texture.getSize().x, BASE_SIZE));
+						//powerup_bar_sprite.setColor(Color(255, 255, 255));
+						//powerup_bar_sprite.setPosition(SCREEN_WIDTH - powerup_bar_texture.getSize().x - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE);
+						//powerup_bar_sprite.setTextureRect(Rectangle(0, 0, powerup_bar_texture.getSize().x, BASE_SIZE));
+						//window.draw(powerup_bar_sprite);
 
-						window.draw(powerup_bar_sprite);
+						Vector2 dest{ SCREEN_WIDTH - powerup_bar_texture.width - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE };
+						Rectangle source{0, 0, powerup_bar_texture.width, BASE_SIZE };
+						ds.DrawTexture(powerup_bar_sprite, source, dest, WHITE);
 
-						powerup_bar_sprite.setPosition(SCREEN_WIDTH - powerup_bar_texture.getSize().x - 0.125f * BASE_SIZE, 0.25f * BASE_SIZE);
-						//Calculating the length of the bar.
-						powerup_bar_sprite.setTextureRect(Rectangle(0.125f * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(powerup_bar_texture.getSize().x - 0.25f * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE));
+						dest = Vector2(SCREEN_WIDTH - powerup_bar_texture.width - 0.125f * BASE_SIZE, 0.25f * BASE_SIZE);
+						source = Rectangle(0.125f * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(powerup_bar_texture.width - 0.25f * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE);
 
+						Color powerupbar = WHITE;
 						switch (player.get_current_power())
 						{
 							case 1:
 							{
-								powerup_bar_sprite.setColor(Color(0, 146, 255));
+								powerupbar = Color(0, 146, 255);
 
 								break;
 							}
 							case 2:
 							{
-								powerup_bar_sprite.setColor(Color(255, 0, 0));
+								powerupbar = Color(255, 0, 0);
 
 								break;
 							}
 							case 3:
 							{
-								powerup_bar_sprite.setColor(Color(255, 219, 0));
+								powerupbar = Color(255, 219, 0);
 
 								break;
 							}
 							case 4:
 							{
-								powerup_bar_sprite.setColor(Color(219, 0, 255));
+								powerupbar = Color(219, 0, 255);
 							}
 						}
 
-						window.draw(powerup_bar_sprite);
+						//window.draw(powerup_bar_sprite);
+						ds.DrawTexture(powerup_bar_sprite, source, dest, powerupbar);
 					}
 				}
 
-				player.draw(window);
+				player.draw(ds);
 
 				draw_text(0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level), window, font_texture);
 
@@ -212,8 +216,6 @@ int main()
 				{
 					draw_text(0.5f * (SCREEN_WIDTH - 5.5f * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Next level!", window, font_texture);
 				}
-
-				window.display();
 			}
 		}
 	}

@@ -3,6 +3,7 @@
 #include <random>
 #include <raylib.h>
 #include "RLWindow.h"
+#include "RLDrawSession.h"
 
 #include "Animation.hpp"
 #include "Global.hpp"
@@ -15,7 +16,7 @@ EnemyManager::EnemyManager() :
 	//We have a function that sets everything to the initial state, so why not use it?
 	reset(0);
 
-	enemy_bullet_texture = LoadTexture("Resources/Images/EnemyBullet.png");
+	enemy_bullet_texture = ::LoadTexture("Resources/Images/EnemyBullet.png");
 	enemy_bullet_sprite = enemy_bullet_texture;
 
 	for (unsigned char a = 0; a < ENEMY_TYPES; a++)
@@ -38,7 +39,7 @@ bool EnemyManager::reached_player(unsigned short i_player_y) const
 	return 0;
 }
 
-void EnemyManager::draw(raylib::Window& i_window)
+void EnemyManager::draw(raylib::DrawSession& ds)
 {
 	for (const Bullet& bullet : enemy_bullets)
 	{
@@ -50,11 +51,9 @@ void EnemyManager::draw(raylib::Window& i_window)
 
 			//i_window.draw(enemy_bullet_sprite);
 
-			Rectangle dest{ bullet.previous_x[a], bullet.previous_y[a], BASE_SIZE, BASE_SIZE};
+			Vector2 dest{ bullet.previous_x[a], bullet.previous_y[a]};
 			Rectangle source{ BASE_SIZE * a, 0, BASE_SIZE, BASE_SIZE };
-			Vector2 origin{ 0.0f, 0.0f };
-			DrawTexturePro(enemy_bullet_sprite, source, dest, origin, 0.0f, RED);
-
+			ds.DrawTexture(enemy_bullet_sprite, source, dest, RED);
 		}
 
 		//Drawing the bullet itself.
@@ -63,11 +62,10 @@ void EnemyManager::draw(raylib::Window& i_window)
 
 		//i_window.draw(enemy_bullet_sprite);
 
-		Rectangle dest{ bullet.x, bullet.y, BASE_SIZE, BASE_SIZE };
+		Vector2 dest{ bullet.x, bullet.y};
 		Rectangle source{ BASE_SIZE * bullet.previous_x.size(), 0, BASE_SIZE, BASE_SIZE };
 		Vector2 origin{ 0.0f, 0.0f };
-		DrawTexturePro(enemy_bullet_sprite, source, dest, origin, 0.0f, RED);
-
+		ds.DrawTexture(enemy_bullet_sprite, source, dest, RED);
 	}
 
 	for (Enemy& enemy : enemies)
@@ -99,7 +97,7 @@ void EnemyManager::draw(raylib::Window& i_window)
 			}
 		}
 
-		enemy_animations[enemy.get_type()].draw(enemy.get_x(), enemy.get_y(), i_window, enemy_color);
+		enemy_animations[enemy.get_type()].draw(enemy.get_x(), enemy.get_y(), ds, enemy_color);
 	}
 }
 
