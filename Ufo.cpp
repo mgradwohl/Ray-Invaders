@@ -45,7 +45,7 @@ unsigned char Ufo::check_powerup_collision(const Rectangle& i_player_hitbox)
 {
 	for (Powerup& powerup : powerups)
 	{
-		if (0 == powerup.dead && 1 == CheckCollisionRecs(powerup.get_hitbox(), i_player_hitbox))
+		if (!powerup.dead && CheckCollisionRecs(powerup.get_hitbox(), i_player_hitbox))
 		{
 			powerup.dead = 1;
 
@@ -59,12 +59,12 @@ unsigned char Ufo::check_powerup_collision(const Rectangle& i_player_hitbox)
 
 void Ufo::draw(raylib::DrawSession& ds)
 {
-	if (0 == dead)
+	if (!dead)
 	{
 		animation.draw(x, y, ds);
 	}
 
-	if (0 == dead_animation_over)
+	if (!dead_animation_over)
 	{
 		explosion.draw(explosion_x, y - 0.5f * BASE_SIZE, ds, Color(255, 36, 0));
 	}

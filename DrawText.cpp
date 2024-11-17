@@ -1,6 +1,6 @@
+#include <string>
 #include <raylib.h>
 #include "RLWindow.h"
-#include <string>
 #include "DrawText.hpp"
 #include "RLDrawSession.h"
 

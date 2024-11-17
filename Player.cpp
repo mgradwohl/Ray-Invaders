@@ -57,7 +57,7 @@ void Player::die()
 
 void Player::draw(raylib::DrawSession& ds)
 {
-	if (0 == dead)
+	if (!dead)
 	{
 		//sprite.setPosition(x, y);
 		//sprite.setTextureRect(sf::IntRect(BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE));
@@ -75,7 +75,7 @@ void Player::draw(raylib::DrawSession& ds)
 			ds.DrawTexture(bullet_sprite, source, dest, BLUE);
 		}
 		//i_window.draw(sprite);
-		ds.DrawTexture(bullet_sprite, source, dest, BLUE);
+		ds.DrawTexture(sprite, source, dest, RAYWHITE);
 
 		if (0 == shield_animation_over)
 		{

@@ -145,9 +145,9 @@ int main()
 
 			if (FRAME_DURATION > lag)
 			{
-				raylib::DrawSession ds;
+				raylib::DrawSession ds(BLACK);
 
-				ds.DrawTexture(background_sprite, 0, 0, WHITE);
+				ds.DrawTexture(background_sprite, 0, 0, BLACK);
 
 				//When the player dies, we won't show anything but the player.
 				if (0 == player.get_dead())

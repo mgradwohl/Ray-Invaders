@@ -53,7 +53,7 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 
 			Vector2 dest{ bullet.previous_x[a], bullet.previous_y[a]};
 			Rectangle source{ BASE_SIZE * a, 0, BASE_SIZE, BASE_SIZE };
-			ds.DrawTexture(enemy_bullet_sprite, source, dest, RED);
+			ds.DrawTexture(enemy_bullet_sprite, source, dest, GRAY);
 		}
 
 		//Drawing the bullet itself.
@@ -64,7 +64,6 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 
 		Vector2 dest{ bullet.x, bullet.y};
 		Rectangle source{ BASE_SIZE * bullet.previous_x.size(), 0, BASE_SIZE, BASE_SIZE };
-		Vector2 origin{ 0.0f, 0.0f };
 		ds.DrawTexture(enemy_bullet_sprite, source, dest, RED);
 	}
 
