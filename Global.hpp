@@ -45,7 +45,7 @@ constexpr unsigned short ENEMY_SHOOT_CHANCE_INCREASE = 64;
 constexpr unsigned short ENEMY_SHOOT_CHANCE_MIN = 1024;
 constexpr unsigned short POWERUP_DURATION = 512;
 constexpr unsigned short SCREEN_HEIGHT = 320;
-constexpr unsigned short SCREEN_WIDTH = 240;
+constexpr unsigned short SCREEN_WIDTH = 320;
 //The UFO will appear after this number of frames.
 constexpr unsigned short UFO_TIMER_MAX = 1024;
 constexpr unsigned short UFO_TIMER_MIN = 768;

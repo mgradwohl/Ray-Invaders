@@ -31,15 +31,10 @@ int main()
 	std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
 	//sf::RenderWindow window(sf::VideoMode(SCREEN_RESIZE * SCREEN_WIDTH, SCREEN_RESIZE * SCREEN_HEIGHT), "Space Invaders", sf::Style::Close);
-	raylib::Window window(/*SCREEN_RESIZE * */SCREEN_WIDTH, /*SCREEN_RESIZE * */SCREEN_HEIGHT, 60, "Space Invaders");
-
-	//Resizing the screen.
-	//window.setView(sf::View(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)));
+	raylib::Window window(320, 180, 60, "Space Invaders");
 
 	Texture2D background_sprite;
-	Texture2D background_texture;
-	background_texture = ::LoadTexture("Resources/Images/Background.png");
-	background_sprite = background_texture;
+	background_sprite = ::LoadTexture("Resources/Images/Background.png");
 
 	Texture2D font_texture;
 	font_texture = ::LoadTexture("Resources/Images/Font.png");
@@ -141,7 +136,7 @@ int main()
 			if (FRAME_DURATION > lag)
 			{
 				raylib::DrawSession ds(BLACK);
-				ds.DrawTexture(background_texture, 0, 0, BLACK);
+				ds.DrawTexture(background_sprite, 0, 0, BLACK);
 
 				//When the player dies, we won't show anything but the player.
 				if (0 == player.get_dead())
