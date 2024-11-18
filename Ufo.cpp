@@ -26,7 +26,7 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 {
 	if (!dead)
 	{
-		if (!CheckCollisionRecs(get_hitbox(), i_bullet_hitbox))
+		if (CheckCollisionRecs(get_hitbox(), i_bullet_hitbox))
 		{
 			dead = 1;
 

@@ -16,8 +16,7 @@ EnemyManager::EnemyManager() :
 	//We have a function that sets everything to the initial state, so why not use it?
 	reset(0);
 
-	enemy_bullet_texture = ::LoadTexture("Resources/Images/EnemyBullet.png");
-	enemy_bullet_sprite = enemy_bullet_texture;
+	enemy_bullet_sprite = ::LoadTexture("Resources/Images/EnemyBullet.png");
 
 	for (unsigned char a = 0; a < ENEMY_TYPES; a++)
 	{
@@ -70,7 +69,7 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 	for (Enemy& enemy : enemies)
 	{
 		//When the enemy gets hit, it's gonna appear white.
-		Color enemy_color = Color(255, 255, 255);
+		Color enemy_color = WHITE;
 
 		if (0 == enemy.get_hit_timer())
 		{
@@ -79,19 +78,19 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 			{
 				case 0:
 				{
-					enemy_color = Color(0, 255, 255);
+					enemy_color = GREEN;
 
 					break;
 				}
 				case 1:
 				{
-					enemy_color = Color(255, 0, 255);
+					enemy_color = PURPLE;
 
 					break;
 				}
 				case 2:
 				{
-					enemy_color = Color(0, 255, 0);
+					enemy_color = GREEN;
 				}
 			}
 		}

@@ -17,11 +17,8 @@ Player::Player() :
 {
 	reset();
 
-	bullet_texture = ::LoadTexture("Resources/Images/PlayerBullet.png");
-	texture = ::LoadTexture("Resources/Images/Player.png");
-
-	bullet_sprite = bullet_texture;
-	sprite = texture;
+	bullet_sprite = ::LoadTexture("Resources/Images/PlayerBullet.png");
+	player_sprite = ::LoadTexture("Resources/Images/Player.png");
 }
 
 bool Player::get_dead() const
@@ -64,7 +61,7 @@ void Player::draw(raylib::DrawSession& ds)
 
 		Vector2 dest{ x, y};
 		Rectangle source{ BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE };
-		ds.DrawTexture(sprite, source, dest, RAYWHITE);
+		ds.DrawTexture(player_sprite, source, dest, WHITE);
 
 		for (const Bullet& bullet : bullets)
 		{
@@ -73,7 +70,7 @@ void Player::draw(raylib::DrawSession& ds)
 
 			dest.x = bullet.x;
 			dest.y = bullet.y;
-			ds.DrawTexture(bullet_sprite, source, dest, BLUE);
+			ds.DrawTexture(bullet_sprite, source, dest, WHITE);
 		}
 		//i_window.draw(sprite);
 
@@ -113,7 +110,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 	{
 		unsigned char powerup_type;
 
-		if (1 == IsKeyPressed(KEY_LEFT))
+		if (1 == IsKeyDown(KEY_LEFT))
 		{
 			if (4 == current_power)
 			{
@@ -126,7 +123,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 			}
 		}
 
-		if (1 == IsKeyPressed(KEY_RIGHT))
+		if (1 == IsKeyDown(KEY_RIGHT))
 		{
 			if (4 == current_power)
 			{

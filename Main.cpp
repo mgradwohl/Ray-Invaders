@@ -33,16 +33,9 @@ int main()
 	//sf::RenderWindow window(sf::VideoMode(SCREEN_RESIZE * SCREEN_WIDTH, SCREEN_RESIZE * SCREEN_HEIGHT), "Space Invaders", sf::Style::Close);
 	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
 
-	Texture2D background_sprite;
-	background_sprite = ::LoadTexture("Resources/Images/Background2.png");
-
-	Texture2D font_texture;
-	font_texture = ::LoadTexture("Resources/Images/Font.png");
-
-	Texture2D powerup_bar_sprite;
-	Texture2D powerup_bar_texture;
-	powerup_bar_texture = ::LoadTexture("Resources/Images/PowerupBar.png");
-	powerup_bar_sprite = powerup_bar_texture;
+	Texture2D background_sprite = ::LoadTexture("Resources/Images/Background2.png");
+	Texture2D font_texture = ::LoadTexture("Resources/Images/Font.png");
+	Texture2D powerup_bar_sprite = ::LoadTexture("Resources/Images/PowerupBar.png");
 
 	EnemyManager enemy_manager;
 
@@ -51,6 +44,9 @@ int main()
 	Ufo ufo(random_engine);
 
 	previous_time = std::chrono::steady_clock::now();
+
+	RenderTexture2D screen = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
+	RenderTexture2D backbuffer = ::LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	while (!window.ShouldClose())
 	{
@@ -64,17 +60,6 @@ int main()
 		while (FRAME_DURATION <= lag)
 		{
 			lag -= FRAME_DURATION;
-
-			//while (1 == window.pollEvent(event))
-			//{
-			//	switch (event.type)
-			//	{
-			//		case sf::Event::Closed:
-			//		{
-			//			window.close();
-			//		}
-			//	}
-			//}
 
 			//We're gonna show the "Game over!" text after the player's death animation.
 			if (player.get_dead_animation_over())
@@ -135,8 +120,6 @@ int main()
 
 			if (FRAME_DURATION > lag)
 			{
-				RenderTexture2D backbuffer = ::LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
-
 				{
 					raylib::DrawSession ds(backbuffer, BLACK);
 					ds.DrawTexture(background_sprite, 0, 0, WHITE);
@@ -145,7 +128,6 @@ int main()
 					if (0 == player.get_dead())
 					{
 						enemy_manager.draw(ds);
-
 						ufo.draw(ds);
 
 						//So much code just to show the duration of the powerup (or power-DOWN!).
@@ -168,22 +150,22 @@ int main()
 							{
 							case 1:
 							{
-								powerupbar = Color(0, 146, 255);
+								powerupbar =  BLUE;
 								break;
 							}
 							case 2:
 							{
-								powerupbar = Color(255, 0, 0);
+								powerupbar = RED;
 								break;
 							}
 							case 3:
 							{
-								powerupbar = Color(255, 219, 0);
+								powerupbar = ORANGE;
 								break;
 							}
 							case 4:
 							{
-								powerupbar = Color(219, 0, 255);
+								powerupbar = YELLOW;
 							}
 							}
 
@@ -207,30 +189,26 @@ int main()
 					}
 				}
 				{
+					// flip it
+					Vector2 pos{ 0,0 };
+					BeginTextureMode(screen);
+						Rectangle source = { 0, 0, backbuffer.texture.width, backbuffer.texture.height };
+						DrawTextureRec(backbuffer.texture, source, pos, WHITE);
+					EndTextureMode();
+
 					// draw the backbuffer from DrawSession to the Window
-					{
-						// flip it
-						Vector2 pos{ 0,0 };
-
-						RenderTexture2D screen = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
-						BeginTextureMode(screen);
-							Rectangle source = { 0, 0, backbuffer.texture.width, backbuffer.texture.height };
-							DrawTextureRec(backbuffer.texture, source, pos, WHITE);
-						EndTextureMode();
-						UnloadRenderTexture(backbuffer);
-
-						BeginDrawing();
-							//Rectangle dest = { 0, 0, source.width * SCREEN_RESIZE, source.height * SCREEN_RESIZE };
-							//Vector2 pos{ -source.width * SCREEN_RESIZE,0 };
-							//Vector2 pos{ 0,-source.height * SCREEN_RESIZE };
-							//DrawTexturePro(backbuffer.texture, source, dest, pos, 0.0f, WHITE);
-							//DrawTextureRec(backbuffer.texture, source, (Vector2) { 0, 0 }, WHITE);
-							DrawTextureEx(screen.texture, pos, 0.0f, SCREEN_RESIZE, WHITE);  // Draw a Texture2D with extended parameters
-						EndDrawing();
-						UnloadRenderTexture(screen);
-					}
+					BeginDrawing();
+						//Rectangle dest = { 0, 0, source.width * SCREEN_RESIZE, source.height * SCREEN_RESIZE };
+						//Vector2 pos{ -source.width * SCREEN_RESIZE,0 };
+						//Vector2 pos{ 0,-source.height * SCREEN_RESIZE };
+						//DrawTexturePro(backbuffer.texture, source, dest, pos, 0.0f, WHITE);
+						//DrawTextureRec(backbuffer.texture, source, (Vector2) { 0, 0 }, WHITE);
+						DrawTextureEx(screen.texture, pos, 0.0f, SCREEN_RESIZE, WHITE);  // Draw a Texture2D with extended parameters
+					EndDrawing();
 				}
 			}
 		}
 	}
+	UnloadRenderTexture(backbuffer);
+	UnloadRenderTexture(screen);
 }

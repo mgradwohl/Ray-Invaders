@@ -24,10 +24,7 @@ class Player
 	std::vector<Bullet> bullets;
 
 	Texture2D bullet_sprite;
-	Texture2D sprite;
-
-	Texture2D bullet_texture;
-	Texture2D texture;
+	Texture2D player_sprite;
 
 	Animation explosion;
 public:

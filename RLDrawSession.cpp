@@ -28,17 +28,17 @@ namespace raylib
         ::DrawRectangle(x, y, width, height, color);
     }
 
-    void DrawSession::DrawTexture(Texture2D texture, int x, int y, Color color)
+    void DrawSession::DrawTexture(Texture2D& texture, int x, int y, Color color)
 	{
 		::DrawTexture(texture, x, y, color);
 	}
 
-    void DrawSession::DrawTexture(Texture2D texture, float x, float y, float width, float height, Vector2 pos, Color color)
+    void DrawSession::DrawTexture(Texture2D& texture, float x, float y, float width, float height, Vector2& pos, Color color)
     {
         ::DrawTextureRec(texture, { x,y,width,height }, pos, color);
     }
 
-    void DrawSession::DrawTexture(Texture2D texture, Rectangle source, Vector2 pos, Color color)
+    void DrawSession::DrawTexture(Texture2D& texture, Rectangle& source, Vector2& pos, Color color)
     {
         ::DrawTextureRec(texture, source, pos, color);
     }
