@@ -246,6 +246,7 @@
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsCpp</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">CompileAsCpp</CompileAs>
     </ClCompile>
+    <ClCompile Include="RLWaveSound.cpp" />
     <ClCompile Include="RLWindow.cpp">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsCpp</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">CompileAsCpp</CompileAs>
@@ -263,6 +264,7 @@
     <ClInclude Include="Global.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="RLDrawSession.h" />
+    <ClInclude Include="RLWaveSound.hpp" />
     <ClInclude Include="RLWindow.h" />
     <ClInclude Include="Ufo.hpp" />
   </ItemGroup>

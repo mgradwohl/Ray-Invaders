@@ -1,9 +1,24 @@
 #pragma once
+#include <string>
 #include <raylib.h>
 #include "RLDrawSession.h"
+#include "RLWaveSound.hpp"
 
 class Ufo
 {
+public:
+	Ufo(std::mt19937_64& i_random_engine);
+
+	bool check_bullet_collision(std::mt19937_64& i_random_engine, const Rectangle& i_bullet_hitbox);
+
+	unsigned char check_powerup_collision(const Rectangle& i_player_hitbox);
+
+	void draw(raylib::DrawSession& ds);
+	void reset(bool i_dead, std::mt19937_64& i_random_engine);
+	void update(std::mt19937_64& i_random_engine);
+
+	Rectangle get_hitbox() const;
+private:
 	bool dead;
 	bool dead_animation_over;
 
@@ -24,16 +39,5 @@ class Ufo
 
 	Animation animation;
 	Animation explosion;
-public:
-	Ufo(std::mt19937_64& i_random_engine);
-
-	bool check_bullet_collision(std::mt19937_64& i_random_engine, const Rectangle& i_bullet_hitbox);
-
-	unsigned char check_powerup_collision(const Rectangle& i_player_hitbox);
-
-	void draw(raylib::DrawSession& ds);
-	void reset(bool i_dead, std::mt19937_64& i_random_engine);
-	void update(std::mt19937_64& i_random_engine);
-
-	Rectangle get_hitbox() const;
+	raylib::WaveSound ufoappear;
 };

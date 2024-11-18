@@ -80,12 +80,12 @@ void Player::draw(raylib::DrawSession& ds)
 		if (0 == shield_animation_over)
 		{
 			//Once we get hit while having a shield, the shield will be destroyed. We'll show a blue explosion.
-			explosion.draw(x, y, ds, Color(0, 109, 255));
+			explosion.draw(ds, x, y, Color(0, 109, 255));
 		}
 	}
 	else if (0 == dead_animation_over)
 	{
-		explosion.draw(x, y, ds, Color(255, 36, 0));
+		explosion.draw(ds, x, y, Color(255, 36, 0));
 	}
 }
 

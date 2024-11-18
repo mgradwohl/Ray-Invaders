@@ -6,6 +6,16 @@
 
 class Animation
 {
+public:
+	Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location);
+
+	bool change_current_frame();
+	bool update();
+
+	void draw(raylib::DrawSession& ds, short i_x, short i_y, const Color& i_color = WHITE);
+	void reset();
+
+private:
 	//When this iterator reaches the animation speed, we change the frame and reset the iterator.
 	unsigned short animation_iterator;
 	//The higher the value, the slower the animation.
@@ -17,12 +27,4 @@ class Animation
 	unsigned short total_frames;
 
 	Texture2D sprite;
-public:
-	Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location);
-
-	bool change_current_frame();
-	bool update();
-
-	void draw(short i_x, short i_y, raylib::DrawSession& ds, const Color& i_color = WHITE);
-	void reset();
 };

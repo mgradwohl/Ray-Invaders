@@ -101,7 +101,7 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 			PlaySound(enemydestroy);
 		}
 
-		enemy_animations[enemy.get_type()].draw(enemy.get_x(), enemy.get_y(), ds, enemy_color);
+		enemy_animations[enemy.get_type()].draw(ds, enemy.get_x(), enemy.get_y(), enemy_color);
 	}
 }
 

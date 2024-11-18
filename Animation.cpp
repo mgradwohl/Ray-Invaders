@@ -52,7 +52,7 @@ bool Animation::update()
 	return output;
 }
 
-void Animation::draw(short i_x, short i_y, raylib::DrawSession& ds, const Color& i_color)
+void Animation::draw(raylib::DrawSession& ds, short i_x, short i_y,  const Color& i_color)
 {
 	//I added coloring for the explosions.
 	//sprite.setColor(i_color);
