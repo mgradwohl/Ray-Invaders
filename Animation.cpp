@@ -63,7 +63,8 @@ void Animation::draw(short i_x, short i_y, raylib::DrawSession& ds, const Color&
 
 	Vector2 dest{ i_x, i_y };
 	Rectangle source{current_frame * frame_width, 0.0f, frame_width, sprite.height };
-	ds.DrawTexture(sprite, source, dest, i_color);
+	Color ani{ i_color.r, i_color.g, i_color.b, 255 };
+	ds.DrawTexture(sprite, source, dest, ani);
 }
 
 void Animation::reset()

@@ -6,6 +6,9 @@ namespace raylib
 {
     Window::Window(const uint16_t width, const uint16_t height, const uint16_t fps, const std::string& title)
     {
+#ifndef DEBUG
+        SetTraceLogLevel(LOG_NONE);
+#endif // !DEBUG
         InitWindow(width, height, title.c_str());
         SetTargetFPS(fps);
     }

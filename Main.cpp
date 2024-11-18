@@ -34,7 +34,6 @@ int main()
 	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
 
 	Texture2D background_sprite = ::LoadTexture("Resources/Images/Background2.png");
-	Texture2D font_texture = ::LoadTexture("Resources/Images/Font.png");
 	Texture2D powerup_bar_sprite = ::LoadTexture("Resources/Images/PowerupBar.png");
 
 	EnemyManager enemy_manager;
@@ -149,22 +148,22 @@ int main()
 							{
 							case 1:
 							{
-								powerupbar = BLUE;
+								powerupbar = Color{ 0,219,255,255 };
 								break;
 							}
 							case 2:
 							{
-								powerupbar = ORANGE;
+								powerupbar = Color{ 255,109,0,255 };
 								break;
 							}
 							case 3:
 							{
-								powerupbar = YELLOW;
+								powerupbar = Color{ 255,219,85,255 };
 								break;
 							}
 							case 4:
 							{
-								powerupbar = PURPLE;
+								powerupbar = Color{ 182,109,255,255 };
 							}
 							}
 
@@ -175,16 +174,16 @@ int main()
 
 					player.draw(ds);
 
-					draw_text(0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level), ds, font_texture);
+					draw_text(ds, 10, 0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level));
 
 					if (game_over)
 					{
 						//I was too lazy to add center alignment, so I just wrote numbers instead.
-						draw_text(0.5f * (SCREEN_WIDTH - 5 * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Game over!", ds, font_texture);
+						draw_text(ds, 20, 0.5f * (SCREEN_WIDTH - 5 * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Game over!");
 					}
 					else if (next_level)
 					{
-						draw_text(0.5f * (SCREEN_WIDTH - 5.5f * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Next level!", ds, font_texture);
+						draw_text(ds, 20, 0.5f * (SCREEN_WIDTH - 5.5f * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Next level!");
 					}
 				}
 
