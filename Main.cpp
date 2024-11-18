@@ -45,7 +45,6 @@ int main()
 
 	previous_time = std::chrono::steady_clock::now();
 
-	RenderTexture2D screen = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
 	RenderTexture2D backbuffer = ::LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	while (!window.ShouldClose())
@@ -150,7 +149,7 @@ int main()
 							{
 							case 1:
 							{
-								powerupbar =  BLUE;
+								powerupbar = BLUE;
 								break;
 							}
 							case 2:
@@ -188,27 +187,20 @@ int main()
 						draw_text(0.5f * (SCREEN_WIDTH - 5.5f * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Next level!", ds, font_texture);
 					}
 				}
-				{
-					// flip it
-					Vector2 pos{ 0,0 };
-					BeginTextureMode(screen);
-						Rectangle source = { 0, 0, backbuffer.texture.width, backbuffer.texture.height };
-						DrawTextureRec(backbuffer.texture, source, pos, WHITE);
-					EndTextureMode();
 
-					// draw the backbuffer from DrawSession to the Window
+				{
+					// Draw backbuffer to front buffer
+					Vector2 pos{ 0,0 };
+					// -height flips the image the right way up
+					Rectangle source = { 0, 0, backbuffer.texture.width, -backbuffer.texture.height };
+
 					BeginDrawing();
-						//Rectangle dest = { 0, 0, source.width * SCREEN_RESIZE, source.height * SCREEN_RESIZE };
-						//Vector2 pos{ -source.width * SCREEN_RESIZE,0 };
-						//Vector2 pos{ 0,-source.height * SCREEN_RESIZE };
-						//DrawTexturePro(backbuffer.texture, source, dest, pos, 0.0f, WHITE);
-						//DrawTextureRec(backbuffer.texture, source, (Vector2) { 0, 0 }, WHITE);
-						DrawTextureEx(screen.texture, pos, 0.0f, SCREEN_RESIZE, WHITE);  // Draw a Texture2D with extended parameters
+						Rectangle dest = { 0, 0, backbuffer.texture.width * SCREEN_RESIZE, backbuffer.texture.height * SCREEN_RESIZE };
+						DrawTexturePro(backbuffer.texture, source, dest, pos, 0.0f, WHITE);
 					EndDrawing();
 				}
 			}
 		}
 	}
 	UnloadRenderTexture(backbuffer);
-	UnloadRenderTexture(screen);
 }
