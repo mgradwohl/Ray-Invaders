@@ -78,7 +78,7 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 			{
 				case 0:
 				{
-					enemy_color = GREEN;
+					enemy_color = Color{ 0, 128, 128, 255 };
 
 					break;
 				}
