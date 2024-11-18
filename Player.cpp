@@ -20,6 +20,8 @@ Player::Player() :
 	bullet_sprite = ::LoadTexture("Resources/Images/PlayerBullet.png");
 	player_sprite = ::LoadTexture("Resources/Images/Player.png");
 	playerlaser = LoadSound("Resources/Sounds/Player Laser.wav");
+	powerup = LoadSound("Resources/Sounds/Power Up.wav");
+	playerdestroy = LoadSound("Resources/Sounds/Player Destroy.wav");
 }
 
 bool Player::get_dead() const
@@ -181,6 +183,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 				else
 				{
 					dead = 1;
+					PlaySound(playerdestroy);
 				}
 
 				enemy_bullet.dead = 1;
@@ -196,6 +199,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 			current_power = powerup_type;
 
 			power_timer = POWERUP_DURATION;
+			PlaySound(powerup);
 		}
 
 		if (0 == power_timer)

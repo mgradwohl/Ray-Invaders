@@ -27,6 +27,7 @@ class Player
 	Texture2D player_sprite;
 	Sound playerlaser;
 	Sound powerup;
+	Sound playerdestroy;
 
 	Animation explosion;
 public:
