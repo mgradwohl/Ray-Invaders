@@ -19,6 +19,7 @@ Player::Player() :
 
 	bullet_sprite = ::LoadTexture("Resources/Images/PlayerBullet.png");
 	player_sprite = ::LoadTexture("Resources/Images/Player.png");
+	playerlaser = LoadSound("Resources/Sounds/Player Laser.wav");
 }
 
 bool Player::get_dead() const
@@ -142,6 +143,8 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 		{
 			if (1 == IsKeyPressed(KEY_Z))
 			{
+				PlaySound(playerlaser);
+
 				if (2 == current_power)
 				{
 					reload_timer = FAST_RELOAD_DURATION;

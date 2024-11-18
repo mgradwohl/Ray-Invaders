@@ -17,6 +17,8 @@ class Enemy
 
 	unsigned short x;
 	unsigned short y;
+	Sound enemylaser;
+
 public:
 	Enemy(unsigned char i_type, unsigned short i_x, unsigned short i_y);
 

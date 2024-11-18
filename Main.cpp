@@ -33,6 +33,8 @@ int main()
 	//sf::RenderWindow window(sf::VideoMode(SCREEN_RESIZE * SCREEN_WIDTH, SCREEN_RESIZE * SCREEN_HEIGHT), "Space Invaders", sf::Style::Close);
 	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
 
+	InitAudioDevice();
+
 	Texture2D background_sprite = ::LoadTexture("Resources/Images/Background2.png");
 	Texture2D powerup_bar_sprite = ::LoadTexture("Resources/Images/PowerupBar.png");
 

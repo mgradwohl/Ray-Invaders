@@ -17,6 +17,9 @@ class EnemyManager
 
 	Texture2D enemy_bullet_sprite;
 
+	Sound enemymove;
+	Sound enemydestroy;
+
 public:
 	EnemyManager();
 

@@ -16,7 +16,7 @@ Enemy::Enemy(unsigned char i_type, unsigned short i_x, unsigned short i_y) :
 	x(i_x),
 	y(i_y)
 {
-	
+	enemylaser = LoadSound("Resources/Sounds/Enemy Laser.wav");
 }
 
 unsigned char Enemy::get_health() const
@@ -102,6 +102,7 @@ void Enemy::shoot(std::vector<Bullet>& i_enemy_bullets)
 			i_enemy_bullets.push_back(Bullet(-0.25f * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, x, y));
 		}
 	}
+	PlaySound(enemylaser);
 }
 
 void Enemy::update()

@@ -22,6 +22,8 @@ EnemyManager::EnemyManager() :
 	{
 		enemy_animations.push_back(Animation(1 + move_pause, BASE_SIZE, "Resources/Images/Enemy" + std::to_string(static_cast<unsigned short>(a)) + ".png"));
 	}
+	enemymove = LoadSound("Resources/Sounds/Enemy Move.wav");
+	enemydestroy = LoadSound("Resources/Sounds/Enemy Destroy.wav");
 }
 
 bool EnemyManager::reached_player(unsigned short i_player_y) const
@@ -93,6 +95,10 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 					enemy_color = GREEN;
 				}
 			}
+		}
+		else
+		{
+			PlaySound(enemydestroy);
 		}
 
 		enemy_animations[enemy.get_type()].draw(enemy.get_x(), enemy.get_y(), ds, enemy_color);
@@ -235,6 +241,7 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 			//The enemies change their frame after each move.
 			enemy_animation.change_current_frame();
 		}
+		PlaySound(enemymove);
 	}
 	else
 	{

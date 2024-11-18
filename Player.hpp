@@ -25,6 +25,8 @@ class Player
 
 	Texture2D bullet_sprite;
 	Texture2D player_sprite;
+	Sound playerlaser;
+	Sound powerup;
 
 	Animation explosion;
 public:
