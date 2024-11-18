@@ -155,17 +155,17 @@ int main()
 							}
 							case 2:
 							{
-								powerupbar = RED;
+								powerupbar = ORANGE;
 								break;
 							}
 							case 3:
 							{
-								powerupbar = ORANGE;
+								powerupbar = YELLOW;
 								break;
 							}
 							case 4:
 							{
-								powerupbar = YELLOW;
+								powerupbar = PURPLE;
 							}
 							}
 
