@@ -4,7 +4,7 @@
 #include <raylib.h>
 #include "RLWindow.h"
 #include "RLDrawSession.h"
-
+#include "Background.hpp"
 #include "Animation.hpp"
 #include "DrawText.hpp"
 #include "Global.hpp"
@@ -33,17 +33,16 @@ int main()
 	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
 	InitAudioDevice();
 
-	Texture2D background_sprite = ::LoadTexture("Resources/Images/Background2.png");
-
+	//Texture2D background_sprite = ::LoadTexture("Resources/Images/Background2.png");
+	Background background("Resources/Images/BigGalaxy.png");
 	EnemyManager enemy_manager;
-
 	Player player;
 	PowerUp powerup("Resources/Images/PowerupBar.png");
-
 	Ufo ufo(random_engine);
 
 	previous_time = std::chrono::steady_clock::now();
 
+	// we draw everything to this, and then render this to the screen
 	RenderTexture2D backbuffer = ::LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	while (!window.ShouldClose())
@@ -96,6 +95,7 @@ int main()
 				{
 					player.update(random_engine, enemy_manager.get_enemy_bullets(), enemy_manager.get_enemies(), ufo);
 					powerup.update(player);
+					background.update(player);
 					enemy_manager.update(random_engine);
 					ufo.update(random_engine);
 				}
@@ -113,7 +113,7 @@ int main()
 			{
 				{
 					raylib::DrawSession ds(backbuffer, BLACK);
-					ds.DrawTexture(background_sprite, 0, 0, WHITE);
+					background.draw(ds);
 
 					//When the player dies, we won't show anything but the player.
 					if (!player.get_dead())

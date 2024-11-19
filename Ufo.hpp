@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include "RLDrawSession.h"
 #include "RLWaveSound.hpp"
+#include "Global.hpp"
 
 class Ufo
 {
