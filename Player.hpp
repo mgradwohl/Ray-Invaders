@@ -4,7 +4,8 @@
 #include "RLDrawSession.h"
 #include "Animation.hpp"
 #include "Ufo.hpp"
-
+#include "Enemy.hpp"
+#include "Bullet.hpp"
 class Player
 {
 	//Is it okay to call this variable "dead"?

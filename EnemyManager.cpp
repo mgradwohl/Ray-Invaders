@@ -9,7 +9,7 @@
 #include "Global.hpp"
 #include "Enemy.hpp"
 #include "EnemyManager.hpp"
-
+#include "Bullet.hpp"
 EnemyManager::EnemyManager() :
 	shoot_distribution(0, ENEMY_SHOOT_CHANCE)
 {
@@ -282,7 +282,7 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 	//AGAIN!
 	enemy_bullets.erase(remove_if(enemy_bullets.begin(), enemy_bullets.end(), [](const Bullet& i_bullet)
 	{
-		return 1 == i_bullet.dead;
+		return 1 == i_bullet.     IsDead();
 	}), enemy_bullets.end());
 }
 

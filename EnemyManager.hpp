@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <random>
+#include "Bullet.hpp"
 
 class EnemyManager
 {

@@ -1,4 +1,6 @@
 #pragma once
+#include "Bullet.hpp"
+
 
 class Enemy
 {

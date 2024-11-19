@@ -12,7 +12,7 @@
 #include "EnemyManager.hpp"
 #include "Ufo.hpp"
 #include "Player.hpp"
-
+#include "PowerUp.hpp"
 int main()
 {
 	bool game_over = 0;
@@ -24,7 +24,6 @@ int main()
 
 	//We'll use this to make the game frame rate independent.
 	std::chrono::microseconds lag(0);
-
 	std::chrono::steady_clock::time_point previous_time;
 
 	//Setting a random seed to make sure the random engine will randomly generate random numbers.
@@ -32,15 +31,14 @@ int main()
 
 	//sf::RenderWindow window(sf::VideoMode(SCREEN_RESIZE * SCREEN_WIDTH, SCREEN_RESIZE * SCREEN_HEIGHT), "Space Invaders", sf::Style::Close);
 	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
-
 	InitAudioDevice();
 
 	Texture2D background_sprite = ::LoadTexture("Resources/Images/Background2.png");
-	Texture2D powerup_bar_sprite = ::LoadTexture("Resources/Images/PowerupBar.png");
 
 	EnemyManager enemy_manager;
 
 	Player player;
+	PowerUp powerup("Resources/Images/PowerupBar.png");
 
 	Ufo ufo(random_engine);
 
@@ -52,9 +50,7 @@ int main()
 	{
 		//Making the game frame rate independent.
 		std::chrono::microseconds delta_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - previous_time);
-
 		lag += delta_time;
-
 		previous_time += delta_time;
 
 		while (FRAME_DURATION <= lag)
@@ -99,22 +95,17 @@ int main()
 				else
 				{
 					player.update(random_engine, enemy_manager.get_enemy_bullets(), enemy_manager.get_enemies(), ufo);
-
+					powerup.update(player);
 					enemy_manager.update(random_engine);
-
 					ufo.update(random_engine);
 				}
 			}
 			else if (IsKeyPressed(KEY_ENTER))
 			{
 				game_over = 0;
-
 				level = 0;
-
 				player.reset();
-
 				enemy_manager.reset(level);
-
 				ufo.reset(1, random_engine);
 			}
 
@@ -125,55 +116,12 @@ int main()
 					ds.DrawTexture(background_sprite, 0, 0, WHITE);
 
 					//When the player dies, we won't show anything but the player.
-					if (0 == player.get_dead())
+					if (!player.get_dead())
 					{
 						enemy_manager.draw(ds);
 						ufo.draw(ds);
-
-						//So much code just to show the duration of the powerup (or power-DOWN!).
-						if (0 < player.get_current_power())
-						{
-							//powerup_bar_sprite.setColor(Color(255, 255, 255));
-							//powerup_bar_sprite.setPosition(SCREEN_WIDTH - powerup_bar_texture.getSize().x - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE);
-							//powerup_bar_sprite.setTextureRect(Rectangle(0, 0, powerup_bar_texture.getSize().x, BASE_SIZE));
-							//window.draw(powerup_bar_sprite);
-
-							Vector2 dest{ SCREEN_WIDTH - powerup_bar_sprite.width - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE };
-							Rectangle source{ 0, 0, powerup_bar_sprite.width, BASE_SIZE };
-							ds.DrawTexture(powerup_bar_sprite, source, dest, WHITE);
-
-							dest = Vector2(SCREEN_WIDTH - powerup_bar_sprite.width - 0.125f * BASE_SIZE, 0.25f * BASE_SIZE);
-							source = Rectangle(0.125f * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(powerup_bar_sprite.width - 0.25f * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE);
-
-							Color powerupbar = WHITE;
-							switch (player.get_current_power())
-							{
-							case 1:
-							{
-								powerupbar = Color{ 0,219,255,255 };
-								break;
-							}
-							case 2:
-							{
-								powerupbar = Color{ 255,109,0,255 };
-								break;
-							}
-							case 3:
-							{
-								powerupbar = Color{ 255,219,85,255 };
-								break;
-							}
-							case 4:
-							{
-								powerupbar = Color{ 182,109,255,255 };
-							}
-							}
-
-							//window.draw(powerup_bar_sprite);
-							ds.DrawTexture(powerup_bar_sprite, source, dest, powerupbar);
-						}
+						powerup.draw(ds, player);
 					}
-
 					player.draw(ds);
 
 					draw_text(ds, 10, 0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level));
@@ -191,8 +139,8 @@ int main()
 
 				{
 					// Draw backbuffer to front buffer
-					Vector2 pos{ 0,0 };
 					// -height flips the image the right way up
+					Vector2 pos{ 0,0 };
 					Rectangle source = { 0, 0, backbuffer.texture.width, -backbuffer.texture.height };
 
 					BeginDrawing();

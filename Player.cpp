@@ -186,7 +186,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 					PlaySound(playerdestroy);
 				}
 
-				enemy_bullet.dead = 1;
+				enemy_bullet.IsDead(true);
 
 				break;
 			}
@@ -225,11 +225,11 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 	{
 		bullet.update();
 		
-		if (0 == bullet.dead)
+		if (0 == bullet.IsDead())
 		{
 			if (1 == i_ufo.check_bullet_collision(i_random_engine, bullet.get_hitbox()))
 			{
-				bullet.dead = 1;
+				bullet.IsDead(true);
 			}
 		}
 	}
@@ -238,9 +238,9 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 	{
 		for (Bullet& bullet : bullets)
 		{
-			if (0 == bullet.dead && 0 < enemy.get_health() && 1 == CheckCollisionRecs(enemy.get_hitbox(), bullet.get_hitbox()))
+			if (0 == bullet.IsDead() && 0 < enemy.get_health() && 1 == CheckCollisionRecs(enemy.get_hitbox(), bullet.get_hitbox()))
 			{
-				bullet.dead = 1;
+				bullet.IsDead(true);
 
 				enemy.hit();
 
@@ -251,7 +251,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 
 	bullets.erase(remove_if(bullets.begin(), bullets.end(), [](const Bullet& i_bullet)
 	{
-		return 1 == i_bullet.dead;
+		return 1 == i_bullet.IsDead();
 	}), bullets.end());
 }
 
