@@ -3,7 +3,7 @@
 #include "Global.hpp"
 #include "PowerUp.hpp"
 
-PowerUp::PowerUp(std::string spritefile)
+PowerUp::PowerUp(const std::string& spritefile)
 {
 	_spritefile = spritefile;
 	powerup_bar_sprite = LoadTexture(_spritefile.c_str());

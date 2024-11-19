@@ -29,22 +29,19 @@ int main()
 	//Setting a random seed to make sure the random engine will randomly generate random numbers.
 	std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
-	//sf::RenderWindow window(sf::VideoMode(SCREEN_RESIZE * SCREEN_WIDTH, SCREEN_RESIZE * SCREEN_HEIGHT), "Space Invaders", sf::Style::Close);
 	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
 	InitAudioDevice();
 
-	//Texture2D background_sprite = ::LoadTexture("Resources/Images/Background2.png");
 	Background background("Resources/Images/BigGalaxy.png");
 	EnemyManager enemy_manager;
 	Player player;
 	PowerUp powerup("Resources/Images/PowerupBar.png");
 	Ufo ufo(random_engine);
 
-	previous_time = std::chrono::steady_clock::now();
-
 	// we draw everything to this, and then render this to the screen
 	RenderTexture2D backbuffer = ::LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	previous_time = std::chrono::steady_clock::now();
 	while (!window.ShouldClose())
 	{
 		//Making the game frame rate independent.
@@ -69,30 +66,28 @@ int main()
 
 			if (!game_over)
 			{
-				if (!enemy_manager.get_enemies().size())
+				// no more enemies left
+				if (enemy_manager.get_enemies().size() == 0)
 				{
 					if (!next_level_timer)
 					{
 						next_level = 0;
-
 						level++;
 						next_level_timer = NEXT_LEVEL_TRANSITION;
-
+						background.reset();
 						player.reset();
-
 						enemy_manager.reset(level);
-
 						ufo.reset(1, random_engine);
 					}
 					else //Here we're showing the next level transition.
 					{
 						next_level = 1;
-
 						next_level_timer--;
 					}
 				}
 				else
 				{
+					// enemies left, update everything
 					player.update(random_engine, enemy_manager.get_enemy_bullets(), enemy_manager.get_enemies(), ufo);
 					powerup.update(player);
 					background.update(player);
@@ -102,8 +97,10 @@ int main()
 			}
 			else if (IsKeyPressed(KEY_ENTER))
 			{
+				// player started a new game
 				game_over = 0;
 				level = 0;
+				background.reset();
 				player.reset();
 				enemy_manager.reset(level);
 				ufo.reset(1, random_engine);
@@ -112,26 +109,25 @@ int main()
 			if (FRAME_DURATION > lag)
 			{
 				{
+					// everything is either reset (new game) or updated (continuing game) time to draw
 					raylib::DrawSession ds(backbuffer, BLACK);
 					background.draw(ds);
 
-					//When the player dies, we won't show anything but the player.
+					// When the player dies, we will only the player and the banner
+					player.draw(ds);
 					if (!player.get_dead())
 					{
 						enemy_manager.draw(ds);
 						ufo.draw(ds);
 						powerup.draw(ds, player);
+						draw_text(ds, 10, 0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level));
 					}
-					player.draw(ds);
-
-					draw_text(ds, 10, 0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level));
-
-					if (game_over)
+					else
 					{
-						//I was too lazy to add center alignment, so I just wrote numbers instead.
 						draw_text(ds, 20, 0.5f * (SCREEN_WIDTH - 5 * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Game over!");
 					}
-					else if (next_level)
+
+					if (next_level)
 					{
 						draw_text(ds, 20, 0.5f * (SCREEN_WIDTH - 5.5f * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Next level!");
 					}

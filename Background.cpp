@@ -1,13 +1,9 @@
 #include "Background.hpp"
 
-Background::Background(std::string spritefile)
+Background::Background(const std::string& spritefile)
 {
 	backgroundsprite = LoadTexture(spritefile.c_str());
-
-	source.x = (backgroundsprite.width - SCREEN_WIDTH) / 2;
-	source.y = backgroundsprite.height - SCREEN_HEIGHT;
-	source.width = SCREEN_WIDTH;
-	source.height = SCREEN_HEIGHT;
+	reset();
 }
 
 Background::~Background()
@@ -52,4 +48,12 @@ void Background::update(Player& player)
 	{
 		source.y = 0;
 	}
+}
+
+void Background::reset()
+{
+	source.x = (backgroundsprite.width - SCREEN_WIDTH) / 2;
+	source.y = backgroundsprite.height - SCREEN_HEIGHT;
+	source.width = SCREEN_WIDTH;
+	source.height = SCREEN_HEIGHT;
 }

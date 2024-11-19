@@ -4,7 +4,7 @@
 class PowerUp
 {
 public:
-	PowerUp(std::string spritefile);
+	PowerUp(const std::string& spritefile);
 	~PowerUp();
 	void update(Player& player);
 	void draw(raylib::DrawSession& ds, Player& player);

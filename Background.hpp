@@ -10,10 +10,11 @@ class Background
 public:
 
 	Background() = default;
-	Background(std::string spritefile);
+	Background(const std::string& spritefile);
 	~Background();
 	void draw(raylib::DrawSession& ds);
 	void update(Player& player);
+	void reset();
 
 private:
 	Texture2D backgroundsprite;
