@@ -9,6 +9,19 @@ void draw_text(raylib::DrawSession& ds, short size, short i_x, short i_y, const 
 	DrawText(i_text.c_str(), i_x, i_y, size, WHITE);
 }
 
+void draw_text_center(raylib::DrawSession& ds, short size, unsigned short width, unsigned short height, const std::string& i_text)
+{
+	const int screenCenterX = width / 2;
+	const int screenCenterY = height/ 2;
+
+	const int textWidth = MeasureText(i_text.c_str(), size);
+
+	const int textStartX = screenCenterX - textWidth / 2;
+	const int textStartY = screenCenterY - size/ 2;
+
+	DrawText(i_text.c_str(), textStartX, textStartY, size, WHITE);
+}
+
 //void draw_text2(short i_x, short i_y, const std::string& i_text, raylib::DrawSession& ds, const Texture2D& i_font_texture)
 //{
 //	short character_x = i_x;

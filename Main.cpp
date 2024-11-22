@@ -4,10 +4,12 @@
 #include <raylib.h>
 #include "RLWindow.h"
 #include "RLDrawSession.h"
+#include "Global.hpp"
+#include "Backbuffer.hpp"
 #include "Background.hpp"
 #include "Animation.hpp"
 #include "DrawText.hpp"
-#include "Global.hpp"
+
 #include "Enemy.hpp"
 #include "EnemyManager.hpp"
 #include "Ufo.hpp"
@@ -39,7 +41,7 @@ int main()
 	Ufo ufo(random_engine);
 
 	// we draw everything to this, and then render this to the screen
-	RenderTexture2D backbuffer = ::LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
+	Backbuffer backbuffer(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_RESIZE);
 
 	previous_time = std::chrono::steady_clock::now();
 	while (!window.ShouldClose())
@@ -110,7 +112,7 @@ int main()
 			{
 				{
 					// everything is either reset (new game) or updated (continuing game) time to draw
-					raylib::DrawSession ds(backbuffer, BLACK);
+					raylib::DrawSession ds(backbuffer.GetRenderTexture(), BLACK);
 					background.draw(ds);
 
 					// When the player dies, we will only the player and the banner
@@ -124,28 +126,16 @@ int main()
 					}
 					else
 					{
-						draw_text(ds, 20, 0.5f * (SCREEN_WIDTH - 5 * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Game over!");
+						draw_text_center(ds, 20, SCREEN_WIDTH, SCREEN_HEIGHT, "Game over!");
 					}
 
 					if (next_level)
 					{
-						draw_text(ds, 20, 0.5f * (SCREEN_WIDTH - 5.5f * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Next level!");
+						draw_text_center(ds, 20, SCREEN_WIDTH, SCREEN_HEIGHT, "Next level!");
 					}
 				}
-
-				{
-					// Draw backbuffer to front buffer
-					// -height flips the image the right way up
-					Vector2 pos{ 0,0 };
-					Rectangle source = { 0, 0, backbuffer.texture.width, -backbuffer.texture.height };
-
-					BeginDrawing();
-						Rectangle dest = { 0, 0, backbuffer.texture.width * SCREEN_RESIZE, backbuffer.texture.height * SCREEN_RESIZE };
-						DrawTexturePro(backbuffer.texture, source, dest, pos, 0.0f, WHITE);
-					EndDrawing();
-				}
+				backbuffer.flip();
 			}
 		}
 	}
-	UnloadRenderTexture(backbuffer);
 }
