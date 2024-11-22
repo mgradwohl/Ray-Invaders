@@ -40,5 +40,5 @@ private:
 
 	Animation animation;
 	Animation explosion;
-	raylib::WaveSound ufoappear;
+	raylib::WaveSound ufoappearsound;
 };

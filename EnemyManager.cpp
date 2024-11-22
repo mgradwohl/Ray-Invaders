@@ -33,11 +33,11 @@ bool EnemyManager::reached_player(unsigned short i_player_y) const
 		if (enemy.get_y() > i_player_y - 0.5f * BASE_SIZE)
 		{
 			//As soon as the enemies reach the player, the game is over!
-			return 1;
+			return true;
 		}
 	}
 
-	return 0;
+	return false;
 }
 
 void EnemyManager::draw(raylib::DrawSession& ds)

@@ -24,15 +24,15 @@ bool Animation::change_current_frame()
 	{
 		current_frame = 0;
 
-		return 1;
+		return true;
 	}
 
-	return 0;
+	return false;
 }
 
 bool Animation::update()
 {
-	bool output = 0;
+	bool output = false;
 
 	animation_iterator++;
 
@@ -43,7 +43,7 @@ bool Animation::update()
 
 		if (current_frame == total_frames)
 		{
-			output = 1;
+			output = true;
 
 			current_frame = 0;
 		}

@@ -15,7 +15,7 @@ Ufo::Ufo(std::mt19937_64& i_random_engine) :
 	explosion(EXPLOSION_ANIMATION_SPEED, 2 * BASE_SIZE, "Resources/Images/ExplosionBig.png")
 {
 	reset(1, i_random_engine);
-	ufoappear = raylib::WaveSound("Resources/Sounds/UFO Enter.wav");
+	ufoappearsound = raylib::WaveSound("Resources/Sounds/UFO Enter.wav");
 
 	for (unsigned char a = 0; a < POWERUP_TYPES; a++)
 	{
@@ -29,18 +29,18 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 	{
 		if (CheckCollisionRecs(get_hitbox(), i_bullet_hitbox))
 		{
-			dead = 1;
-			ufoappear.Stop();
+			dead = true;
+			ufoappearsound.Stop();
 
 			explosion_x = x;
 
 			powerups.push_back(Powerup(x + 0.5f * BASE_SIZE, y, powerup_distribution(i_random_engine)));
 
-			return 1;
+			return true;
 		}
 	}
 	
-	return 0;
+	return false;
 }
 
 unsigned char Ufo::check_powerup_collision(const Rectangle& i_player_hitbox)
@@ -88,7 +88,7 @@ void Ufo::reset(bool i_dead, std::mt19937_64& i_random_engine)
 	timer = timer_distribution(i_random_engine);
 
 	powerups.clear();
-	ufoappear.Stop();
+	ufoappearsound.Stop();
 	animation.reset();
 	explosion.reset();
 }
@@ -97,9 +97,9 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 {
 	if (!dead)
 	{
-		if (!ufoappear.IsPlaying())
+		if (!ufoappearsound.IsPlaying())
 		{
-			ufoappear.Play();
+			ufoappearsound.Play();
 		}
 
 		x -= UFO_MOVE_SPEED;
@@ -108,7 +108,7 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 		if (x <= -2 * BASE_SIZE)
 		{
 			dead = 1;
-			ufoappear.Stop();
+			ufoappearsound.Stop();
 		}
 
 		animation.update();
@@ -151,7 +151,7 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 
 	powerups.erase(remove_if(powerups.begin(), powerups.end(), [](const Powerup& i_powerup)
 	{
-		return 1 == i_powerup.dead;
+		return true == i_powerup.dead;
 	}), powerups.end());
 }
 
