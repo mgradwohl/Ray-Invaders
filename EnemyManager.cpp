@@ -20,7 +20,7 @@ EnemyManager::EnemyManager() :
 
 	for (unsigned char a = 0; a < ENEMY_TYPES; a++)
 	{
-		enemy_animations.push_back(Animation(1 + move_pause, BASE_SIZE, "Resources/Images/Enemy" + std::to_string(static_cast<unsigned short>(a)) + ".png"));
+		enemy_animations.emplace_back(1 + move_pause, BASE_SIZE, "Resources/Images/Enemy" + std::to_string(static_cast<unsigned short>(a)) + ".png");
 	}
 	enemymove = LoadSound("Resources/Sounds/Enemy Move.wav");
 	enemydestroy = LoadSound("Resources/Sounds/Enemy Destroy.wav");
@@ -205,19 +205,19 @@ void EnemyManager::reset(unsigned short i_level)
 			}
 			case '0':
 			{
-				enemies.push_back(Enemy(0, BASE_SIZE * (1 + enemy_x), BASE_SIZE * (2 + enemy_y)));
+				enemies.emplace_back(0, BASE_SIZE * (1 + enemy_x), BASE_SIZE * (2 + enemy_y));
 
 				break;
 			}
 			case '1':
 			{
-				enemies.push_back(Enemy(1, BASE_SIZE * (1 + enemy_x), BASE_SIZE * (2 + enemy_y)));
+				enemies.emplace_back(1, BASE_SIZE * (1 + enemy_x), BASE_SIZE * (2 + enemy_y));
 
 				break;
 			}
 			case '2':
 			{
-				enemies.push_back(Enemy(2, BASE_SIZE * (1 + enemy_x), BASE_SIZE * (2 + enemy_y)));
+				enemies.emplace_back(2, BASE_SIZE * (1 + enemy_x), BASE_SIZE * (2 + enemy_y));
 			}
 		}
 	}

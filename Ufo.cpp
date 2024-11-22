@@ -19,7 +19,7 @@ Ufo::Ufo(std::mt19937_64& i_random_engine) :
 
 	for (unsigned char a = 0; a < POWERUP_TYPES; a++)
 	{
-		powerup_animations.push_back(Animation(POWERUP_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Powerup" + std::to_string(static_cast<unsigned short>(a)) + ".png"));
+		powerup_animations.emplace_back(POWERUP_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Powerup" + std::to_string(static_cast<unsigned short>(a)) + ".png");
 	}
 }
 
@@ -34,7 +34,7 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 
 			explosion_x = x;
 
-			powerups.push_back(Powerup(x + 0.5f * BASE_SIZE, y, powerup_distribution(i_random_engine)));
+			powerups.emplace_back(x + 0.5f * BASE_SIZE, y, powerup_distribution(i_random_engine));
 
 			return true;
 		}

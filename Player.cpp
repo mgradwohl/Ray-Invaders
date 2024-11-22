@@ -156,12 +156,12 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 					reload_timer = RELOAD_DURATION;
 				}
 
-				bullets.push_back(Bullet(0, -PLAYER_BULLET_SPEED, x, y));
+				bullets.emplace_back(0, -PLAYER_BULLET_SPEED, x, y);
 
 				if (3 == current_power)
 				{
-					bullets.push_back(Bullet(0, -PLAYER_BULLET_SPEED, x - 0.375f * BASE_SIZE, y));
-					bullets.push_back(Bullet(0, -PLAYER_BULLET_SPEED, x + 0.375f * BASE_SIZE, y));
+					bullets.emplace_back(0, -PLAYER_BULLET_SPEED, x - 0.375f * BASE_SIZE, y);
+					bullets.emplace_back(0, -PLAYER_BULLET_SPEED, x + 0.375f * BASE_SIZE, y);
 				}
 			}
 		}
