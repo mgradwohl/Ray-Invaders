@@ -18,6 +18,7 @@ public:
 	void update();
 	Rectangle get_hitbox() const;
 
+	// TODO why are these public
 	//We also use this struct in the Player class. But the player's bullets don't have a tail. So it may seem a bit redundant. But I'm too lazy to fix it.
 	std::array<short, 3> previous_x;
 	std::array<short, 3> previous_y;

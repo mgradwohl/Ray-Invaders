@@ -1,4 +1,3 @@
-#include <array>
 #include <chrono>
 #include <random>
 #include <raylib.h>
@@ -7,10 +6,7 @@
 #include "Global.hpp"
 #include "Backbuffer.hpp"
 #include "Background.hpp"
-#include "Animation.hpp"
 #include "DrawText.hpp"
-
-#include "Enemy.hpp"
 #include "EnemyManager.hpp"
 #include "Ufo.hpp"
 #include "Player.hpp"
