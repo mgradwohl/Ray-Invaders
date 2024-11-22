@@ -11,10 +11,12 @@ namespace raylib
 #endif // !DEBUG
         InitWindow(width, height, title.c_str());
         SetTargetFPS(fps);
+        InitAudioDevice();
     }
 
     Window::~Window()
     {
+        CloseAudioDevice();
         CloseWindow();
     }
 

@@ -17,10 +17,8 @@
 #include "PowerUp.hpp"
 int main()
 {
-	bool game_over = 0;
-	bool next_level = 0;
-
-	//The current level.
+	bool game_over = false;
+	bool next_level = false;
 	unsigned short level = 0;
 	unsigned short next_level_timer = NEXT_LEVEL_TRANSITION;
 
@@ -32,7 +30,6 @@ int main()
 	std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
 	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
-	InitAudioDevice();
 
 	Background background("Resources/Images/BigGalaxy.png");
 	EnemyManager enemy_manager;
@@ -100,7 +97,7 @@ int main()
 			else if (IsKeyPressed(KEY_ENTER))
 			{
 				// player started a new game
-				game_over = 0;
+				game_over = false;
 				level = 0;
 				background.reset();
 				player.reset();
@@ -133,7 +130,7 @@ int main()
 					{
 						draw_text_center(ds, 20, SCREEN_WIDTH, SCREEN_HEIGHT, "Next level!");
 					}
-				}
+				}// DrawSession ds
 				backbuffer.flip();
 			}
 		}
