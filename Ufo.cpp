@@ -68,7 +68,7 @@ void Ufo::draw(raylib::DrawSession& ds)
 
 	if (!dead_animation_over)
 	{
-		explosion.draw(ds, explosion_x, y - 0.5f * BASE_SIZE, Color(255, 36, 0));
+		explosion.draw(ds, explosion_x, y - 0.5f * BASE_SIZE, Color(255, 36, 0, 255));
 	}
 
 	for (Powerup& powerup : powerups)
