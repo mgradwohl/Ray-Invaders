@@ -276,9 +276,6 @@
     <ClInclude Include="RLWindow.h" />
     <ClInclude Include="Ufo.hpp" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="Resources\Images\Background2.png" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
