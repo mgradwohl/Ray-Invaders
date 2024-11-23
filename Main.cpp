@@ -92,6 +92,7 @@ int main()
 					enemy_manager.update(random_engine);
 					ufo.update(random_engine);
 					bases.update(enemy_manager.get_enemy_bullets());
+					bases.update(player.get_player_bullets());
 				}
 			}
 			else if (IsKeyPressed(KEY_ENTER))

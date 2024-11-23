@@ -25,6 +25,11 @@ public:
 	void update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_enemy_bullets, std::vector<Enemy>& i_enemies, Ufo& i_ufo);
 
 	Rectangle get_hitbox() const;
+	std::vector<Bullet>& get_player_bullets()
+	{
+		return bullets;
+	}
+
 private:
 	//Is it okay to call this variable "dead"?
 	//I mean, it's a spaceship.
