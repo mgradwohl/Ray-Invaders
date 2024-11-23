@@ -27,7 +27,7 @@ void Base::update(std::vector<Bullet>& i_enemy_bullets)
 	}
 
 	frame = damage;
-	if (frame >= 4)
+	if (frame > 4)
 	{
 		frame = 5;
 		dead = true;

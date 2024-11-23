@@ -6,12 +6,12 @@
 Bases::Bases(const std::string& filename)
 {
 	_sprite = LoadTexture(filename.c_str());
-
-	unsigned short x = 40;
+	unsigned short offset = (SCREEN_WIDTH - (BASE_COUNT * BASE_WIDTH)) / (BASE_COUNT + 1);
+	unsigned short x = offset;
 	for (int i = 0; i < BASE_COUNT; i++)
 	{
 		_bases.emplace_back(x);
-		x += 40;			// spacing
+		x += offset;			// spacing
 		x += BASE_WIDTH;	// BASE WIDTH
 	};
 }
