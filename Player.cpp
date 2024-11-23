@@ -109,7 +109,7 @@ void Player::reset()
 
 void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_enemy_bullets, std::vector<Enemy>& i_enemies, Ufo& i_ufo)
 {
-	if (0 == dead)
+	if (!dead)
 	{
 		unsigned char powerup_type;
 

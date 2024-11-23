@@ -1,4 +1,7 @@
 #pragma once
+#include <array>
+#include <raylib.h>
+
 class Bullet
 {
 

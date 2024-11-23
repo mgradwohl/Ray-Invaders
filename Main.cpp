@@ -11,6 +11,7 @@
 #include "Ufo.hpp"
 #include "Player.hpp"
 #include "PowerUp.hpp"
+#include "Bases.hpp"
 int main()
 {
 	bool game_over = false;
@@ -32,6 +33,7 @@ int main()
 	Player player;
 	PowerUp powerup("Resources/Images/PowerupBar.png");
 	Ufo ufo(random_engine);
+	Bases bases("Resources/Images/Base.png");
 
 	// we draw everything to this, and then render this to the screen
 	Backbuffer backbuffer(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_RESIZE);
@@ -73,6 +75,7 @@ int main()
 						player.reset();
 						enemy_manager.reset(level);
 						ufo.reset(1, random_engine);
+						bases.reset(false);
 					}
 					else //Here we're showing the next level transition.
 					{
@@ -88,6 +91,7 @@ int main()
 					background.update(player);
 					enemy_manager.update(random_engine);
 					ufo.update(random_engine);
+					bases.update(enemy_manager.get_enemy_bullets());
 				}
 			}
 			else if (IsKeyPressed(KEY_ENTER))
@@ -99,6 +103,7 @@ int main()
 				player.reset();
 				enemy_manager.reset(level);
 				ufo.reset(1, random_engine);
+				bases.reset(false);
 			}
 
 			if (FRAME_DURATION > lag)
@@ -114,6 +119,7 @@ int main()
 					{
 						enemy_manager.draw(ds);
 						ufo.draw(ds);
+						bases.draw(ds);
 						powerup.draw(ds, player);
 						draw_text(ds, 10, 0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level));
 					}
