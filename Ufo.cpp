@@ -120,7 +120,7 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 			dead_animation_over = explosion.update();
 		}
 
-		if (0 == timer)
+		if (!timer)
 		{
 			reset(0, i_random_engine);
 		}

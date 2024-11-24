@@ -17,7 +17,7 @@ Bullet::Bullet(float i_step_x, float i_step_y, short i_x, short i_y) :
 
 void Bullet::update()
 {
-	if (0 == dead)
+	if (!dead)
 	{
 		//I hate using floats, so we'll change real_x and _y and work only with integer values.
 		real_x += step_x;

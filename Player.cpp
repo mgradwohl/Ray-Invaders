@@ -77,13 +77,13 @@ void Player::draw(raylib::DrawSession& ds)
 		}
 		//i_window.draw(sprite);
 
-		if (0 == shield_animation_over)
+		if (!shield_animation_over)
 		{
 			//Once we get hit while having a shield, the shield will be destroyed. We'll show a blue explosion.
 			explosion.draw(ds, x, y, Color(0, 109, 255, 255));
 		}
 	}
-	else if (0 == dead_animation_over)
+	else if (!dead_animation_over)
 	{
 		explosion.draw(ds, x, y, Color(255, 36, 0, 255));
 	}
@@ -113,7 +113,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 	{
 		unsigned char powerup_type;
 
-		if (1 == IsKeyDown(KEY_LEFT))
+		if (IsKeyDown(KEY_LEFT))
 		{
 			if (4 == current_power)
 			{
@@ -126,7 +126,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 			}
 		}
 
-		if (1 == IsKeyDown(KEY_RIGHT))
+		if (IsKeyDown(KEY_RIGHT))
 		{
 			if (4 == current_power)
 			{
@@ -141,9 +141,9 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 			}
 		}
 
-		if (0 == reload_timer)
+		if (!reload_timer)
 		{
-			if (1 == IsKeyPressed(KEY_Z))
+			if (IsKeyPressed(KEY_Z))
 			{
 				PlaySound(playerlaser);
 
@@ -172,7 +172,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 
 		for (Bullet& enemy_bullet : i_enemy_bullets)
 		{
-			if (1 == CheckCollisionRecs( get_hitbox(), enemy_bullet.get_hitbox()))
+			if (CheckCollisionRecs( get_hitbox(), enemy_bullet.get_hitbox()))
 			{
 				if (1 == current_power)
 				{
@@ -202,7 +202,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 			PlaySound(powerup);
 		}
 
-		if (0 == power_timer)
+		if (!power_timer)
 		{
 			current_power = 0;
 		}
@@ -211,12 +211,12 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 			power_timer--;
 		}
 
-		if (0 == shield_animation_over)
+		if (!shield_animation_over)
 		{
 			shield_animation_over = explosion.update();
 		}
 	}
-	else if (0 == dead_animation_over)
+	else if (!dead_animation_over)
 	{
 		dead_animation_over = explosion.update();
 	}
@@ -225,9 +225,9 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 	{
 		bullet.update();
 		
-		if (0 == bullet.IsDead())
+		if (!bullet.IsDead())
 		{
-			if (1 == i_ufo.check_bullet_collision(i_random_engine, bullet.get_hitbox()))
+			if (i_ufo.check_bullet_collision(i_random_engine, bullet.get_hitbox()))
 			{
 				bullet.IsDead(true);
 			}
@@ -238,7 +238,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 	{
 		for (Bullet& bullet : bullets)
 		{
-			if (0 == bullet.IsDead() && 0 < enemy.get_health() && 1 == CheckCollisionRecs(enemy.get_hitbox(), bullet.get_hitbox()))
+			if (!bullet.IsDead() && 0 < enemy.get_health() && CheckCollisionRecs(enemy.get_hitbox(), bullet.get_hitbox()))
 			{
 				bullet.IsDead(true);
 
@@ -251,7 +251,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 
 	bullets.erase(remove_if(bullets.begin(), bullets.end(), [](const Bullet& i_bullet)
 	{
-		return 1 == i_bullet.IsDead();
+		return true == i_bullet.IsDead();
 	}), bullets.end());
 }
 

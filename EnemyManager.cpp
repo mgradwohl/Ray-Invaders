@@ -73,7 +73,7 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 		//When the enemy gets hit, it's gonna appear white.
 		Color enemy_color = WHITE;
 
-		if (0 == enemy.get_hit_timer())
+		if (!enemy.get_hit_timer())
 		{
 			//Otherwise, we're gonna color it.
 			switch (enemy.get_type())
@@ -227,7 +227,7 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 {
 	std::vector<Enemy>::iterator dead_enemies_start;
 
-	if (0 == move_timer)
+	if (!move_timer)
 	{
 		move_timer = move_pause;
 
@@ -252,7 +252,7 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 	{
 		enemy.update();
 
-		if (0 == shoot_distribution(i_random_engine))
+		if (!shoot_distribution(i_random_engine))
 		{
 			enemy.shoot(enemy_bullets);
 		}
