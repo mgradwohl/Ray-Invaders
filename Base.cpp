@@ -18,7 +18,7 @@ void Base::reset()
 	damage = 0;
 }
 
-void Base::update(std::vector<Bullet>& i_enemy_bullets)
+void Base::update(std::vector<Bullet>& i_enemy_bullets, unsigned short framecount)
 {
 	if (dead)
 	{
@@ -27,9 +27,9 @@ void Base::update(std::vector<Bullet>& i_enemy_bullets)
 	}
 
 	frame = damage;
-	if (frame > 4)
+	if (frame >= framecount)
 	{
-		frame = 5;
+		frame = framecount;
 		dead = true;
 	}
 

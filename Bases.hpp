@@ -20,5 +20,7 @@ public:
 
 private:
 	std::vector<Base> _bases;
+	unsigned short _framecount = 0;
+
 	Texture2D _sprite;
 };
