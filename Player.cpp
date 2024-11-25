@@ -71,8 +71,8 @@ void Player::draw(raylib::DrawSession& ds)
 			//bullet_sprite.setPosition(bullet.x, bullet.y);
 			//i_window.draw(bullet_sprite);
 
-			dest.x = bullet.x;
-			dest.y = bullet.y;
+			dest.x = bullet._x;
+			dest.y = bullet._y;
 			ds.DrawTexture(bullet_sprite, source, dest, WHITE);
 		}
 		//i_window.draw(sprite);

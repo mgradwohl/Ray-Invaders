@@ -6,12 +6,12 @@
 PowerUp::PowerUp(const std::string& spritefile)
 {
 	_spritefile = spritefile;
-	powerup_bar_sprite = LoadTexture(_spritefile.c_str());
+	_powerup_bar_sprite = LoadTexture(_spritefile.c_str());
 }
 
 PowerUp::~PowerUp()
 {
-	UnloadTexture(powerup_bar_sprite);
+	UnloadTexture(_powerup_bar_sprite);
 }
 
 void PowerUp::update(Player& player)
@@ -23,22 +23,22 @@ void PowerUp::update(Player& player)
 	{
 		case 1:
 		{
-			color = Color{ 0,219,255,255 };
+			_color = Color{ 0,219,255,255 };
 			break;
 		}
 		case 2:
 		{
-			color = Color{ 255,109,0,255 };
+			_color = Color{ 255,109,0,255 };
 			break;
 		}
 		case 3:
 		{
-			color = Color{ 255,219,85,255 };
+			_color = Color{ 255,219,85,255 };
 			break;
 		}
 		case 4:
 		{
-			color = Color{ 182,109,255,255 };
+			_color = Color{ 182,109,255,255 };
 		}
 	}
 }
@@ -48,12 +48,12 @@ void PowerUp::draw(raylib::DrawSession& ds, Player& player)
 	if (player.get_current_power() <= 0)
 		return;
 
-	Vector2 dest{ SCREEN_WIDTH - powerup_bar_sprite.width - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE };
-	Rectangle source{ 0, 0, powerup_bar_sprite.width, BASE_SIZE };
-	ds.DrawTexture(powerup_bar_sprite, source, dest, WHITE);
+	Vector2 dest{ SCREEN_WIDTH - _powerup_bar_sprite.width - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE };
+	Rectangle source{ 0, 0, _powerup_bar_sprite.width, BASE_SIZE };
+	ds.DrawTexture(_powerup_bar_sprite, source, dest, WHITE);
 
-	dest = Vector2(SCREEN_WIDTH - powerup_bar_sprite.width - 0.125f * BASE_SIZE, 0.25f * BASE_SIZE);
-	source = Rectangle(0.125f * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(powerup_bar_sprite.width - 0.25f * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE);
-	ds.DrawTexture(powerup_bar_sprite, source, dest, color);
+	dest = Vector2(SCREEN_WIDTH - _powerup_bar_sprite.width - 0.125f * BASE_SIZE, 0.25f * BASE_SIZE);
+	source = Rectangle(0.125f * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(_powerup_bar_sprite.width - 0.25f * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE);
+	ds.DrawTexture(_powerup_bar_sprite, source, dest, _color);
 }
 

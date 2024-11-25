@@ -10,8 +10,8 @@ public:
 	void draw(raylib::DrawSession& ds, Player& player);
 
 private:
-	Texture2D powerup_bar_sprite;
-	Color color = WHITE;
+	Texture2D _powerup_bar_sprite;
+	Color _color = WHITE;
 	std::string _spritefile;
 };
 

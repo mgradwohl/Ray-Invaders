@@ -56,29 +56,59 @@ constexpr std::chrono::microseconds FRAME_DURATION(16667);
 
 struct Powerup
 {
-	bool dead;
+public:
+	Powerup(float i_x, float i_y, unsigned char i_type) :
+		_dead(0),
+		_x(i_x),
+		_y(i_y),
+		_type(i_type)
+	{
+		
+	}
 
-	short x;
-	short y;
+	const bool isdead() const
+	{
+		return _dead;
+	}
 
+	void isdead(bool dead)
+	{
+		_dead = dead;
+	}
+
+	float getx()
+	{
+		return _x;
+	}
+
+	float gety()
+	{
+		return _y;
+	}
+
+	void bump_y(unsigned short ybump)
+	{
+		_y += ybump;
+	}
+
+	Rectangle get_hitbox() const
+	{
+		return Rectangle(_x + 0.25f * BASE_SIZE, _y + 0.25f * BASE_SIZE, 0.5f * BASE_SIZE, 0.5f * BASE_SIZE);
+	}
+
+	unsigned char get_type()
+	{
+		return _type;
+	}
+private:
 	//0 - Shield
 	//1 - Fast reload
 	//2 - 3 bullets
 	//3 - Mirrored controls (power-DOWN! I'm so proud of this joke)
 	//Damn, I should've used enums. That would've made the code more readable.
-	unsigned char type;
+	unsigned char _type;
+	bool _dead;
 
-	Powerup(short i_x, short i_y, unsigned char i_type) :
-		dead(0),
-		x(i_x),
-		y(i_y),
-		type(i_type)
-	{
-		
-	}
-
-	Rectangle get_hitbox() const
-	{
-		return Rectangle(x + 0.25f * BASE_SIZE, y + 0.25f * BASE_SIZE, 0.5f * BASE_SIZE, 0.5f * BASE_SIZE);
-	}
+	float _x;
+	float _y;
 };

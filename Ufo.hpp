@@ -20,25 +20,25 @@ public:
 
 	Rectangle get_hitbox() const;
 private:
-	bool dead;
-	bool dead_animation_over;
+	bool _dead;
+	bool _dead_animation_over;
 
-	short explosion_x;
-	short x;
+	float _explosion_x;
+	float _x;
+	float _y;
 
-	unsigned short timer;
-	unsigned short y;
+	unsigned short _timer;
 
-	std::uniform_int_distribution<unsigned short> powerup_distribution;
+	std::uniform_int_distribution<unsigned short> _powerup_distribution;
 	//The UFO can appear after 12 seconds. Or 16 seconds. Or 14.652 seconds. We don't know for sure.
-	std::uniform_int_distribution<unsigned short> timer_distribution;
+	std::uniform_int_distribution<unsigned short> _timer_distribution;
 
-	std::vector<Animation> powerup_animations;
+	std::vector<Animation> _powerup_animations;
 
 	//Yes, the UFO is responsible for the powerups too.
-	std::vector<Powerup> powerups;
+	std::vector<Powerup> _powerups;
 
-	Animation animation;
-	Animation explosion;
-	raylib::WaveSound ufoappearsound;
+	Animation _animation;
+	Animation _explosion;
+	raylib::WaveSound _ufoappearsound;
 };

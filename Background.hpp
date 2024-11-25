@@ -17,7 +17,7 @@ public:
 	void reset();
 
 private:
-	Texture2D backgroundsprite;
-	Rectangle source{ 0, 0, 0, 0 };
+	Texture2D _backgroundsprite;
+	Rectangle _source{ 0, 0, 0, 0 };
 };
 

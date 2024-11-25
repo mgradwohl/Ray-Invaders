@@ -3,41 +3,41 @@
 #include "Bullet.hpp"
 
 Bullet::Bullet(float i_step_x, float i_step_y, short i_x, short i_y) :
-	dead(0),
-	real_x(i_x),
-	real_y(i_y),
-	step_x(i_step_x),
-	step_y(i_step_y),
-	x(i_x),
-	y(i_y)
+	_dead(0),
+	_real_x(i_x),
+	_real_y(i_y),
+	_step_x(i_step_x),
+	_step_y(i_step_y),
+	_x(i_x),
+	_y(i_y)
 {
-	previous_x.fill(x);
-	previous_y.fill(y);
+	_previous_x.fill(_x);
+	_previous_y.fill(_y);
 }
 
 void Bullet::update()
 {
-	if (!dead)
+	if (!_dead)
 	{
 		//I hate using floats, so we'll change real_x and _y and work only with integer values.
-		real_x += step_x;
-		real_y += step_y;
+		_real_x += _step_x;
+		_real_y += _step_y;
 
-		for (unsigned char a = 0; a < previous_x.size() - 1; a++)
+		for (unsigned char a = 0; a < _previous_x.size() - 1; a++)
 		{
-			previous_x[a] = previous_x[1 + a];
-			previous_y[a] = previous_y[1 + a];
+			_previous_x[a] = _previous_x[1 + a];
+			_previous_y[a] = _previous_y[1 + a];
 		}
 
-		previous_x[previous_x.size() - 1] = x;
-		previous_y[previous_y.size() - 1] = y;
+		_previous_x[_previous_x.size() - 1] = _x;
+		_previous_y[_previous_y.size() - 1] = _y;
 
-		x = round(real_x);
-		y = round(real_y);
+		_x = round(_real_x);
+		_y = round(_real_y);
 
-		if (x <= -BASE_SIZE || y <= -BASE_SIZE || SCREEN_HEIGHT <= y || SCREEN_WIDTH <= x)
+		if (_x <= -BASE_SIZE || _y <= -BASE_SIZE || SCREEN_HEIGHT <= _y || SCREEN_WIDTH <= _x)
 		{
-			dead = 1;
+			_dead = 1;
 		}
 	}
 }
@@ -45,15 +45,15 @@ void Bullet::update()
 Rectangle Bullet::get_hitbox() const
 {
 	//Smaller hitboxes make the game so much better!
-	return Rectangle(x + 0.375f * BASE_SIZE, y + 0.375f * BASE_SIZE, 0.25f * BASE_SIZE, 0.25f * BASE_SIZE);
+	return Rectangle(_x + 0.375f * BASE_SIZE, _y + 0.375f * BASE_SIZE, 0.25f * BASE_SIZE, 0.25f * BASE_SIZE);
 }
 
 const bool Bullet::IsDead() const
 {
-	return dead;
+	return _dead;
 };
 
 void Bullet::IsDead(bool d)
 {
-	dead = d;
+	_dead = d;
 }

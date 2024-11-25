@@ -17,10 +17,10 @@ public:
 	Rectangle get_hitbox() const;
 
 private:
-	unsigned short damage = 0;
-	bool dead = false;
-	unsigned short _x = 0;
-	unsigned short _y = 0;
-	unsigned short frame = 0;
+	unsigned short _damage = 0;
+	bool _dead = false;
+	float _x = 0;
+	float _y = 0;
+	unsigned short _frame = 0;
 };
 

@@ -14,30 +14,30 @@ Base::~Base()
 
 void Base::reset()
 {
-	dead = false;
-	damage = 0;
+	_dead = false;
+	_damage = 0;
 }
 
 void Base::update(std::vector<Bullet>& i_enemy_bullets, unsigned short framecount)
 {
-	if (dead)
+	if (_dead)
 	{
 		// can't collide with a dead Base
 		return;
 	}
 
-	frame = damage;
-	if (frame >= framecount)
+	_frame = _damage;
+	if (_frame >= framecount)
 	{
-		frame = framecount;
-		dead = true;
+		_frame = framecount;
+		_dead = true;
 	}
 
 	for (Bullet& enemy_bullet : i_enemy_bullets)
 	{
 		if (CheckCollisionRecs(get_hitbox(), enemy_bullet.get_hitbox()))
 		{
-			damage++;
+			_damage++;
 			enemy_bullet.IsDead(true);
 
 			break;
@@ -48,7 +48,7 @@ void Base::update(std::vector<Bullet>& i_enemy_bullets, unsigned short framecoun
 void Base::draw(raylib::DrawSession& ds, Texture2D& sprite)
 {
 	Vector2 dest{ _x, _y };
-	Rectangle source{ BASE_WIDTH * frame, 0, BASE_WIDTH, BASE_SIZE };
+	Rectangle source{ BASE_WIDTH * _frame, 0, BASE_WIDTH, BASE_SIZE };
 	ds.DrawTexture(sprite, source, dest, WHITE);
 }
 

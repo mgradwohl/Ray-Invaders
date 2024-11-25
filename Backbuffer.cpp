@@ -12,7 +12,7 @@ Backbuffer::~Backbuffer()
 	UnloadRenderTexture(_backbuffer);
 }
 
-void Backbuffer::flip()
+const void Backbuffer::flip()
 {
 	Vector2 pos{ 0,0 };
 	Rectangle source = { 0, 0, _backbuffer.texture.width, -_backbuffer.texture.height };
