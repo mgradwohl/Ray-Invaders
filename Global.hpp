@@ -76,12 +76,12 @@ public:
 		_dead = dead;
 	}
 
-	float getx()
+	float getx() const
 	{
 		return _x;
 	}
 
-	float gety()
+	float gety() const
 	{
 		return _y;
 	}
@@ -96,7 +96,7 @@ public:
 		return Rectangle(_x + 0.25f * BASE_SIZE, _y + 0.25f * BASE_SIZE, 0.5f * BASE_SIZE, 0.5f * BASE_SIZE);
 	}
 
-	unsigned char get_type()
+	unsigned char get_type() const
 	{
 		return _type;
 	}
