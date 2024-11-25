@@ -5,6 +5,8 @@
 #include <array>
 #include <chrono>
 
+#include <raylib.h>
+
 //I didn't wanna make PLAYER_SIZE, ENEMY_SIZE, BULLET_SIZE, so I just defined the base size.
 constexpr unsigned char BASE_SIZE = 16;
 constexpr unsigned char ENEMY_BULLET_SPEED = 2;
@@ -58,9 +60,9 @@ struct Powerup
 {
 public:
 	Powerup(float i_x, float i_y, unsigned char i_type) :
-		_dead(0),
 		_x(i_x),
 		_y(i_y),
+		_dead(0),
 		_type(i_type)
 	{
 		
@@ -106,9 +108,9 @@ private:
 	//2 - 3 bullets
 	//3 - Mirrored controls (power-DOWN! I'm so proud of this joke)
 	//Damn, I should've used enums. That would've made the code more readable.
-	unsigned char _type;
-	bool _dead;
 
 	float _x;
 	float _y;
+	bool _dead;
+	unsigned char _type;
 };

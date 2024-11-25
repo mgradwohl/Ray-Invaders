@@ -17,7 +17,7 @@ public:
 	unsigned char get_current_power() const;
 
 	unsigned short get_power_timer() const;
-	unsigned short get_y() const;
+	float get_y() const;
 
 	void die();
 	void draw(raylib::DrawSession& ds);
@@ -27,31 +27,31 @@ public:
 	Rectangle get_hitbox() const;
 	std::vector<Bullet>& get_player_bullets()
 	{
-		return bullets;
+		return _bullets;
 	}
 
 private:
 	//Is it okay to call this variable "dead"?
 	//I mean, it's a spaceship.
 	//And spaceships don't die, they get destroyed.
-	bool dead;
-	bool dead_animation_over;
-	bool shield_animation_over;
+	bool _dead;
+	bool _dead_animation_over;
+	bool _shield_animation_over;
 
-	unsigned char current_power;
-	unsigned char reload_timer;
+	unsigned char _current_power;
+	unsigned char _reload_timer;
 
-	unsigned short power_timer;
-	unsigned short x;
-	unsigned short y;
+	unsigned short _power_timer;
+	float _x;
+	float _y;
 
-	std::vector<Bullet> bullets;
+	std::vector<Bullet> _bullets;
 
-	Texture2D bullet_sprite;
-	Texture2D player_sprite;
-	Sound playerlaser;
-	Sound powerup;
-	Sound playerdestroy;
+	Texture2D _bullet_sprite;
+	Texture2D _player_sprite;
+	Sound _playerlasersound;
+	Sound _powerupsound;
+	Sound _playerdestroysound;
 
-	Animation explosion;
+	Animation _explosion;
 };

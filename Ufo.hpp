@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
+#include <random>
 #include <raylib.h>
 #include "RLDrawSession.h"
 #include "RLWaveSound.hpp"
 #include "Global.hpp"
+#include "Animation.hpp"
 
 class Ufo
 {
@@ -22,12 +24,11 @@ public:
 private:
 	bool _dead;
 	bool _dead_animation_over;
+	unsigned short _timer;
 
 	float _explosion_x;
 	float _x;
 	float _y;
-
-	unsigned short _timer;
 
 	std::uniform_int_distribution<unsigned short> _powerup_distribution;
 	//The UFO can appear after 12 seconds. Or 16 seconds. Or 14.652 seconds. We don't know for sure.

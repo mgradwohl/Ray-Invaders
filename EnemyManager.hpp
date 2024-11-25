@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
 #include <random>
+#include <raylib.h>
 #include "Bullet.hpp"
-
+#include "Enemy.hpp"
+#include "Animation.hpp"
 class EnemyManager
 {
 public:
