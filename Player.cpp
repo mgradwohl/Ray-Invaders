@@ -63,7 +63,7 @@ void Player::draw(raylib::DrawSession& ds)
 		//sprite.setTextureRect(sf::IntRect(BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE));
 
 		Vector2 dest{ _x, _y};
-		Rectangle source{ BASE_SIZE * _current_power, 0, BASE_SIZE, BASE_SIZE };
+		const Rectangle source{ BASE_SIZE * _current_power, 0, BASE_SIZE, BASE_SIZE };
 		ds.DrawTexture(_player_sprite, source, dest, WHITE);
 
 		for (const Bullet& bullet : _bullets)

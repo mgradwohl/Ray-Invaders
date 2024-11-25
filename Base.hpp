@@ -13,10 +13,10 @@ public:
 	Base(unsigned short x);
 	~Base();
 	void reset();
-	void update(std::vector<Bullet>& i_enemy_bullets, unsigned short framecount);
-	void draw(raylib::DrawSession& ds, Texture2D& sprite);
+	void update(std::vector<Bullet>& i_enemy_bullets, const unsigned short framecount);
+	void draw(raylib::DrawSession& ds, const Texture2D& sprite);
 
-	Rectangle get_hitbox() const;
+	[[no_discard]] Rectangle get_hitbox() const;
 
 private:
 	unsigned short _damage = 0;

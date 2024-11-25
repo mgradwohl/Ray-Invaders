@@ -14,10 +14,12 @@ PowerUp::~PowerUp()
 	UnloadTexture(_powerup_bar_sprite);
 }
 
-void PowerUp::update(Player& player)
+void PowerUp::update(const Player& player)
 {
 	if (player.get_current_power() <= 0)
+	{
 		return;
+	}
 
 	switch (player.get_current_power())
 	{
@@ -43,7 +45,7 @@ void PowerUp::update(Player& player)
 	}
 }
 
-void PowerUp::draw(raylib::DrawSession& ds, Player& player)
+void PowerUp::draw(raylib::DrawSession& ds, const Player& player) const
 {
 	if (player.get_current_power() <= 0)
 		return;

@@ -12,7 +12,7 @@ public:
 	Background() = default;
 	Background(const std::string& spritefile);
 	~Background();
-	void draw(raylib::DrawSession& ds);
+	void draw(raylib::DrawSession& ds) const;
 	void update(Player& player);
 	void reset();
 

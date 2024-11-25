@@ -52,8 +52,8 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 
 			//i_window.draw(enemy_bullet_sprite);
 
-			Vector2 dest{ bullet._previous_x[a], bullet._previous_y[a]};
-			Rectangle source{ BASE_SIZE * a, 0, BASE_SIZE, BASE_SIZE };
+			const Vector2 dest{ bullet._previous_x[a], bullet._previous_y[a]};
+			const Rectangle source{ BASE_SIZE * a, 0, BASE_SIZE, BASE_SIZE };
 			ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 		}
 
@@ -63,8 +63,8 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 
 		//i_window.draw(enemy_bullet_sprite);
 
-		Vector2 dest{ bullet._x, bullet._y};
-		Rectangle source{ BASE_SIZE * bullet._previous_x.size(), 0, BASE_SIZE, BASE_SIZE };
+		const Vector2 dest{ bullet._x, bullet._y};
+		const Rectangle source{ BASE_SIZE * bullet._previous_x.size(), 0, BASE_SIZE, BASE_SIZE };
 		ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 	}
 

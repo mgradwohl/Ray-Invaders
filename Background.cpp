@@ -11,9 +11,9 @@ Background::~Background()
 	UnloadTexture(_backgroundsprite);
 }
 
-void Background::draw(raylib::DrawSession& ds)
+void Background::draw(raylib::DrawSession& ds) const
 {
-	Vector2 pos{ 0,0 };
+	const Vector2 pos{ 0,0 };
 	ds.DrawTexture(_backgroundsprite, _source, pos, WHITE);
 
 	//ds.DrawTexture(backgroundsprite, x, y, WHITE);

@@ -12,7 +12,7 @@ public:
 	bool change_current_frame() noexcept;
 	bool update() noexcept;
 
-	void draw(raylib::DrawSession& ds, float x, float y, const Color& i_color = WHITE);
+	void draw(raylib::DrawSession& ds, float x, float y, const Color& i_color = WHITE) const;
 	void reset();
 
 private:

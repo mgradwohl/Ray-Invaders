@@ -45,14 +45,14 @@ void Base::update(std::vector<Bullet>& i_enemy_bullets, unsigned short framecoun
 	}
 }
 
-void Base::draw(raylib::DrawSession& ds, Texture2D& sprite)
+void Base::draw(raylib::DrawSession& ds, const Texture2D& sprite)
 {
-	Vector2 dest{ _x, _y };
-	Rectangle source{ BASE_WIDTH * _frame, 0, BASE_WIDTH, BASE_SIZE };
+	const Vector2 dest{ _x, _y };
+	const Rectangle source{ BASE_WIDTH * _frame, 0, BASE_WIDTH, BASE_SIZE };
 	ds.DrawTexture(sprite, source, dest, WHITE);
 }
 
-Rectangle Base::get_hitbox() const
+[[no_discard]] Rectangle Base::get_hitbox() const
 {
 	return Rectangle(_x, _y, BASE_WIDTH, BASE_SIZE);
 }
