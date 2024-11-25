@@ -68,7 +68,7 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 		ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 	}
 
-	for (Enemy& enemy : _enemies)
+	for (const Enemy& enemy : _enemies)
 	{
 		//When the enemy gets hit, it's gonna appear white.
 		Color enemy_color = WHITE;
@@ -190,7 +190,7 @@ void EnemyManager::reset(unsigned short i_level)
 	}
 
 	//Here we're converting each character into an enemy.
-	for (char sketch_character : level_sketch)
+	for (const char sketch_character : level_sketch)
 	{
 		enemy_x++;
 

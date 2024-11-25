@@ -42,7 +42,7 @@ int main()
 	while (!window.ShouldClose())
 	{
 		//Making the game frame rate independent.
-		std::chrono::microseconds delta_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - previous_time);
+		const std::chrono::microseconds delta_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - previous_time);
 		lag += delta_time;
 		previous_time += delta_time;
 

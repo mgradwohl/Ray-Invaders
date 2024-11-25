@@ -101,31 +101,43 @@
     <IncludePath>C:\raylib\raylib\src;$(IncludePath)</IncludePath>
     <LibraryPath>C:\raylib\raylib\projects\VS2022\build\raylib\bin\$(LibrariesArchitecture)\$(Configuration);$(LibraryPath)</LibraryPath>
     <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <CodeAnalysisRuleSet>Good Ruleset Preview.ruleset</CodeAnalysisRuleSet>
+    <ClangTidyChecks>clang-analyzer-*,bugprone-*,readability-*,performance-*,modernize-*,-modernize-use-trailing-return-type,-readability-magic-numbers,-misc-non-private-member-variables-in-classes,misc-const-correctness</ClangTidyChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\raylib\raylib\src;$(IncludePath)</IncludePath>
     <LibraryPath>C:\raylib\raylib\projects\VS2022\build\raylib\bin\$(LibrariesArchitecture)\$(Configuration);$(LibraryPath)</LibraryPath>
     <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <CodeAnalysisRuleSet>Good Ruleset Preview.ruleset</CodeAnalysisRuleSet>
+    <ClangTidyChecks>clang-analyzer-*,bugprone-*,readability-*,performance-*,modernize-*,-modernize-use-trailing-return-type,-readability-magic-numbers,-misc-non-private-member-variables-in-classes,misc-const-correctness</ClangTidyChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\raylib\raylib\src;$(IncludePath)</IncludePath>
     <LibraryPath>C:\raylib\raylib\projects\VS2022\build\raylib\bin\$(LibrariesArchitecture)\$(Configuration);$(LibraryPath)</LibraryPath>
     <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <CodeAnalysisRuleSet>Good Ruleset Preview.ruleset</CodeAnalysisRuleSet>
+    <ClangTidyChecks>clang-analyzer-*,bugprone-*,readability-*,performance-*,modernize-*,-modernize-use-trailing-return-type,-readability-magic-numbers,-misc-non-private-member-variables-in-classes,misc-const-correctness</ClangTidyChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <IncludePath>C:\raylib\raylib\src;$(IncludePath)</IncludePath>
     <LibraryPath>C:\raylib\raylib\projects\VS2022\build\raylib\bin\$(LibrariesArchitecture)\$(Configuration);$(LibraryPath)</LibraryPath>
     <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <CodeAnalysisRuleSet>Good Ruleset Preview.ruleset</CodeAnalysisRuleSet>
+    <ClangTidyChecks>clang-analyzer-*,bugprone-*,readability-*,performance-*,modernize-*,-modernize-use-trailing-return-type,-readability-magic-numbers,-misc-non-private-member-variables-in-classes,misc-const-correctness</ClangTidyChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\raylib\raylib\src;$(IncludePath)</IncludePath>
     <LibraryPath>C:\raylib\raylib\projects\VS2022\build\raylib\bin\$(LibrariesArchitecture)\$(Configuration);$(LibraryPath)</LibraryPath>
     <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <CodeAnalysisRuleSet>Good Ruleset Preview.ruleset</CodeAnalysisRuleSet>
+    <ClangTidyChecks>clang-analyzer-*,bugprone-*,readability-*,performance-*,modernize-*,-modernize-use-trailing-return-type,-readability-magic-numbers,-misc-non-private-member-variables-in-classes,misc-const-correctness</ClangTidyChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <IncludePath>C:\raylib\raylib\src;$(IncludePath)</IncludePath>
     <LibraryPath>C:\raylib\raylib\projects\VS2022\build\raylib\bin\$(LibrariesArchitecture)\$(Configuration);$(LibraryPath)</LibraryPath>
     <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <CodeAnalysisRuleSet>Good Ruleset Preview.ruleset</CodeAnalysisRuleSet>
+    <ClangTidyChecks>clang-analyzer-*,bugprone-*,readability-*,performance-*,modernize-*,-modernize-use-trailing-return-type,-readability-magic-numbers,-misc-non-private-member-variables-in-classes,misc-const-correctness</ClangTidyChecks>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -285,6 +297,9 @@
     <ClInclude Include="RLWaveSound.hpp" />
     <ClInclude Include="RLWindow.h" />
     <ClInclude Include="Ufo.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Good Ruleset Preview.ruleset" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

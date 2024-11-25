@@ -14,12 +14,11 @@ Backbuffer::~Backbuffer()
 
 const void Backbuffer::flip() const
 {
-	Vector2 pos{ 0,0 };
-	Rectangle source = { 0, 0, _backbuffer.texture.width, -_backbuffer.texture.height };
+	const Vector2 pos{ 0,0 };
+	const Rectangle source = { 0, 0, _backbuffer.texture.width, -_backbuffer.texture.height };
 
 	BeginDrawing();
-	Rectangle dest = { 0, 0, _backbuffer.texture.width * _scale, _backbuffer.texture.height * _scale};
+	const Rectangle dest = { 0, 0, _backbuffer.texture.width * _scale, _backbuffer.texture.height * _scale};
 	DrawTexturePro(_backbuffer.texture, source, dest, pos, 0.0f, WHITE);
 	EndDrawing();
-
 }

@@ -9,8 +9,8 @@ class Animation
 public:
 	Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location);
 
-	bool change_current_frame();
-	bool update();
+	bool change_current_frame() noexcept;
+	bool update() noexcept;
 
 	void draw(raylib::DrawSession& ds, float x, float y, const Color& i_color = WHITE);
 	void reset();

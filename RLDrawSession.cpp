@@ -6,14 +6,14 @@
 #include "RLDrawSession.h"
 namespace raylib
 {
-    DrawSession::DrawSession(RenderTexture2D& backbuffer, Color clearColor)
+    DrawSession::DrawSession(const RenderTexture2D& backbuffer, const Color clearColor)
     {
         BeginTextureMode(backbuffer);
 
         ClearBackground(clearColor);
     }
 
-    DrawSession::DrawSession(RenderTexture2D& backbuffer)
+    DrawSession::DrawSession(const RenderTexture2D& backbuffer)
     {
         BeginTextureMode(backbuffer);
     }
@@ -28,22 +28,22 @@ namespace raylib
         ::DrawRectangle(x, y, width, height, color);
     }
 
-    void DrawSession::DrawTexture(Texture2D& texture, int x, int y, Color color)
+    void DrawSession::DrawTexture(const Texture2D& texture, const int x, const int y, const Color color)
 	{
 		::DrawTexture(texture, x, y, color);
 	}
 
-    void DrawSession::DrawTexture(Texture2D& texture, float x, float y, float width, float height, Vector2& pos, Color color)
+    void DrawSession::DrawTexture(const Texture2D& texture, const float x, const float y, const float width, const float height, const Vector2& pos, const Color color)
     {
         ::DrawTextureRec(texture, { x,y,width,height }, pos, color);
     }
 
-    void DrawSession::DrawTexture(Texture2D& texture, Rectangle& source, Vector2& pos, Color color)
+    void DrawSession::DrawTexture(const Texture2D& texture, const Rectangle& source, const Vector2& pos, const Color color)
     {
         ::DrawTextureRec(texture, source, pos, color);
     }
 
-    void DrawSession::DrawText(const std::string& text, int x, int y, int fontSize, Color color)
+    void DrawSession::DrawText(const std::string& text, const int x, const int y, int const fontSize, const Color color)
     {
         ::DrawText(text.c_str(), x, y, fontSize, color);
     }

@@ -16,7 +16,7 @@ Animation::Animation(unsigned short i_animation_speed, unsigned short i_frame_wi
 }
 
 //This is for the enemies.
-bool Animation::change_current_frame()
+bool Animation::change_current_frame() noexcept
 {
 	_current_frame++;
 
@@ -30,7 +30,7 @@ bool Animation::change_current_frame()
 	return false;
 }
 
-bool Animation::update()
+bool Animation::update() noexcept
 {
 	bool output = false;
 
@@ -61,9 +61,9 @@ void Animation::draw(raylib::DrawSession& ds, float x, float y, const Color& i_c
 	//sprite.setTextureRect(sf::IntRect(current_frame * frame_width, 0, frame_width, texture.getSize().y));
 	//i_window.draw(sprite);
 
-	Vector2 dest{ x, y };
-	Rectangle source{_current_frame * _frame_width, 0.0f, _frame_width, _sprite.height };
-	Color ani{ i_color.r, i_color.g, i_color.b, 255 };
+	const Vector2 dest{ x, y };
+	const Rectangle source{_current_frame * _frame_width, 0.0f, _frame_width, _sprite.height };
+	const Color ani{ i_color.r, i_color.g, i_color.b, 255 };
 	ds.DrawTexture(_sprite, source, dest, ani);
 }
 

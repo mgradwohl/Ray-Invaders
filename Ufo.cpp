@@ -71,7 +71,7 @@ void Ufo::draw(raylib::DrawSession& ds)
 		_explosion.draw(ds, _explosion_x, _y - 0.5f * BASE_SIZE, Color(255, 36, 0, 255));
 	}
 
-	for (Powerup& powerup : _powerups)
+	for (const Powerup& powerup : _powerups)
 	{
 		_powerup_animations[powerup.get_type()].draw(ds, powerup.getx(), powerup.gety(), WHITE);
 	}
