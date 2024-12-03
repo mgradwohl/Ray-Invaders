@@ -59,46 +59,46 @@ constexpr std::chrono::microseconds FRAME_DURATION(16667);
 struct Powerup
 {
 public:
-	Powerup(float i_x, float i_y, unsigned char i_type) :
+	Powerup(float i_x, float i_y, unsigned char i_type) noexcept :
 		_x(i_x),
 		_y(i_y),
-		_dead(0),
+		_dead(false),
 		_type(i_type)
 	{
 		
 	}
 
-	const bool isdead() const
+	[[nodiscard]] const bool isdead() const noexcept
 	{
 		return _dead;
 	}
 
-	void isdead(bool dead)
+	void isdead(bool dead) noexcept
 	{
 		_dead = dead;
 	}
 
-	float getx() const
+	[[nodiscard]] float getx() const noexcept
 	{
 		return _x;
 	}
 
-	float gety() const
+	[[nodiscard]] float gety() const noexcept
 	{
 		return _y;
 	}
 
-	void bump_y(unsigned short ybump)
+	void bump_y(unsigned short ybump) noexcept
 	{
 		_y += ybump;
 	}
 
-	Rectangle get_hitbox() const
+	[[nodiscard]] Rectangle get_hitbox() const noexcept
 	{
-		return Rectangle(_x + 0.25f * BASE_SIZE, _y + 0.25f * BASE_SIZE, 0.5f * BASE_SIZE, 0.5f * BASE_SIZE);
+		return Rectangle(_x + 0.25F * BASE_SIZE, _y + 0.25F * BASE_SIZE, 0.5F * BASE_SIZE, 0.5F * BASE_SIZE);
 	}
 
-	unsigned char get_type() const
+	unsigned char get_type() const noexcept
 	{
 		return _type;
 	}

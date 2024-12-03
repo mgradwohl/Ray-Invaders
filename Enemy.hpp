@@ -6,21 +6,21 @@
 class Enemy
 {
 public:
-	Enemy(unsigned char i_type, unsigned short i_x, unsigned short i_y);
+	Enemy(unsigned char i_type, unsigned short i_x, unsigned short i_y) noexcept;
 
-	unsigned char get_health() const;
-	unsigned char get_hit_timer() const;
-	unsigned char get_type() const;
+	[[nodiscard]] unsigned char get_health() const noexcept;
+	unsigned char get_hit_timer() const noexcept;
+	unsigned char get_type() const noexcept;
 
-	float get_x() const;
-	float get_y() const;
+	[[nodiscard]] float get_x() const noexcept;
+	[[nodiscard]] float get_y() const noexcept;
 
-	void hit();
+	void hit() noexcept;
 	void move();
 	void shoot(std::vector<Bullet>& i_enemy_bullets);
-	void update();
+	void update() noexcept;
 
-	Rectangle get_hitbox() const;
+	[[nodiscard]] Rectangle get_hitbox() const noexcept;
 private:
 	//-1 - Left
 	//0 - Down

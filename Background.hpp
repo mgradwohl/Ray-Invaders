@@ -13,8 +13,8 @@ public:
 	Background(const std::string& spritefile);
 	~Background();
 	void draw(raylib::DrawSession& ds) const;
-	void update(Player& player);
-	void reset();
+	void update(Player& player) noexcept;
+	void reset() noexcept;
 
 private:
 	Texture2D _backgroundsprite;

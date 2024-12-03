@@ -10,13 +10,14 @@
 class Base
 {
 public:
-	Base(unsigned short x);
-	~Base();
-	void reset();
+	Base() = default;
+	Base(unsigned short x) noexcept;
+	~Base() = default;
+	void reset() noexcept;
 	void update(std::vector<Bullet>& i_enemy_bullets, const unsigned short framecount);
 	void draw(raylib::DrawSession& ds, const Texture2D& sprite);
 
-	[[no_discard]] Rectangle get_hitbox() const;
+	[[nodiscard]] Rectangle get_hitbox() const noexcept;
 
 private:
 	unsigned short _damage = 0;

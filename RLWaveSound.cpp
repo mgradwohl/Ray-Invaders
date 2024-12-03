@@ -5,7 +5,7 @@
 
 namespace raylib
 {
-    WaveSound::WaveSound(const std::string& filename)
+    WaveSound::WaveSound(const std::string& filename) noexcept
     {
         _sound = LoadSound(filename.c_str());
     }

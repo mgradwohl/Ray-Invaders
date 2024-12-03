@@ -3,19 +3,19 @@
 #include "Bullet.hpp"
 
 Bullet::Bullet(float i_step_x, float i_step_y, short i_x, short i_y) :
-	_dead(0),
+	_dead(false),
 	_real_x(i_x),
 	_real_y(i_y),
 	_step_x(i_step_x),
-	_step_y(i_step_y),
 	_x(i_x),
+	_step_y(i_step_y),
 	_y(i_y)
 {
 	_previous_x.fill(_x);
 	_previous_y.fill(_y);
 }
 
-void Bullet::update()
+void Bullet::update() noexcept
 {
 	if (!_dead)
 	{
@@ -37,23 +37,23 @@ void Bullet::update()
 
 		if (_x <= -BASE_SIZE || _y <= -BASE_SIZE || SCREEN_HEIGHT <= _y || SCREEN_WIDTH <= _x)
 		{
-			_dead = 1;
+			_dead = true;
 		}
 	}
 }
 
-Rectangle Bullet::get_hitbox() const
+Rectangle Bullet::get_hitbox() const noexcept
 {
 	//Smaller hitboxes make the game so much better!
-	return Rectangle(_x + 0.375f * BASE_SIZE, _y + 0.375f * BASE_SIZE, 0.25f * BASE_SIZE, 0.25f * BASE_SIZE);
+	return Rectangle(_x + 0.375F * BASE_SIZE, _y + 0.375F * BASE_SIZE, 0.25F * BASE_SIZE, 0.25F * BASE_SIZE);
 }
 
-const bool Bullet::IsDead() const
+const bool Bullet::IsDead() const noexcept
 {
 	return _dead;
 };
 
-void Bullet::IsDead(bool d)
+void Bullet::IsDead(bool d) noexcept
 {
 	_dead = d;
 }

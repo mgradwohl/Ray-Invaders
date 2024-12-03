@@ -10,7 +10,7 @@
 #include "Enemy.hpp"
 #include "EnemyManager.hpp"
 #include "Bullet.hpp"
-EnemyManager::EnemyManager() :
+EnemyManager::EnemyManager() noexcept :
 	_shoot_distribution(0, ENEMY_SHOOT_CHANCE)
 {
 	//We have a function that sets everything to the initial state, so why not use it?
@@ -30,7 +30,7 @@ bool EnemyManager::reached_player(unsigned short i_player_y) const
 {
 	for (const Enemy& enemy : _enemies)
 	{
-		if (enemy.get_y() > i_player_y - 0.5f * BASE_SIZE)
+		if (enemy.get_y() > i_player_y - 0.5F * BASE_SIZE)
 		{
 			//As soon as the enemies reach the player, the game is over!
 			return true;
@@ -131,7 +131,7 @@ void EnemyManager::reset(unsigned short i_level)
 	//Go watch that video, btw!
 	if (TOTAL_LEVELS <= i_level)
 	{
-		i_level = 0.5f * TOTAL_LEVELS + i_level % static_cast<unsigned char>(0.5f * TOTAL_LEVELS);
+		i_level = 0.5F * TOTAL_LEVELS + i_level % static_cast<unsigned char>(0.5F * TOTAL_LEVELS);
 	}
 
 	//Here you can see my pro level design skills!
@@ -287,12 +287,12 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 }
 
 //Yes, that's a reference return type.
-std::vector<Bullet>& EnemyManager::get_enemy_bullets()
+std::vector<Bullet>& EnemyManager::get_enemy_bullets() noexcept
 {
 	return _enemy_bullets;
 }
 
-std::vector<Enemy>& EnemyManager::get_enemies()
+std::vector<Enemy>& EnemyManager::get_enemies() noexcept
 {
 	return _enemies;
 }

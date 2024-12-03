@@ -24,35 +24,35 @@ Player::Player() :
 	_playerdestroysound = LoadSound("Resources/Sounds/Player Destroy.wav");
 }
 
-bool Player::get_dead() const
+bool Player::get_dead() const noexcept
 {
 	return _dead;
 }
 
-bool Player::get_dead_animation_over() const
+bool Player::get_dead_animation_over() const noexcept
 {
 	return _dead_animation_over;
 }
 
-unsigned char Player::get_current_power() const
+unsigned char Player::get_current_power() const noexcept
 {
 	return _current_power;
 }
 
-unsigned short Player::get_power_timer() const
+unsigned short Player::get_power_timer() const noexcept
 {
 	return _power_timer;
 }
 
-float Player::get_y() const
+float Player::get_y() const noexcept
 {
 	return _y;
 }
 
 //I don't know why, but this is funny.
-void Player::die()
+void Player::die() noexcept
 {
-	_dead = 1;
+	_dead = true;
 }
 
 void Player::draw(raylib::DrawSession& ds)
@@ -91,9 +91,9 @@ void Player::draw(raylib::DrawSession& ds)
 
 void Player::reset()
 {
-	_dead = 0;
-	_dead_animation_over = 0;
-	_shield_animation_over = 1;
+	_dead = false;
+	_dead_animation_over = false;
+	_shield_animation_over = true;
 
 	_current_power = 0;
 	_reload_timer = 0;
@@ -178,11 +178,11 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 				{
 					_current_power = 0;
 
-					_shield_animation_over = 0;
+					_shield_animation_over = false;
 				}
 				else
 				{
-					_dead = 1;
+					_dead = true;
 					PlaySound(_playerdestroysound);
 				}
 
@@ -255,7 +255,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 	}), _bullets.end());
 }
 
-Rectangle Player::get_hitbox() const
+Rectangle Player::get_hitbox() const noexcept
 {
 	return Rectangle(_x + 0.125f * BASE_SIZE, _y + 0.125f * BASE_SIZE, 0.75f * BASE_SIZE, 0.75f * BASE_SIZE);
 }

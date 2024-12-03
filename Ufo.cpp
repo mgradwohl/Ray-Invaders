@@ -14,7 +14,7 @@ Ufo::Ufo(std::mt19937_64& i_random_engine) :
 	_animation(UFO_ANIMATION_SPEED, 2 * BASE_SIZE, "Resources/Images/Ufo.png"),
 	_explosion(EXPLOSION_ANIMATION_SPEED, 2 * BASE_SIZE, "Resources/Images/ExplosionBig.png")
 {
-	reset(1, i_random_engine);
+	reset(true, i_random_engine);
 	_ufoappearsound = raylib::WaveSound("Resources/Sounds/UFO Enter.wav");
 
 	for (unsigned char a = 0; a < POWERUP_TYPES; a++)
@@ -43,7 +43,7 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 	return false;
 }
 
-unsigned char Ufo::check_powerup_collision(const Rectangle& i_player_hitbox)
+unsigned char Ufo::check_powerup_collision(const Rectangle& i_player_hitbox) noexcept
 {
 	for (Powerup& powerup : _powerups)
 	{
@@ -80,7 +80,7 @@ void Ufo::draw(raylib::DrawSession& ds)
 void Ufo::reset(bool i_dead, std::mt19937_64& i_random_engine)
 {
 	_dead = i_dead;
-	_dead_animation_over = 0;
+	_dead_animation_over = false;
 
 	_explosion_x = SCREEN_WIDTH;
 	_x = SCREEN_WIDTH;
@@ -107,7 +107,7 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 		//As soon as the UFO leaves the screen, it gets destroyed. But no powerups will appear.
 		if (_x <= -2 * BASE_SIZE)
 		{
-			_dead = 1;
+			_dead = true;
 			_ufoappearsound.Stop();
 		}
 
@@ -122,7 +122,7 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 
 		if (!_timer)
 		{
-			reset(0, i_random_engine);
+			reset(false, i_random_engine);
 		}
 		else
 		{
@@ -150,13 +150,13 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 		powerup_animation.update();
 	}
 
-	_powerups.erase(remove_if(_powerups.begin(), _powerups.end(), [](const Powerup& i_powerup)
+	_powerups.erase(remove_if(_powerups.begin(), _powerups.end(), [](const Powerup& i_powerup) noexcept
 	{
 		return true == i_powerup. isdead();
 	}), _powerups.end());
 }
 
-Rectangle Ufo::get_hitbox() const
+Rectangle Ufo::get_hitbox() const noexcept
 {
 	return Rectangle(_x, _y, 2 * BASE_SIZE, BASE_SIZE);
 }

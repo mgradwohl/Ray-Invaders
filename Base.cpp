@@ -2,17 +2,13 @@
 #include "Bullet.hpp"
 #include "Base.hpp"
 
-Base::Base(unsigned short x)
+Base::Base(unsigned short x) noexcept
 {
 	_x = x;
 	_y = SCREEN_HEIGHT - 4 - (BASE_SIZE * 3);
 }
 
-Base::~Base()
-{
-}
-
-void Base::reset()
+void Base::reset() noexcept
 {
 	_dead = false;
 	_damage = 0;
@@ -52,7 +48,7 @@ void Base::draw(raylib::DrawSession& ds, const Texture2D& sprite)
 	ds.DrawTexture(sprite, source, dest, WHITE);
 }
 
-[[no_discard]] Rectangle Base::get_hitbox() const
+[[nodiscard]] Rectangle Base::get_hitbox() const noexcept
 {
 	return Rectangle(_x, _y, BASE_WIDTH, BASE_SIZE);
 }

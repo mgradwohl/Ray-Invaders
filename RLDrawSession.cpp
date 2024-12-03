@@ -6,14 +6,14 @@
 #include "RLDrawSession.h"
 namespace raylib
 {
-    DrawSession::DrawSession(const RenderTexture2D& backbuffer, const Color clearColor)
+    DrawSession::DrawSession(const RenderTexture2D& backbuffer, const Color clearColor) noexcept
     {
         BeginTextureMode(backbuffer);
 
         ClearBackground(clearColor);
     }
 
-    DrawSession::DrawSession(const RenderTexture2D& backbuffer)
+    DrawSession::DrawSession(const RenderTexture2D& backbuffer) noexcept
     {
         BeginTextureMode(backbuffer);
     }
@@ -23,27 +23,27 @@ namespace raylib
         EndTextureMode();
     }
 
-    void DrawSession::DrawRectangle(int x, int y, int width, int height, Color color)
+    void DrawSession::DrawRectangle(int x, int y, int width, int height, Color color) noexcept
     {
         ::DrawRectangle(x, y, width, height, color);
     }
 
-    void DrawSession::DrawTexture(const Texture2D& texture, const int x, const int y, const Color color)
+    void DrawSession::DrawTexture(const Texture2D& texture, const int x, const int y, const Color color) noexcept
 	{
 		::DrawTexture(texture, x, y, color);
 	}
 
-    void DrawSession::DrawTexture(const Texture2D& texture, const float x, const float y, const float width, const float height, const Vector2& pos, const Color color)
+    void DrawSession::DrawTexture(const Texture2D& texture, const float x, const float y, const float width, const float height, const Vector2& pos, const Color color) noexcept
     {
         ::DrawTextureRec(texture, { x,y,width,height }, pos, color);
     }
 
-    void DrawSession::DrawTexture(const Texture2D& texture, const Rectangle& source, const Vector2& pos, const Color color)
+    void DrawSession::DrawTexture(const Texture2D& texture, const Rectangle& source, const Vector2& pos, const Color color) noexcept
     {
         ::DrawTextureRec(texture, source, pos, color);
     }
 
-    void DrawSession::DrawText(const std::string& text, const int x, const int y, int const fontSize, const Color color)
+    void DrawSession::DrawText(const std::string& text, const int x, const int y, int const fontSize, const Color color) noexcept
     {
         ::DrawText(text.c_str(), x, y, fontSize, color);
     }

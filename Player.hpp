@@ -11,21 +11,21 @@ class Player
 public:
 	Player();
 
-	bool get_dead() const;
-	bool get_dead_animation_over() const;
+	[[nodiscard]] bool get_dead() const noexcept;
+	[[nodiscard]] bool get_dead_animation_over() const noexcept;
 
-	unsigned char get_current_power() const;
+	[[nodiscard]] unsigned char get_current_power() const noexcept;
 
-	unsigned short get_power_timer() const;
-	float get_y() const;
+	[[nodiscard]] unsigned short get_power_timer() const noexcept;
+	[[nodiscard]] float get_y() const noexcept;
 
-	void die();
+	void die() noexcept;
 	void draw(raylib::DrawSession& ds);
 	void reset();
 	void update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_enemy_bullets, std::vector<Enemy>& i_enemies, Ufo& i_ufo);
 
-	Rectangle get_hitbox() const;
-	std::vector<Bullet>& get_player_bullets()
+	[[nodiscard]] Rectangle get_hitbox() const noexcept;
+	std::vector<Bullet>& get_player_bullets() noexcept
 	{
 		return _bullets;
 	}

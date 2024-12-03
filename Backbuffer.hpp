@@ -3,16 +3,16 @@
 class Backbuffer
 {
 public:
-	Backbuffer(unsigned short width, unsigned short height, unsigned short scale);
+	Backbuffer(unsigned short width, unsigned short height, unsigned short scale) noexcept;
 	~Backbuffer();
-	const void flip() const;
+	void flip() const noexcept;
 
-	RenderTexture2D& GetRenderTexture()
+	RenderTexture2D& GetRenderTexture() noexcept
 	{
 		return _backbuffer;
 	}
 
-	const Texture2D GetTexture() const
+	[[nodiscard]] const Texture2D GetTexture() const noexcept
 	{
 		return _backbuffer.texture;
 	}

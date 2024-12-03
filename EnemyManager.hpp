@@ -8,16 +8,16 @@
 class EnemyManager
 {
 public:
-	EnemyManager();
+	EnemyManager() noexcept;
 
-	bool reached_player(unsigned short i_player_y) const;
+	[[nodiscard]] bool reached_player(unsigned short i_player_y) const;
 
 	void draw(raylib::DrawSession& ds);
 	void reset(unsigned short i_level);
 	void update(std::mt19937_64& i_random_engine);
 
-	std::vector<Bullet>& get_enemy_bullets();
-	std::vector<Enemy>& get_enemies();
+	std::vector<Bullet>& get_enemy_bullets() noexcept;
+	std::vector<Enemy>& get_enemies() noexcept;
 private:
 	//I didn't wanna use floats, so I did this. The enemies will pause for a few frames and then move. To make them faster, we'll just reduce the duration of the pause.
 	unsigned short _move_pause;

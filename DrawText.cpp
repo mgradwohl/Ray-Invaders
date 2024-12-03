@@ -4,12 +4,12 @@
 #include "DrawText.hpp"
 #include "RLDrawSession.h"
 
-void draw_text(raylib::DrawSession& ds, short size, short i_x, short i_y, const std::string& i_text)
+void draw_text(raylib::DrawSession& ds, short size, short i_x, short i_y, const std::string& i_text) noexcept
 {
 	DrawText(i_text.c_str(), i_x, i_y, size, WHITE);
 }
 
-void draw_text_center(raylib::DrawSession& ds, short size, unsigned short width, unsigned short height, const std::string& i_text)
+void draw_text_center(raylib::DrawSession& ds, short size, unsigned short width, unsigned short height, const std::string& i_text) noexcept
 {
 	const int screenCenterX = width / 2;
 	const int screenCenterY = height/ 2;

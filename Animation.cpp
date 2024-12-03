@@ -4,7 +4,7 @@
 
 #include "Animation.hpp"
 
-Animation::Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location) :
+Animation::Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location) noexcept :
 	_animation_iterator(0),
 	_animation_speed(std::max<unsigned short>(1, i_animation_speed)),
 	_current_frame(0),
@@ -62,12 +62,12 @@ void Animation::draw(raylib::DrawSession& ds, float x, float y, const Color& i_c
 	//i_window.draw(sprite);
 
 	const Vector2 dest{ x, y };
-	const Rectangle source{_current_frame * _frame_width, 0.0f, _frame_width, _sprite.height };
+	const Rectangle source{_current_frame * _frame_width, 0.0F, _frame_width, _sprite.height };
 	const Color ani{ i_color.r, i_color.g, i_color.b, 255 };
 	ds.DrawTexture(_sprite, source, dest, ani);
 }
 
-void Animation::reset()
+void Animation::reset() noexcept
 {
 	_animation_iterator = 0;
 	_current_frame = 0;

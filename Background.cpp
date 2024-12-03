@@ -19,7 +19,7 @@ void Background::draw(raylib::DrawSession& ds) const
 	//ds.DrawTexture(backgroundsprite, x, y, WHITE);
 }
 
-void Background::update(Player& player)
+void Background::update(Player& player) noexcept
 {
 	if (IsKeyDown(KEY_RIGHT))
 	{
@@ -50,7 +50,7 @@ void Background::update(Player& player)
 	}
 }
 
-void Background::reset()
+void Background::reset() noexcept
 {
 	_source.x = (_backgroundsprite.width - SCREEN_WIDTH) / 2;
 	_source.y = _backgroundsprite.height - SCREEN_HEIGHT;

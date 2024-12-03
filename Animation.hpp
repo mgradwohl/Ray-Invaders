@@ -7,13 +7,13 @@
 class Animation
 {
 public:
-	Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location);
+	Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location) noexcept;
 
 	bool change_current_frame() noexcept;
 	bool update() noexcept;
 
 	void draw(raylib::DrawSession& ds, float x, float y, const Color& i_color = WHITE) const;
-	void reset();
+	void reset() noexcept;
 
 private:
 	//When this iterator reaches the animation speed, we change the frame and reset the iterator.

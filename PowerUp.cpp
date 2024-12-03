@@ -48,14 +48,16 @@ void PowerUp::update(const Player& player)
 void PowerUp::draw(raylib::DrawSession& ds, const Player& player) const
 {
 	if (player.get_current_power() <= 0)
+	{
 		return;
+	}
 
-	Vector2 dest{ SCREEN_WIDTH - _powerup_bar_sprite.width - 0.25f * BASE_SIZE, 0.25f * BASE_SIZE };
+	Vector2 dest{ SCREEN_WIDTH - _powerup_bar_sprite.width - 0.25F * BASE_SIZE, 0.25F * BASE_SIZE };
 	Rectangle source{ 0, 0, _powerup_bar_sprite.width, BASE_SIZE };
 	ds.DrawTexture(_powerup_bar_sprite, source, dest, WHITE);
 
-	dest = Vector2(SCREEN_WIDTH - _powerup_bar_sprite.width - 0.125f * BASE_SIZE, 0.25f * BASE_SIZE);
-	source = Rectangle(0.125f * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(_powerup_bar_sprite.width - 0.25f * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE);
+	dest = Vector2(SCREEN_WIDTH - _powerup_bar_sprite.width - 0.125F * BASE_SIZE, 0.25F * BASE_SIZE);
+	source = Rectangle(0.125F * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(_powerup_bar_sprite.width - 0.25F * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE);
 	ds.DrawTexture(_powerup_bar_sprite, source, dest, _color);
 }
 
