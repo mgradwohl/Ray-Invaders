@@ -6,7 +6,7 @@ class Bullet
 {
 public:
 	Bullet(float i_step_x, float i_step_y, short i_x, short i_y);
-	[[nodiscard]] const bool IsDead() const noexcept;
+	[[nodiscard]] bool IsDead() const noexcept;
 	void IsDead(bool dead) noexcept;
 	void update() noexcept;
 	[[nodiscard]] Rectangle get_hitbox() const noexcept;

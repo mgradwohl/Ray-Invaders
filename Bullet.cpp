@@ -48,7 +48,7 @@ Rectangle Bullet::get_hitbox() const noexcept
 	return Rectangle(_x + 0.375F * BASE_SIZE, _y + 0.375F * BASE_SIZE, 0.25F * BASE_SIZE, 0.25F * BASE_SIZE);
 }
 
-const bool Bullet::IsDead() const noexcept
+bool Bullet::IsDead() const noexcept
 {
 	return _dead;
 };
