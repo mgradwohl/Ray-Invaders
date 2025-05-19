@@ -12,6 +12,7 @@
 #include "Player.hpp"
 #include "PowerUp.hpp"
 #include "Bases.hpp"
+
 int main()
 {
 	bool game_over = false;
@@ -56,7 +57,7 @@ int main()
 				game_over = 1;
 			}
 
-			if (enemy_manager.reached_player(player.get_y()))
+			if (enemy_manager.reached_player(static_cast<unsigned short>(player.get_y())))
 			{
 				player.die();
 			}
@@ -75,7 +76,7 @@ int main()
 						player.reset();
 						enemy_manager.reset(level);
 						ufo.reset(1, random_engine);
-						bases.reset(false);
+						bases.reset();
 					}
 					else //Here we're showing the next level transition.
 					{
@@ -104,7 +105,7 @@ int main()
 				player.reset();
 				enemy_manager.reset(level);
 				ufo.reset(1, random_engine);
-				bases.reset(false);
+				bases.reset();
 			}
 
 			if (FRAME_DURATION > lag)
@@ -122,7 +123,7 @@ int main()
 						ufo.draw(ds);
 						bases.draw(ds);
 						powerup.draw(ds, player);
-						draw_text(ds, 10, 0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level));
+						draw_text(ds, 10, static_cast<short>(0.25f * BASE_SIZE), static_cast<short>(0.25f * BASE_SIZE), "Level: " + std::to_string(level));
 					}
 					else
 					{

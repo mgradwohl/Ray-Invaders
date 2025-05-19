@@ -14,7 +14,7 @@ public:
 	Bases(const std::string& filename);
 	~Bases();
 
-	void reset(bool dead);
+	void reset();
 	void update(std::vector<Bullet>& i_enemy_bullets);
 	void draw(raylib::DrawSession& ds);
 

@@ -53,7 +53,7 @@ void PowerUp::draw(raylib::DrawSession& ds, const Player& player) const
 	}
 
 	Vector2 dest{ SCREEN_WIDTH - _powerup_bar_sprite.width - 0.25F * BASE_SIZE, 0.25F * BASE_SIZE };
-	Rectangle source{ 0, 0, _powerup_bar_sprite.width, BASE_SIZE };
+	Rectangle source{ 0.0f, 0.0f, static_cast<float>(_powerup_bar_sprite.width), static_cast<float>(BASE_SIZE) };
 	ds.DrawTexture(_powerup_bar_sprite, source, dest, WHITE);
 
 	dest = Vector2(SCREEN_WIDTH - _powerup_bar_sprite.width - 0.125F * BASE_SIZE, 0.25F * BASE_SIZE);

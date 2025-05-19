@@ -63,6 +63,6 @@ namespace raylib
         }
 
         const std::string fpsStr = std::format("FPS: {}", GetFPS());
-        DrawText(fpsStr, 10, 10, height, color);
+        DrawText(fpsStr, posX, posY, height, color);
     }
 } // namespace raylib

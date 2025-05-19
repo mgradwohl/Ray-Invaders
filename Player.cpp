@@ -63,7 +63,16 @@ void Player::draw(raylib::DrawSession& ds)
 		//sprite.setTextureRect(sf::IntRect(BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE));
 
 		Vector2 dest{ _x, _y};
-		const Rectangle source{ BASE_SIZE * _current_power, 0, BASE_SIZE, BASE_SIZE };
+		// const float src_x = float(BASE_SIZE) * float(_current_power);
+		// const float src_y = 0.0f;
+		// const float src_w = float(BASE_SIZE);
+		// const float src_h = float(BASE_SIZE);
+		const Rectangle source{
+			static_cast<float>(BASE_SIZE * static_cast<int>(_current_power)),
+			0.0f,
+			static_cast<float>(BASE_SIZE),
+			static_cast<float>(BASE_SIZE)
+		};
 		ds.DrawTexture(_player_sprite, source, dest, WHITE);
 
 		for (const Bullet& bullet : _bullets)
@@ -99,8 +108,8 @@ void Player::reset()
 	_reload_timer = 0;
 
 	_power_timer = 0;
-	_x = 0.5f * (SCREEN_WIDTH - BASE_SIZE);
-	_y = SCREEN_HEIGHT - 2 * BASE_SIZE;
+	_x = 0.5f * static_cast<float>(SCREEN_WIDTH - BASE_SIZE);
+	_y = static_cast<float>(SCREEN_HEIGHT - 2 * BASE_SIZE);
 
 	_bullets.clear();
 
@@ -118,11 +127,18 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 			if (4 == _current_power)
 			{
 				//Mirrored controls power-DOWN!
-				_x = std::min<int>(PLAYER_MOVE_SPEED + _x, SCREEN_WIDTH - 2 * BASE_SIZE);
+				_x = std::min(
+					static_cast<float>(PLAYER_MOVE_SPEED) + _x,
+					static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE)
+				);
 			}
 			else
 			{
-				_x = std::max<int>(_x - PLAYER_MOVE_SPEED, BASE_SIZE);
+				float new_x = std::max(
+					_x - static_cast<float>(PLAYER_MOVE_SPEED),
+					static_cast<float>(BASE_SIZE)
+				);
+				_x = new_x;
 			}
 		}
 
@@ -133,11 +149,18 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 				//Mirrored controls power-DOWN!
 				//I'm never gonna get tired of this joke.
 				//NEVER!
-				_x = std::max<int>(_x - PLAYER_MOVE_SPEED, BASE_SIZE);
+				_x = std::max(
+					_x - static_cast<float>(PLAYER_MOVE_SPEED),
+					static_cast<float>(BASE_SIZE)
+				);
 			}
 			else
 			{
-				_x = std::min<int>(PLAYER_MOVE_SPEED + _x, SCREEN_WIDTH - 2 * BASE_SIZE);
+				float new_x = std::min(
+					static_cast<float>(PLAYER_MOVE_SPEED) + _x,
+					static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE)
+				);
+				_x = new_x;
 			}
 		}
 

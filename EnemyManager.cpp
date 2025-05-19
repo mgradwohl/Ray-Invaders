@@ -47,47 +47,33 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 		//Drawing the tail of the bullet.
 		for (unsigned char a = 0; a < bullet._previous_x.size(); a++)
 		{
-			//enemy_bullet_sprite.setPosition(bullet.previous_x[a], bullet.previous_y[a]);
-			//enemy_bullet_sprite.setTextureRect(sf::IntRect(BASE_SIZE * a, 0, BASE_SIZE, BASE_SIZE));
-
-			//i_window.draw(enemy_bullet_sprite);
-
-			const Vector2 dest{ bullet._previous_x[a], bullet._previous_y[a]};
-			const Rectangle source{ BASE_SIZE * a, 0, BASE_SIZE, BASE_SIZE };
+			const Vector2 dest{ static_cast<float>(bullet._previous_x[a]), static_cast<float>(bullet._previous_y[a]) };
+			const Rectangle source{ static_cast<float>(BASE_SIZE * a), 0.0f, static_cast<float>(BASE_SIZE), static_cast<float>(BASE_SIZE) };
 			ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 		}
 
 		//Drawing the bullet itself.
-		//enemy_bullet_sprite.setPosition(bullet.x, bullet.y);
-		//enemy_bullet_sprite.setTextureRect(sf::IntRect(BASE_SIZE * bullet.previous_x.size(), 0, BASE_SIZE, BASE_SIZE));
-
-		//i_window.draw(enemy_bullet_sprite);
-
-		const Vector2 dest{ bullet._x, bullet._y};
-		const Rectangle source{ BASE_SIZE * bullet._previous_x.size(), 0, BASE_SIZE, BASE_SIZE };
+		const Vector2 dest{ static_cast<float>(bullet._x), static_cast<float>(bullet._y) };
+		const Rectangle source{ static_cast<float>(BASE_SIZE * bullet._previous_x.size()), 0.0f, static_cast<float>(BASE_SIZE), static_cast<float>(BASE_SIZE) };
 		ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 	}
 
 	for (const Enemy& enemy : _enemies)
 	{
-		//When the enemy gets hit, it's gonna appear white.
 		Color enemy_color = WHITE;
 
 		if (!enemy.get_hit_timer())
 		{
-			//Otherwise, we're gonna color it.
 			switch (enemy.get_type())
 			{
 				case 0:
 				{
 					enemy_color = Color{ 0, 255, 255, 255 }; //CYAN
-
 					break;
 				}
 				case 1:
 				{
 					enemy_color = PURPLE;
-
 					break;
 				}
 				case 2:
@@ -131,7 +117,8 @@ void EnemyManager::reset(unsigned short i_level)
 	//Go watch that video, btw!
 	if (TOTAL_LEVELS <= i_level)
 	{
-		i_level = 0.5F * TOTAL_LEVELS + i_level % static_cast<unsigned char>(0.5F * TOTAL_LEVELS);
+		unsigned short half_levels = static_cast<unsigned short>(TOTAL_LEVELS / 2);
+		i_level = half_levels + static_cast<unsigned short>(i_level % static_cast<unsigned char>(half_levels));
 	}
 
 	//Here you can see my pro level design skills!
@@ -205,19 +192,17 @@ void EnemyManager::reset(unsigned short i_level)
 			}
 			case '0':
 			{
-				_enemies.emplace_back(0, BASE_SIZE * (1 + enemy_x), BASE_SIZE * (2 + enemy_y));
-
+				_enemies.emplace_back(0, static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
 				break;
 			}
 			case '1':
 			{
-				_enemies.emplace_back(1, BASE_SIZE * (1 + enemy_x), BASE_SIZE * (2 + enemy_y));
-
+				_enemies.emplace_back(1, static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
 				break;
 			}
 			case '2':
 			{
-				_enemies.emplace_back(2, BASE_SIZE * (1 + enemy_x), BASE_SIZE * (2 + enemy_y));
+				_enemies.emplace_back(2, static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
 			}
 		}
 	}
@@ -269,7 +254,9 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 	});
 
 	//The more enemies we kill, the faster they become.
-	_move_pause = std::max<int>(ENEMY_MOVE_PAUSE_MIN, _move_pause - ENEMY_MOVE_PAUSE_DECREASE * (_enemies.end() - dead_enemies_start));
+	int alive_count = static_cast<int>(std::distance(dead_enemies_start, _enemies.end()));
+	int new_pause = std::max<int>(ENEMY_MOVE_PAUSE_MIN, static_cast<int>(_move_pause) - ENEMY_MOVE_PAUSE_DECREASE * alive_count);
+	_move_pause = static_cast<unsigned short>(std::max<int>(0, new_pause));
 
 	_enemies.erase(dead_enemies_start, _enemies.end());
 

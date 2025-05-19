@@ -12,7 +12,7 @@ Animation::Animation(unsigned short i_animation_speed, unsigned short i_frame_wi
 {
 	_sprite = ::LoadTexture(i_texture_location.c_str());
 
-	_total_frames = _sprite.width / _frame_width;
+	_total_frames = static_cast<unsigned short>(_sprite.width / _frame_width);
 }
 
 //This is for the enemies.
@@ -54,15 +54,8 @@ bool Animation::update() noexcept
 
 void Animation::draw(raylib::DrawSession& ds, float x, float y, const Color& i_color) const
 {
-	//I added coloring for the explosions.
-	//sprite.setColor(i_color);
-	//sprite.setPosition(i_x, i_y);
-	//sprite.setTexture(texture);
-	//sprite.setTextureRect(sf::IntRect(current_frame * frame_width, 0, frame_width, texture.getSize().y));
-	//i_window.draw(sprite);
-
 	const Vector2 dest{ x, y };
-	const Rectangle source{_current_frame * _frame_width, 0.0F, _frame_width, _sprite.height };
+	const Rectangle source{ static_cast<float>(_current_frame * _frame_width), 0.0f, static_cast<float>(_frame_width), static_cast<float>(_sprite.height) };
 	const Color ani{ i_color.r, i_color.g, i_color.b, 255 };
 	ds.DrawTexture(_sprite, source, dest, ani);
 }

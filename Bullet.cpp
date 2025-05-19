@@ -32,8 +32,8 @@ void Bullet::update() noexcept
 		_previous_x[_previous_x.size() - 1] = _x;
 		_previous_y[_previous_y.size() - 1] = _y;
 
-		_x = round(_real_x);
-		_y = round(_real_y);
+		_x = static_cast<short>(round(_real_x));
+		_y = static_cast<short>(round(_real_y));
 
 		if (_x <= -BASE_SIZE || _y <= -BASE_SIZE || SCREEN_HEIGHT <= _y || SCREEN_WIDTH <= _x)
 		{

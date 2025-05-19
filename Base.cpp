@@ -4,8 +4,8 @@
 
 Base::Base(unsigned short x) noexcept
 {
-	_x = x;
-	_y = SCREEN_HEIGHT - 4 - (BASE_SIZE * 3);
+	_x = static_cast<float>(x);
+	_y = static_cast<float>(SCREEN_HEIGHT - 4 - (BASE_SIZE * 3));
 }
 
 void Base::reset() noexcept
@@ -22,10 +22,10 @@ void Base::update(std::vector<Bullet>& i_enemy_bullets, unsigned short framecoun
 		return;
 	}
 
-	_frame = _damage;
-	if (_frame >= framecount)
+	_frame = static_cast<unsigned char>(_damage);
+	if (_frame >= static_cast<unsigned char>(framecount))
 	{
-		_frame = framecount;
+		_frame = static_cast<unsigned char>(framecount);
 		_dead = true;
 	}
 
@@ -43,12 +43,12 @@ void Base::update(std::vector<Bullet>& i_enemy_bullets, unsigned short framecoun
 
 void Base::draw(raylib::DrawSession& ds, const Texture2D& sprite)
 {
-	const Vector2 dest{ _x, _y };
-	const Rectangle source{ BASE_WIDTH * _frame, 0, BASE_WIDTH, BASE_SIZE };
+	const Vector2 dest{ static_cast<float>(_x), static_cast<float>(_y) };
+	const Rectangle source{ static_cast<float>(BASE_WIDTH * _frame), 0.0f, static_cast<float>(BASE_WIDTH), static_cast<float>(BASE_SIZE) };
 	ds.DrawTexture(sprite, source, dest, WHITE);
 }
 
 [[nodiscard]] Rectangle Base::get_hitbox() const noexcept
 {
-	return Rectangle(_x, _y, BASE_WIDTH, BASE_SIZE);
+	return Rectangle(static_cast<float>(_x), static_cast<float>(_y), static_cast<float>(BASE_WIDTH), static_cast<float>(BASE_SIZE));
 }

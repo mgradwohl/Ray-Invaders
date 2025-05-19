@@ -21,6 +21,7 @@ void Background::draw(raylib::DrawSession& ds) const
 
 void Background::update(Player& player) noexcept
 {
+	player;
 	if (IsKeyDown(KEY_RIGHT))
 	{
 		//player moving right, move background from right to left
@@ -33,27 +34,27 @@ void Background::update(Player& player) noexcept
 		_source.x--;
 	}
 
-	if (_source.x >= _backgroundsprite.width)
+	if (_source.x >= static_cast<float>(_backgroundsprite.width))
 	{
-		_source.x = _backgroundsprite.width;
+		_source.x = static_cast<float>(_backgroundsprite.width);
 	}
 
-	if (_source.x <= 0)
+	if (_source.x <= 0.0f)
 	{
-		_source.x = 0;
+		_source.x = 0.0f;
 	}
 
 	_source.y--;
-	if (_source.y <= 0)
+	if (_source.y <= 0.0f)
 	{
-		_source.y = 0;
+		_source.y = 0.0f;
 	}
 }
 
 void Background::reset() noexcept
 {
-	_source.x = (_backgroundsprite.width - SCREEN_WIDTH) / 2;
-	_source.y = _backgroundsprite.height - SCREEN_HEIGHT;
-	_source.width = SCREEN_WIDTH;
-	_source.height = SCREEN_HEIGHT;
+	_source.x = static_cast<float>((_backgroundsprite.width - SCREEN_WIDTH) / 2);
+	_source.y = static_cast<float>(_backgroundsprite.height - SCREEN_HEIGHT);
+	_source.width = static_cast<float>(SCREEN_WIDTH);
+	_source.height = static_cast<float>(SCREEN_HEIGHT);
 }
