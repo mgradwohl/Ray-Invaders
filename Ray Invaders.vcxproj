@@ -243,12 +243,7 @@
     <ClCompile Include="Backbuffer.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Base.cpp" />
-    <ClCompile Include="Bases.cpp" />
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="DrawText.cpp">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsCpp</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">CompileAsCpp</CompileAs>
-    </ClCompile>
+    <ClCompile Include="Bases.cpp" />    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy.cpp">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsCpp</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">CompileAsCpp</CompileAs>
@@ -283,11 +278,9 @@
   <ItemGroup>
     <ClInclude Include="Animation.hpp" />
     <ClInclude Include="Backbuffer.hpp" />
-    <ClInclude Include="Background.hpp" />
-    <ClInclude Include="Base.hpp" />
+    <ClInclude Include="Background.hpp" />    <ClInclude Include="Base.hpp" />
     <ClInclude Include="Bases.hpp" />
     <ClInclude Include="Bullet.hpp" />
-    <ClInclude Include="DrawText.hpp" />
     <ClInclude Include="Enemy.hpp" />
     <ClInclude Include="EnemyManager.hpp" />
     <ClInclude Include="Global.hpp" />

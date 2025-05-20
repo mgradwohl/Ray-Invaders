@@ -177,14 +177,12 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 				else
 				{
 					_reload_timer = RELOAD_DURATION;
-				}
-
-				_bullets.emplace_back(0, -PLAYER_BULLET_SPEED, _x, _y);
+				}				_bullets.emplace_back(0.0f, static_cast<float>(-PLAYER_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
 
 				if (3 == _current_power)
 				{
-					_bullets.emplace_back(0, -PLAYER_BULLET_SPEED, _x - 0.375f * BASE_SIZE, _y);
-					_bullets.emplace_back(0, -PLAYER_BULLET_SPEED, _x + 0.375f * BASE_SIZE, _y);
+					_bullets.emplace_back(0.0f, static_cast<float>(-PLAYER_BULLET_SPEED), static_cast<short>(_x - 0.375f * BASE_SIZE), static_cast<short>(_y));
+					_bullets.emplace_back(0.0f, static_cast<float>(-PLAYER_BULLET_SPEED), static_cast<short>(_x + 0.375f * BASE_SIZE), static_cast<short>(_y));
 				}
 			}
 		}

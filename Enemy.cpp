@@ -74,27 +74,26 @@ void Enemy::move()
 }
 
 void Enemy::shoot(std::vector<Bullet>& i_enemy_bullets)
-{
-	switch (_type)
+{	switch (_type)
 	{
 		case 0:
 		{
-			i_enemy_bullets.emplace_back(0, ENEMY_BULLET_SPEED, _x, _y);
+			i_enemy_bullets.emplace_back(0.0f, static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
 
 			break;
 		}
 		case 1:
 		{
-			i_enemy_bullets.emplace_back(0.125F * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, _x, _y);
-			i_enemy_bullets.emplace_back(-0.125F * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, _x, _y);
+			i_enemy_bullets.emplace_back(0.125F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
+			i_enemy_bullets.emplace_back(-0.125F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
 
 			break;
 		}
 		case 2:
 		{
-			i_enemy_bullets.emplace_back(0, ENEMY_BULLET_SPEED, _x, _y);
-			i_enemy_bullets.emplace_back(0.25F * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, _x, _y);
-			i_enemy_bullets.emplace_back(-0.25F * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, _x, _y);
+			i_enemy_bullets.emplace_back(0.0f, static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
+			i_enemy_bullets.emplace_back(0.25F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
+			i_enemy_bullets.emplace_back(-0.25F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
 		}
 	}
 	PlaySound(_enemylaser);

@@ -30,11 +30,9 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 		if (CheckCollisionRecs(get_hitbox(), i_bullet_hitbox))
 		{
 			_dead = true;
-			_ufoappearsound.Stop();
+			_ufoappearsound.Stop();			_explosion_x = _x;
 
-			_explosion_x = _x;
-
-			_powerups.emplace_back(_x + 0.5f * BASE_SIZE, _y, _powerup_distribution(i_random_engine));
+			_powerups.emplace_back(_x + 0.5f * BASE_SIZE, _y, static_cast<unsigned char>(_powerup_distribution(i_random_engine)));
 
 			return true;
 		}

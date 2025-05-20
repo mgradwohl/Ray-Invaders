@@ -17,10 +17,9 @@ EnemyManager::EnemyManager() noexcept :
 	reset(0);
 
 	_enemy_bullet_sprite = ::LoadTexture("Resources/Images/EnemyBullet.png");
-
 	for (unsigned char a = 0; a < ENEMY_TYPES; a++)
 	{
-		_enemy_animations.emplace_back(1 + _move_pause, BASE_SIZE, "Resources/Images/Enemy" + std::to_string(static_cast<unsigned short>(a)) + ".png");
+		_enemy_animations.emplace_back(static_cast<unsigned short>(1 + _move_pause), BASE_SIZE, "Resources/Images/Enemy" + std::to_string(static_cast<unsigned short>(a)) + ".png");
 	}
 	_enemymove = LoadSound("Resources/Sounds/Enemy Move.wav");
 	_enemydestroy = LoadSound("Resources/Sounds/Enemy Destroy.wav");
@@ -189,20 +188,19 @@ void EnemyManager::reset(unsigned short i_level)
 				enemy_y++;
 
 				break;
-			}
-			case '0':
+			}			case '0':
 			{
-				_enemies.emplace_back(0, static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
+				_enemies.emplace_back(static_cast<unsigned char>(0), static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
 				break;
 			}
 			case '1':
 			{
-				_enemies.emplace_back(1, static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
+				_enemies.emplace_back(static_cast<unsigned char>(1), static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
 				break;
 			}
 			case '2':
 			{
-				_enemies.emplace_back(2, static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
+				_enemies.emplace_back(static_cast<unsigned char>(2), static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
 			}
 		}
 	}
@@ -252,7 +250,6 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 	{
 		return 0 == i_enemy.get_health();
 	});
-
 	//The more enemies we kill, the faster they become.
 	int alive_count = static_cast<int>(std::distance(dead_enemies_start, _enemies.end()));
 	int new_pause = std::max<int>(ENEMY_MOVE_PAUSE_MIN, static_cast<int>(_move_pause) - ENEMY_MOVE_PAUSE_DECREASE * alive_count);
