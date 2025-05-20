@@ -6,7 +6,6 @@
 #include "Global.hpp"
 #include "Backbuffer.hpp"
 #include "Background.hpp"
-#include "DrawText.hpp"
 #include "EnemyManager.hpp"
 #include "Ufo.hpp"
 #include "Player.hpp"
@@ -28,7 +27,7 @@ int main()
 	std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
 	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
-	
+
 	Background background("Resources/Images/BigGalaxy.png");
 	EnemyManager enemy_manager;
 	Player player;
@@ -123,16 +122,16 @@ int main()
 						ufo.draw(ds);
 						bases.draw(ds);
 						powerup.draw(ds, player);
-						draw_text(ds, 10, static_cast<short>(0.25f * BASE_SIZE), static_cast<short>(0.25f * BASE_SIZE), "Level: " + std::to_string(level));
+						ds.DrawText("Level: " + std::to_string(level), 10, static_cast<short>(0.25f * BASE_SIZE), static_cast<short>(0.25f * BASE_SIZE), WHITE);
 					}
 					else
 					{
-						draw_text_center(ds, 20, SCREEN_WIDTH, SCREEN_HEIGHT, "Game over!");
+						ds.DrawText("Game over!", 20, SCREEN_HEIGHT / 2, 40, WHITE);
 					}
 
 					if (next_level)
 					{
-						draw_text_center(ds, 20, SCREEN_WIDTH, SCREEN_HEIGHT, "Next level!");
+						ds.DrawText("Next level!", 20, SCREEN_HEIGHT / 2, 40, WHITE);
 					}
 				}// DrawSession ds
 				backbuffer.flip();
