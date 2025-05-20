@@ -89,6 +89,11 @@ public:
 	{
 		return _type;
 	}
+
+	bool isdead() const noexcept { return _dead; }
+	void isdead(bool dead) noexcept { _dead = dead; }
+	float getx() const noexcept { return _x; }
+	float gety() const noexcept { return _y; }
 private:
 	//0 - Shield
 	//1 - Fast reload

@@ -1,5 +1,8 @@
 {
     "files.associations": {
         "optional": "cpp"
+    },
+    "terminal.integrated.env.windows": {
+        "RAYLIB_PATH": "c:\\raylib"
     }
 }

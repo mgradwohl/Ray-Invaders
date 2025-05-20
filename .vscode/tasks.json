@@ -1,6 +1,7 @@
 {
     "tasks": [
-        {            "type": "cppbuild",
+        {   
+            "type": "cppbuild",
             "label": "C/C++: cl.exe build active file (Debug)",
             "command": "cl.exe",
                 "args": [
@@ -13,7 +14,7 @@
                 "/nologo",
                 "/Od",
                 "/I", "${workspaceFolder}",
-                "/I", "d:\\raylib\\include",
+                "/I", "c:\\raylib\\include",
                 "${workspaceFolder}\\Main.cpp",
                 "${workspaceFolder}\\RLWindow.cpp",
                 "${workspaceFolder}\\RLDrawSession.cpp",
@@ -35,8 +36,10 @@
                 "/Fd${workspaceFolder}\\bin\\Debug\\",
                 "/link",
                 "/DEBUG",
-                "/LIBPATH:d:\\raylib\\lib",
+                "/MACHINE:X64",
+                "/LIBPATH:c:\\raylib\\lib",
                 "/NODEFAULTLIB:libucrt.lib",
+                "/NODEFAULTLIB:MSVCRT",
                 "raylib.lib",
                 "ucrt.lib",
                 "winmm.lib",
@@ -55,9 +58,10 @@
             },
             "detail": "Build Ray-Invaders project with MSVC (Debug)"
         },
-        {            "type": "cppbuild",
+        {   "type": "cppbuild",
             "label": "C/C++: cl.exe build active file (Release)",
-            "command": "cl.exe",            "args": [
+            "command": "cl.exe",
+            "args": [
                 "/std:c++20",
                 "/EHsc",
                 "/W4",
@@ -67,7 +71,7 @@
                 "/O2",
                 "/GL",
                 "/I", "${workspaceFolder}",
-                "/I", "d:\\raylib\\include",
+                "/I", "c:\\raylib\\include",
                 "${workspaceFolder}\\Main.cpp",
                 "${workspaceFolder}\\RLWindow.cpp",
                 "${workspaceFolder}\\RLDrawSession.cpp", 
@@ -86,10 +90,14 @@
                 "${workspaceFolder}\\PowerUp.cpp",
                 "/Fe${workspaceFolder}\\bin\\Release\\Ray-Invaders.exe",
                 "/Fo${workspaceFolder}\\bin\\Release\\",
-                "/link",                "/LTCG",
+                "/link",
+                "/LTCG",
                 "/OPT:REF",
-                "/OPT:ICF",                "/LIBPATH:d:\\raylib\\lib",
+                "/OPT:ICF",
+                "/MACHINE:X64",
+                "/LIBPATH:c:\\raylib\\lib",
                 "/NODEFAULTLIB:libucrt.lib",
+                "/NODEFAULTLIB:MSVCRT",
                 "raylib.lib",
                 "ucrt.lib",
                 "winmm.lib",
