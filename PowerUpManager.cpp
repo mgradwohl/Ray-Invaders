@@ -1,20 +1,20 @@
 #include <raylib.h>
-#include"RLDrawSession.h"
+#include "RLDrawSession.h"
 #include "Global.hpp"
-#include "PowerUp.hpp"
+#include "PowerUpManager.hpp"
 
-PowerUp::PowerUp(const std::string& spritefile)
+PowerUpManager::PowerUpManager(const std::string& spritefile)
 {
 	_spritefile = spritefile;
 	_powerup_bar_sprite = LoadTexture(_spritefile.c_str());
 }
 
-PowerUp::~PowerUp()
+PowerUpManager::~PowerUpManager()
 {
 	UnloadTexture(_powerup_bar_sprite);
 }
 
-void PowerUp::update(const Player& player)
+void PowerUpManager::update(const Player& player)
 {
 	if (player.get_current_power() <= 0)
 	{
@@ -45,7 +45,7 @@ void PowerUp::update(const Player& player)
 	}
 }
 
-void PowerUp::draw(raylib::DrawSession& ds, const Player& player) const
+void PowerUpManager::draw(raylib::DrawSession& ds, const Player& player) const
 {
 	if (player.get_current_power() <= 0)
 	{
@@ -60,4 +60,3 @@ void PowerUp::draw(raylib::DrawSession& ds, const Player& player) const
 	source = Rectangle(0.125F * BASE_SIZE, BASE_SIZE, ceil(player.get_power_timer() * static_cast<float>(_powerup_bar_sprite.width - 0.25F * BASE_SIZE) / POWERUP_DURATION), BASE_SIZE);
 	ds.DrawTexture(_powerup_bar_sprite, source, dest, _color);
 }
-

@@ -45,7 +45,7 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 
 unsigned char Ufo::check_powerup_collision(const Rectangle& i_player_hitbox) noexcept
 {
-	for (Powerup& powerup : _powerups)
+	for (PowerUpItem& powerup : _powerups)
 	{
 		if (!powerup.isdead() && CheckCollisionRecs(powerup.get_hitbox(), i_player_hitbox))
 		{
@@ -70,8 +70,7 @@ void Ufo::draw(raylib::DrawSession& ds)
 	{
 		_explosion.draw(ds, _explosion_x, _y - 0.5f * BASE_SIZE, Color(255, 36, 0, 255));
 	}
-
-	for (const Powerup& powerup : _powerups)
+	for (const PowerUpItem& powerup : _powerups)
 	{
 		_powerup_animations[powerup.get_type()].draw(ds, powerup.getx(), powerup.gety(), WHITE);
 	}
@@ -129,13 +128,12 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 			_timer--;
 		}
 	}
-
-	for (Powerup& powerup : _powerups)
+	for (PowerUpItem& powerup : _powerups)
 	{
 		//Why didn't I made an update function for the powerups?
 		//No, seriously.
 		//I did it for the Bullet struct.
-		//But not for the Powerup struct.
+		//But not for the PowerUpItem struct.
 		//
 		// powerup._y += POWERUP_SPEED;
 		powerup.bump_y(POWERUP_SPEED);
@@ -149,10 +147,9 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 	{
 		powerup_animation.update();
 	}
-
-	_powerups.erase(remove_if(_powerups.begin(), _powerups.end(), [](const Powerup& i_powerup) noexcept
+	_powerups.erase(remove_if(_powerups.begin(), _powerups.end(), [](const PowerUpItem& i_powerup) noexcept
 	{
-		return true == i_powerup. isdead();
+		return true == i_powerup.isdead();
 	}), _powerups.end());
 }
 

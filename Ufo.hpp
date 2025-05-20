@@ -6,6 +6,7 @@
 #include "RLWaveSound.hpp"
 #include "Global.hpp"
 #include "Animation.hpp"
+#include "PowerUpItem.hpp"
 
 class Ufo
 {
@@ -33,11 +34,10 @@ private:
 	std::uniform_int_distribution<unsigned short> _powerup_distribution;
 	//The UFO can appear after 12 seconds. Or 16 seconds. Or 14.652 seconds. We don't know for sure.
 	std::uniform_int_distribution<unsigned short> _timer_distribution;
-
 	std::vector<Animation> _powerup_animations;
 
 	//Yes, the UFO is responsible for the powerups too.
-	std::vector<Powerup> _powerups;
+	std::vector<PowerUpItem> _powerups;
 
 	Animation _animation;
 	Animation _explosion;

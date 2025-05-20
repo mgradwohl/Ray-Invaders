@@ -10,7 +10,7 @@
 #include "EnemyManager.hpp"
 #include "Ufo.hpp"
 #include "Player.hpp"
-#include "PowerUp.hpp"
+#include "PowerUpManager.hpp"
 #include "Bases.hpp"
 
 int main()
@@ -28,11 +28,11 @@ int main()
 	std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
 	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
-
+	
 	Background background("Resources/Images/BigGalaxy.png");
 	EnemyManager enemy_manager;
 	Player player;
-	PowerUp powerup("Resources/Images/PowerupBar.png");
+	PowerUpManager powerup("Resources/Images/PowerupBar.png");
 	Ufo ufo(random_engine);
 	Bases bases("Resources/Images/Base.png");
 

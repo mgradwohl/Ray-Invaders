@@ -1,11 +1,12 @@
 #pragma once
 #include "RLDrawSession.h"
 #include "Player.hpp"
-class PowerUp
+
+class PowerUpManager
 {
 public:
-	PowerUp(const std::string& spritefile);
-	~PowerUp();
+	PowerUpManager(const std::string& spritefile);
+	~PowerUpManager();
 	void update(const Player& player);
 	void draw(raylib::DrawSession& ds, const Player& player) const;
 
@@ -14,4 +15,3 @@ private:
 	Color _color = WHITE;
 	std::string _spritefile;
 };
-
