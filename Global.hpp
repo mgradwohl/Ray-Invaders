@@ -64,9 +64,9 @@ struct Powerup
 	//2 - 3 bullets
 	//3 - Mirrored controls (power-DOWN! I'm so proud of this joke)
 	//Damn, I should've used enums. That would've made the code more readable.
-	unsigned char type;
+	int type;
 
-	Powerup(short i_x, short i_y, unsigned char i_type) :
+	Powerup(short i_x, short i_y, int i_type) :
 		dead(0),
 		x(i_x),
 		y(i_y),
