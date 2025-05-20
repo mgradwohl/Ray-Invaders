@@ -8,117 +8,113 @@
 #include "Global.hpp"
 #include "Enemy.hpp"
 
-Enemy::Enemy(unsigned char i_type, unsigned short i_x, unsigned short i_y) :
-	direction(0 == (i_y / BASE_SIZE) % 2 ? -1 : 1),
-	health(1 + i_type),
-	hit_timer(0),
-	type(i_type),
-	x(i_x),
-	y(i_y)
+Enemy::Enemy(unsigned char i_type, unsigned short i_x, unsigned short i_y) noexcept :
+	_direction(0 == (i_y / BASE_SIZE) % 2 ? -1 : 1),
+	_health(1 + i_type),
+	_hit_timer(0),
+	_type(i_type),
+	_x(static_cast<float>(i_x)),
+	_y(static_cast<float>(i_y))
 {
-	enemylaser = LoadSound("Resources/Sounds/Enemy Laser.wav");
+	_enemylaser = LoadSound("Resources/Sounds/Enemy Laser.wav");
 }
 
-unsigned char Enemy::get_health() const
+unsigned char Enemy::get_health() const noexcept
 {
-	return health;
+	return _health;
 }
 
-unsigned char Enemy::get_hit_timer() const
+unsigned char Enemy::get_hit_timer() const noexcept
 {
-	return hit_timer;
+	return _hit_timer;
 }
 
-unsigned char Enemy::get_type() const
+unsigned char Enemy::get_type() const noexcept
 {
-	return type;
+	return _type;
 }
 
-unsigned short Enemy::get_x() const
+float Enemy::get_x() const noexcept
 {
-	return x;
+	return _x;
 }
 
-unsigned short Enemy::get_y() const
+float Enemy::get_y() const noexcept
 {
-	return y;
+	return _y;
 }
 
-void Enemy::hit()
-{
-	hit_timer = ENEMY_HIT_TIMER_DURATION;
+void Enemy::hit() noexcept
+{ 
+	_hit_timer = ENEMY_HIT_TIMER_DURATION;
 }
 
 void Enemy::move()
 {
-	if (0 != direction)
+	if (0 != _direction)
 	{
-		if ((1 == direction && x == SCREEN_WIDTH - 2 * BASE_SIZE) || (-1 == direction && x == BASE_SIZE))
+		if ((1 == _direction && _x == static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE)) || (-1 == _direction && _x == static_cast<float>(BASE_SIZE)))
 		{
-			//Once we reach the edge, we start moving down until we reach the next row.
-			direction = 0;
-
-			y += ENEMY_MOVE_SPEED;
+			_direction = 0;
+			_y += static_cast<float>(ENEMY_MOVE_SPEED);
 		}
 		else
 		{
-			//Moving horizontally.
-			x = std::clamp<short>(x + ENEMY_MOVE_SPEED * direction, BASE_SIZE, SCREEN_WIDTH - 2 * BASE_SIZE);
+			_x = std::clamp<float>(_x + static_cast<float>(ENEMY_MOVE_SPEED) * _direction, static_cast<float>(BASE_SIZE), static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE));
 		}
 	}
 	else
 	{
-		y = std::min<short>(y + ENEMY_MOVE_SPEED, BASE_SIZE * ceil(y / static_cast<float>(BASE_SIZE)));
-
-		if (y == BASE_SIZE * ceil(y / static_cast<float>(BASE_SIZE)))
+		_y = std::min<float>(_y + static_cast<float>(ENEMY_MOVE_SPEED), static_cast<float>(BASE_SIZE * ceil(_y / static_cast<float>(BASE_SIZE))));
+		if (_y == static_cast<float>(BASE_SIZE * ceil(_y / static_cast<float>(BASE_SIZE))))
 		{
-			//Moving in a snake pattern. We use the modulo operator to decide whether to move left or right.
-			direction = 0 == (y / BASE_SIZE) % 2 ? -1 : 1;
+			_direction = 0 == (static_cast<int>(_y) / BASE_SIZE) % 2 ? -1 : 1;
 		}
 	}
 }
 
 void Enemy::shoot(std::vector<Bullet>& i_enemy_bullets)
 {
-	switch (type)
+	switch (_type)
 	{
 		case 0:
 		{
-			i_enemy_bullets.push_back(Bullet(0, ENEMY_BULLET_SPEED, x, y));
+			i_enemy_bullets.emplace_back(0, ENEMY_BULLET_SPEED, _x, _y);
 
 			break;
 		}
 		case 1:
 		{
-			i_enemy_bullets.push_back(Bullet(0.125f * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, x, y));
-			i_enemy_bullets.push_back(Bullet(-0.125f * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, x, y));
+			i_enemy_bullets.emplace_back(0.125F * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, _x, _y);
+			i_enemy_bullets.emplace_back(-0.125F * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, _x, _y);
 
 			break;
 		}
 		case 2:
 		{
-			i_enemy_bullets.push_back(Bullet(0, ENEMY_BULLET_SPEED, x, y));
-			i_enemy_bullets.push_back(Bullet(0.25f * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, x, y));
-			i_enemy_bullets.push_back(Bullet(-0.25f * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, x, y));
+			i_enemy_bullets.emplace_back(0, ENEMY_BULLET_SPEED, _x, _y);
+			i_enemy_bullets.emplace_back(0.25F * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, _x, _y);
+			i_enemy_bullets.emplace_back(-0.25F * ENEMY_BULLET_SPEED, ENEMY_BULLET_SPEED, _x, _y);
 		}
 	}
-	PlaySound(enemylaser);
+	PlaySound(_enemylaser);
 }
 
-void Enemy::update()
+void Enemy::update() noexcept
 {
-	if (0 < hit_timer)
+	if (0 < _hit_timer)
 	{
-		if (1 == hit_timer)
+		if (1 == _hit_timer)
 		{
-			health = std::max(0, health - 1);
+			int new_health = std::max(0, static_cast<int>(_health) - 1);
+			_health = static_cast<unsigned char>(new_health);
 		}
 
-		hit_timer--;
+		_hit_timer--;
 	}
 }
 
-Rectangle Enemy::get_hitbox() const
+Rectangle Enemy::get_hitbox() const noexcept
 {
-	return Rectangle(x + 0.25f * BASE_SIZE, y + 0.25f * BASE_SIZE, 0.5f * BASE_SIZE, 0.5f * BASE_SIZE);
+	return Rectangle(_x + 0.25f * BASE_SIZE, _y + 0.25f * BASE_SIZE, 0.5f * BASE_SIZE, 0.5f * BASE_SIZE);
 }

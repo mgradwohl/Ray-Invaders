@@ -8,51 +8,51 @@
 #include "Ufo.hpp"
 
 Ufo::Ufo(std::mt19937_64& i_random_engine) :
-	y(BASE_SIZE),
-	powerup_distribution(0, POWERUP_TYPES - 1),
-	timer_distribution(UFO_TIMER_MIN, UFO_TIMER_MAX),
-	animation(UFO_ANIMATION_SPEED, 2 * BASE_SIZE, "Resources/Images/Ufo.png"),
-	explosion(EXPLOSION_ANIMATION_SPEED, 2 * BASE_SIZE, "Resources/Images/ExplosionBig.png")
+	_y(BASE_SIZE),
+	_powerup_distribution(0, POWERUP_TYPES - 1),
+	_timer_distribution(UFO_TIMER_MIN, UFO_TIMER_MAX),
+	_animation(UFO_ANIMATION_SPEED, 2 * BASE_SIZE, "Resources/Images/Ufo.png"),
+	_explosion(EXPLOSION_ANIMATION_SPEED, 2 * BASE_SIZE, "Resources/Images/ExplosionBig.png")
 {
-	reset(1, i_random_engine);
-	ufoappear = raylib::WaveSound("Resources/Sounds/UFO Enter.wav");
+	reset(true, i_random_engine);
+	_ufoappearsound = raylib::WaveSound("Resources/Sounds/UFO Enter.wav");
 
 	for (unsigned char a = 0; a < POWERUP_TYPES; a++)
 	{
-		powerup_animations.push_back(Animation(POWERUP_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Powerup" + std::to_string(static_cast<unsigned short>(a)) + ".png"));
+		_powerup_animations.emplace_back(POWERUP_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Powerup" + std::to_string(static_cast<unsigned short>(a)) + ".png");
 	}
 }
 
 bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectangle& i_bullet_hitbox)
 {
-	if (!dead)
+	if (!_dead)
 	{
 		if (CheckCollisionRecs(get_hitbox(), i_bullet_hitbox))
 		{
-			dead = 1;
-			ufoappear.Stop();
+			_dead = true;
+			_ufoappearsound.Stop();
 
-			explosion_x = x;
+			_explosion_x = _x;
 
-			powerups.push_back(Powerup(x + 0.5f * BASE_SIZE, y, powerup_distribution(i_random_engine)));
+			_powerups.emplace_back(_x + 0.5f * BASE_SIZE, _y, _powerup_distribution(i_random_engine));
 
-			return 1;
+			return true;
 		}
 	}
 	
-	return 0;
+	return false;
 }
 
-unsigned char Ufo::check_powerup_collision(const Rectangle& i_player_hitbox)
+unsigned char Ufo::check_powerup_collision(const Rectangle& i_player_hitbox) noexcept
 {
-	for (Powerup& powerup : powerups)
+	for (Powerup& powerup : _powerups)
 	{
-		if (!powerup.dead && CheckCollisionRecs(powerup.get_hitbox(), i_player_hitbox))
+		if (!powerup.isdead() && CheckCollisionRecs(powerup.get_hitbox(), i_player_hitbox))
 		{
-			powerup.dead = 1;
+			powerup.isdead(true);
 
 			//Plus 1, because 0 means we didn't pick up any powerups.
-			return 1 + powerup.type;
+			return 1 + powerup.get_type();
 		}
 	}
 	
@@ -61,101 +61,102 @@ unsigned char Ufo::check_powerup_collision(const Rectangle& i_player_hitbox)
 
 void Ufo::draw(raylib::DrawSession& ds)
 {
-	if (!dead)
+	if (!_dead)
 	{
-		animation.draw(ds, x, y);
+		_animation.draw(ds, _x, _y, WHITE);
 	}
 
-	if (!dead_animation_over)
+	if (!_dead_animation_over)
 	{
-		explosion.draw(ds, explosion_x, y - 0.5f * BASE_SIZE, Color(255, 36, 0));
+		_explosion.draw(ds, _explosion_x, _y - 0.5f * BASE_SIZE, Color(255, 36, 0, 255));
 	}
 
-	for (Powerup& powerup : powerups)
+	for (const Powerup& powerup : _powerups)
 	{
-		powerup_animations[powerup.type].draw(ds, powerup.x, powerup.y);
+		_powerup_animations[powerup.get_type()].draw(ds, powerup.getx(), powerup.gety(), WHITE);
 	}
 }
 
 void Ufo::reset(bool i_dead, std::mt19937_64& i_random_engine)
 {
-	dead = i_dead;
-	dead_animation_over = 0;
+	_dead = i_dead;
+	_dead_animation_over = false;
 
-	explosion_x = SCREEN_WIDTH;
-	x = SCREEN_WIDTH;
+	_explosion_x = SCREEN_WIDTH;
+	_x = SCREEN_WIDTH;
 
-	timer = timer_distribution(i_random_engine);
+	_timer = _timer_distribution(i_random_engine);
 
-	powerups.clear();
-	ufoappear.Stop();
-	animation.reset();
-	explosion.reset();
+	_powerups.clear();
+	_ufoappearsound.Stop();
+	_animation.reset();
+	_explosion.reset();
 }
 
 void Ufo::update(std::mt19937_64& i_random_engine)
 {
-	if (!dead)
+	if (!_dead)
 	{
-		if (!ufoappear.IsPlaying())
+		if (!_ufoappearsound.IsPlaying())
 		{
-			ufoappear.Play();
+			_ufoappearsound.Play();
 		}
 
-		x -= UFO_MOVE_SPEED;
+		_x -= UFO_MOVE_SPEED;
 
 		//As soon as the UFO leaves the screen, it gets destroyed. But no powerups will appear.
-		if (x <= -2 * BASE_SIZE)
+		if (_x <= -2 * BASE_SIZE)
 		{
-			dead = 1;
-			ufoappear.Stop();
+			_dead = true;
+			_ufoappearsound.Stop();
 		}
 
-		animation.update();
+		_animation.update();
 	}
 	else
 	{
-		if (!dead_animation_over)
+		if (!_dead_animation_over)
 		{
-			dead_animation_over = explosion.update();
+			_dead_animation_over = _explosion.update();
 		}
 
-		if (0 == timer)
+		if (!_timer)
 		{
-			reset(0, i_random_engine);
+			reset(false, i_random_engine);
 		}
 		else
 		{
-			timer--;
+			_timer--;
 		}
 	}
 
-	for (Powerup& powerup : powerups)
+	for (Powerup& powerup : _powerups)
 	{
 		//Why didn't I made an update function for the powerups?
 		//No, seriously.
 		//I did it for the Bullet struct.
 		//But not for the Powerup struct.
-		powerup.y += POWERUP_SPEED;
-
-		if (SCREEN_HEIGHT <= powerup.y)
+		//
+		// powerup._y += POWERUP_SPEED;
+		powerup.bump_y(POWERUP_SPEED);
+		if (SCREEN_HEIGHT <= powerup.gety())
 		{
-			powerup.dead = 1;
+			powerup.isdead(true);
 		}
 	}
 
-	for (Animation& powerup_animation : powerup_animations)
+	for (Animation& powerup_animation : _powerup_animations)
 	{
 		powerup_animation.update();
 	}
 
-	powerups.erase(remove_if(powerups.begin(), powerups.end(), [](const Powerup& i_powerup)
+	_powerups.erase(remove_if(_powerups.begin(), _powerups.end(), [](const Powerup& i_powerup) noexcept
 	{
-		return 1 == i_powerup.dead;
-	}), powerups.end());
+		return true == i_powerup. isdead();
+	}), _powerups.end());
 }
 
-Rectangle Ufo::get_hitbox() const
+Rectangle Ufo::get_hitbox() const noexcept
 {
-	return Rectangle(x, y, 2 * BASE_SIZE, BASE_SIZE);
+	return Rectangle(_x, _y, 2 * BASE_SIZE, BASE_SIZE);
 }

@@ -5,6 +5,8 @@
 #include <array>
 #include <chrono>
 
+#include <raylib.h>
+
 //I didn't wanna make PLAYER_SIZE, ENEMY_SIZE, BULLET_SIZE, so I just defined the base size.
 constexpr unsigned char BASE_SIZE = 16;
 constexpr unsigned char ENEMY_BULLET_SPEED = 2;
@@ -37,6 +39,8 @@ constexpr unsigned char SCREEN_RESIZE = 5;
 constexpr unsigned char TOTAL_LEVELS = 8;
 constexpr unsigned char UFO_ANIMATION_SPEED = 8;
 constexpr unsigned char UFO_MOVE_SPEED = 1;
+constexpr unsigned char BASE_COUNT = 4;
+constexpr unsigned char BASE_WIDTH = 30;
 
 //There are 64 enemies. So the probability that at least one of them shoots is 1 - (1 - 1 / 4096)^64 = 1.55%
 //Keep in mind that we do this every frame.
@@ -54,10 +58,15 @@ constexpr std::chrono::microseconds FRAME_DURATION(16667);
 
 struct Powerup
 {
-	bool dead;
-
-	short x;
-	short y;
+public:
+	Powerup(float i_x, float i_y, unsigned char i_type) noexcept :
+		_x(i_x),
+		_y(i_y),
+		_dead(false),
+		_type(i_type)
+	{
+		
+	}
 
 	//0 - Shield
 	//1 - Fast reload
@@ -66,17 +75,29 @@ struct Powerup
 	//Damn, I should've used enums. That would've made the code more readable.
 	int type;
 
-	Powerup(short i_x, short i_y, int i_type) :
-		dead(0),
-		x(i_x),
-		y(i_y),
-		type(i_type)
+	void bump_y(unsigned short ybump) noexcept
 	{
-		
+		_y += ybump;
 	}
 
-	Rectangle get_hitbox() const
+	[[nodiscard]] Rectangle get_hitbox() const noexcept
 	{
-		return Rectangle(x + 0.25f * BASE_SIZE, y + 0.25f * BASE_SIZE, 0.5f * BASE_SIZE, 0.5f * BASE_SIZE);
+		return Rectangle(_x + 0.25F * BASE_SIZE, _y + 0.25F * BASE_SIZE, 0.5F * BASE_SIZE, 0.5F * BASE_SIZE);
 	}
+
+	unsigned char get_type() const noexcept
+	{
+		return _type;
+	}
+private:
+	//0 - Shield
+	//1 - Fast reload
+	//2 - 3 bullets
+	//3 - Mirrored controls (power-DOWN! I'm so proud of this joke)
+	//Damn, I should've used enums. That would've made the code more readable.
+
+	float _x;
+	float _y;
+	bool _dead;
+	unsigned char _type;
 };

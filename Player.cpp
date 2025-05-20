@@ -13,177 +13,200 @@
 #include "Player.hpp"
 
 Player::Player() :
-	explosion(EXPLOSION_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Explosion.png")
+	_explosion(EXPLOSION_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Explosion.png")
 {
 	reset();
 
-	bullet_sprite = ::LoadTexture("Resources/Images/PlayerBullet.png");
-	player_sprite = ::LoadTexture("Resources/Images/Player.png");
-	playerlaser = LoadSound("Resources/Sounds/Player Laser.wav");
-	powerup = LoadSound("Resources/Sounds/Power Up.wav");
-	playerdestroy = LoadSound("Resources/Sounds/Player Destroy.wav");
+	_bullet_sprite = ::LoadTexture("Resources/Images/PlayerBullet.png");
+	_player_sprite = ::LoadTexture("Resources/Images/Player.png");
+	_playerlasersound = LoadSound("Resources/Sounds/Player Laser.wav");
+	_powerupsound = LoadSound("Resources/Sounds/Power Up.wav");
+	_playerdestroysound = LoadSound("Resources/Sounds/Player Destroy.wav");
 }
 
-bool Player::get_dead() const
+bool Player::get_dead() const noexcept
 {
-	return dead;
+	return _dead;
 }
 
-bool Player::get_dead_animation_over() const
+bool Player::get_dead_animation_over() const noexcept
 {
-	return dead_animation_over;
+	return _dead_animation_over;
 }
 
-unsigned char Player::get_current_power() const
+unsigned char Player::get_current_power() const noexcept
 {
-	return current_power;
+	return _current_power;
 }
 
-unsigned short Player::get_power_timer() const
+unsigned short Player::get_power_timer() const noexcept
 {
-	return power_timer;
+	return _power_timer;
 }
 
-unsigned short Player::get_y() const
+float Player::get_y() const noexcept
 {
-	return y;
+	return _y;
 }
 
 //I don't know why, but this is funny.
-void Player::die()
+void Player::die() noexcept
 {
-	dead = 1;
+	_dead = true;
 }
 
 void Player::draw(raylib::DrawSession& ds)
 {
-	if (!dead)
+	if (!_dead)
 	{
 		//sprite.setPosition(x, y);
 		//sprite.setTextureRect(sf::IntRect(BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE));
 
-		Vector2 dest{ x, y};
-		Rectangle source{ BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE };
-		ds.DrawTexture(player_sprite, source, dest, WHITE);
+		Vector2 dest{ _x, _y};
+		// const float src_x = float(BASE_SIZE) * float(_current_power);
+		// const float src_y = 0.0f;
+		// const float src_w = float(BASE_SIZE);
+		// const float src_h = float(BASE_SIZE);
+		const Rectangle source{
+			static_cast<float>(BASE_SIZE * static_cast<int>(_current_power)),
+			0.0f,
+			static_cast<float>(BASE_SIZE),
+			static_cast<float>(BASE_SIZE)
+		};
+		ds.DrawTexture(_player_sprite, source, dest, WHITE);
 
-		for (const Bullet& bullet : bullets)
+		for (const Bullet& bullet : _bullets)
 		{
 			//bullet_sprite.setPosition(bullet.x, bullet.y);
 			//i_window.draw(bullet_sprite);
 
-			dest.x = bullet.x;
-			dest.y = bullet.y;
-			ds.DrawTexture(bullet_sprite, source, dest, WHITE);
+			dest.x = bullet._x;
+			dest.y = bullet._y;
+			ds.DrawTexture(_bullet_sprite, source, dest, WHITE);
 		}
 		//i_window.draw(sprite);
 
-		if (0 == shield_animation_over)
+		if (!_shield_animation_over)
 		{
 			//Once we get hit while having a shield, the shield will be destroyed. We'll show a blue explosion.
-			explosion.draw(ds, x, y, Color(0, 109, 255));
+			_explosion.draw(ds, _x, _y, Color(0, 109, 255, 255));
 		}
 	}
-	else if (0 == dead_animation_over)
+	else if (!_dead_animation_over)
 	{
-		explosion.draw(ds, x, y, Color(255, 36, 0));
+		_explosion.draw(ds, _x, _y, Color(255, 36, 0, 255));
 	}
 }
 
 void Player::reset()
 {
-	dead = 0;
-	dead_animation_over = 0;
-	shield_animation_over = 1;
+	_dead = false;
+	_dead_animation_over = false;
+	_shield_animation_over = true;
 
-	current_power = 0;
-	reload_timer = 0;
+	_current_power = 0;
+	_reload_timer = 0;
 
-	power_timer = 0;
-	x = 0.5f * (SCREEN_WIDTH - BASE_SIZE);
-	y = SCREEN_HEIGHT - 2 * BASE_SIZE;
+	_power_timer = 0;
+	_x = 0.5f * static_cast<float>(SCREEN_WIDTH - BASE_SIZE);
+	_y = static_cast<float>(SCREEN_HEIGHT - 2 * BASE_SIZE);
 
-	bullets.clear();
+	_bullets.clear();
 
-	explosion.reset();
+	_explosion.reset();
 }
 
 void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_enemy_bullets, std::vector<Enemy>& i_enemies, Ufo& i_ufo)
 {
-	if (0 == dead)
+	if (!_dead)
 	{
 		unsigned char powerup_type;
 
-		if (1 == IsKeyDown(KEY_LEFT))
+		if (IsKeyDown(KEY_LEFT))
 		{
-			if (4 == current_power)
+			if (4 == _current_power)
 			{
 				//Mirrored controls power-DOWN!
-				x = std::min<int>(PLAYER_MOVE_SPEED + x, SCREEN_WIDTH - 2 * BASE_SIZE);
+				_x = std::min(
+					static_cast<float>(PLAYER_MOVE_SPEED) + _x,
+					static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE)
+				);
 			}
 			else
 			{
-				x = std::max<int>(x - PLAYER_MOVE_SPEED, BASE_SIZE);
+				float new_x = std::max(
+					_x - static_cast<float>(PLAYER_MOVE_SPEED),
+					static_cast<float>(BASE_SIZE)
+				);
+				_x = new_x;
 			}
 		}
 
-		if (1 == IsKeyDown(KEY_RIGHT))
+		if (IsKeyDown(KEY_RIGHT))
 		{
-			if (4 == current_power)
+			if (4 == _current_power)
 			{
 				//Mirrored controls power-DOWN!
 				//I'm never gonna get tired of this joke.
 				//NEVER!
-				x = std::max<int>(x - PLAYER_MOVE_SPEED, BASE_SIZE);
+				_x = std::max(
+					_x - static_cast<float>(PLAYER_MOVE_SPEED),
+					static_cast<float>(BASE_SIZE)
+				);
 			}
 			else
 			{
-				x = std::min<int>(PLAYER_MOVE_SPEED + x, SCREEN_WIDTH - 2 * BASE_SIZE);
+				float new_x = std::min(
+					static_cast<float>(PLAYER_MOVE_SPEED) + _x,
+					static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE)
+				);
+				_x = new_x;
 			}
 		}
 
-		if (0 == reload_timer)
+		if (!_reload_timer)
 		{
-			if (1 == IsKeyPressed(KEY_Z))
+			if (IsKeyPressed(KEY_Z))
 			{
-				PlaySound(playerlaser);
+				PlaySound(_playerlasersound);
 
-				if (2 == current_power)
+				if (2 == _current_power)
 				{
-					reload_timer = FAST_RELOAD_DURATION;
+					_reload_timer = FAST_RELOAD_DURATION;
 				}
 				else
 				{
-					reload_timer = RELOAD_DURATION;
+					_reload_timer = RELOAD_DURATION;
 				}
 
-				bullets.push_back(Bullet(0, -PLAYER_BULLET_SPEED, x, y));
+				_bullets.emplace_back(0, -PLAYER_BULLET_SPEED, _x, _y);
 
-				if (3 == current_power)
+				if (3 == _current_power)
 				{
-					bullets.push_back(Bullet(0, -PLAYER_BULLET_SPEED, x - 0.375f * BASE_SIZE, y));
-					bullets.push_back(Bullet(0, -PLAYER_BULLET_SPEED, x + 0.375f * BASE_SIZE, y));
+					_bullets.emplace_back(0, -PLAYER_BULLET_SPEED, _x - 0.375f * BASE_SIZE, _y);
+					_bullets.emplace_back(0, -PLAYER_BULLET_SPEED, _x + 0.375f * BASE_SIZE, _y);
 				}
 			}
 		}
 		else
 		{
-			reload_timer--;
+			_reload_timer--;
 		}
 
 		for (Bullet& enemy_bullet : i_enemy_bullets)
 		{
-			if (1 == CheckCollisionRecs( get_hitbox(), enemy_bullet.get_hitbox()))
+			if (CheckCollisionRecs( get_hitbox(), enemy_bullet.get_hitbox()))
 			{
-				if (1 == current_power)
+				if (1 == _current_power)
 				{
-					current_power = 0;
+					_current_power = 0;
 
-					shield_animation_over = 0;
+					_shield_animation_over = false;
 				}
 				else
 				{
-					dead = 1;
-					PlaySound(playerdestroy);
+					_dead = true;
+					PlaySound(_playerdestroysound);
 				}
 
 				enemy_bullet.IsDead(true);
@@ -196,38 +219,38 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 
 		if (0 < powerup_type)
 		{
-			current_power = powerup_type;
+			_current_power = powerup_type;
 
-			power_timer = POWERUP_DURATION;
-			PlaySound(powerup);
+			_power_timer = POWERUP_DURATION;
+			PlaySound(_powerupsound);
 		}
 
-		if (0 == power_timer)
+		if (!_power_timer)
 		{
-			current_power = 0;
+			_current_power = 0;
 		}
 		else
 		{
-			power_timer--;
+			_power_timer--;
 		}
 
-		if (0 == shield_animation_over)
+		if (!_shield_animation_over)
 		{
-			shield_animation_over = explosion.update();
+			_shield_animation_over = _explosion.update();
 		}
 	}
-	else if (0 == dead_animation_over)
+	else if (!_dead_animation_over)
 	{
-		dead_animation_over = explosion.update();
+		_dead_animation_over = _explosion.update();
 	}
 
-	for (Bullet& bullet : bullets)
+	for (Bullet& bullet : _bullets)
 	{
 		bullet.update();
 		
-		if (0 == bullet.IsDead())
+		if (!bullet.IsDead())
 		{
-			if (1 == i_ufo.check_bullet_collision(i_random_engine, bullet.get_hitbox()))
+			if (i_ufo.check_bullet_collision(i_random_engine, bullet.get_hitbox()))
 			{
 				bullet.IsDead(true);
 			}
@@ -236,9 +259,9 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 
 	for (Enemy& enemy : i_enemies)
 	{
-		for (Bullet& bullet : bullets)
+		for (Bullet& bullet : _bullets)
 		{
-			if (0 == bullet.IsDead() && 0 < enemy.get_health() && 1 == CheckCollisionRecs(enemy.get_hitbox(), bullet.get_hitbox()))
+			if (!bullet.IsDead() && 0 < enemy.get_health() && CheckCollisionRecs(enemy.get_hitbox(), bullet.get_hitbox()))
 			{
 				bullet.IsDead(true);
 
@@ -249,13 +272,13 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 		}
 	}
 
-	bullets.erase(remove_if(bullets.begin(), bullets.end(), [](const Bullet& i_bullet)
+	_bullets.erase(remove_if(_bullets.begin(), _bullets.end(), [](const Bullet& i_bullet)
 	{
-		return 1 == i_bullet.IsDead();
-	}), bullets.end());
+		return true == i_bullet.IsDead();
+	}), _bullets.end());
 }
 
-Rectangle Player::get_hitbox() const
+Rectangle Player::get_hitbox() const noexcept
 {
-	return Rectangle(x + 0.125f * BASE_SIZE, y + 0.125f * BASE_SIZE, 0.75f * BASE_SIZE, 0.75f * BASE_SIZE);
+	return Rectangle(_x + 0.125f * BASE_SIZE, _y + 0.125f * BASE_SIZE, 0.75f * BASE_SIZE, 0.75f * BASE_SIZE);
 }

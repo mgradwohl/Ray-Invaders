@@ -1,28 +1,29 @@
 #pragma once
+#include <array>
+#include <raylib.h>
+
 class Bullet
 {
-
-private:
-	bool dead;
-
-	float real_x;
-	float real_y;
-	float step_x;
-	float step_y;
-
-
 public:
 	Bullet(float i_step_x, float i_step_y, short i_x, short i_y);
-	const bool IsDead() const;
-	void IsDead(bool dead);
-	void update();
-	Rectangle get_hitbox() const;
+	[[nodiscard]] bool IsDead() const noexcept;
+	void IsDead(bool dead) noexcept;
+	void update() noexcept;
+	[[nodiscard]] Rectangle get_hitbox() const noexcept;
 
+	// TODO why are these public
 	//We also use this struct in the Player class. But the player's bullets don't have a tail. So it may seem a bit redundant. But I'm too lazy to fix it.
-	std::array<short, 3> previous_x;
-	std::array<short, 3> previous_y;
+	std::array<float, 3> _previous_x;
+	std::array<float, 3> _previous_y;
 
-	short x;
-	short y;
+	float _x;
+	float _y;
 
+private:
+	bool _dead;
+
+	float _real_x;
+	float _real_y;
+	float _step_x;
+	float _step_y;
 };

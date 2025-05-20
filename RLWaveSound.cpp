@@ -5,14 +5,14 @@
 
 namespace raylib
 {
-    WaveSound::WaveSound(const std::string& filename)
+    WaveSound::WaveSound(const std::string& filename) noexcept
     {
-        sound = LoadSound(filename.c_str());
+        _sound = LoadSound(filename.c_str());
     }
 
     WaveSound::~WaveSound()
     {
-        StopSound(sound);
+        StopSound(_sound);
         //UnloadSound(sound);
     }
 
@@ -25,16 +25,16 @@ namespace raylib
         }
 #endif
         
-        PlaySound(sound);
+        PlaySound(_sound);
         return true;
     }
     void WaveSound::Stop() const noexcept
     {
-        StopSound(sound);
+        StopSound(_sound);
     }
 
     bool WaveSound::IsPlaying() const noexcept
     {
-        return IsSoundPlaying(sound);
+        return IsSoundPlaying(_sound);
     }
 } // namespace raylib

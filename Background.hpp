@@ -12,12 +12,12 @@ public:
 	Background() = default;
 	Background(const std::string& spritefile);
 	~Background();
-	void draw(raylib::DrawSession& ds);
-	void update(Player& player);
-	void reset();
+	void draw(raylib::DrawSession& ds) const;
+	void update(Player& player) noexcept;
+	void reset() noexcept;
 
 private:
-	Texture2D backgroundsprite;
-	Rectangle source{ 0, 0, 0, 0 };
+	Texture2D _backgroundsprite;
+	Rectangle _source{ 0, 0, 0, 0 };
 };
 

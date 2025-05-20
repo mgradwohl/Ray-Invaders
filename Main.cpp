@@ -1,24 +1,22 @@
-#include <array>
 #include <chrono>
 #include <random>
 #include <raylib.h>
 #include "RLWindow.h"
 #include "RLDrawSession.h"
-#include "Background.hpp"
-#include "Animation.hpp"
-#include "DrawText.hpp"
 #include "Global.hpp"
-#include "Enemy.hpp"
+#include "Backbuffer.hpp"
+#include "Background.hpp"
+#include "DrawText.hpp"
 #include "EnemyManager.hpp"
 #include "Ufo.hpp"
 #include "Player.hpp"
 #include "PowerUp.hpp"
+#include "Bases.hpp"
+
 int main()
 {
-	bool game_over = 0;
-	bool next_level = 0;
-
-	//The current level.
+	bool game_over = false;
+	bool next_level = false;
 	unsigned short level = 0;
 	unsigned short next_level_timer = NEXT_LEVEL_TRANSITION;
 
@@ -30,22 +28,22 @@ int main()
 	std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
 	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
-	InitAudioDevice();
 
 	Background background("Resources/Images/BigGalaxy.png");
 	EnemyManager enemy_manager;
 	Player player;
 	PowerUp powerup("Resources/Images/PowerupBar.png");
 	Ufo ufo(random_engine);
+	Bases bases("Resources/Images/Base.png");
 
 	// we draw everything to this, and then render this to the screen
-	RenderTexture2D backbuffer = ::LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
+	Backbuffer backbuffer(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_RESIZE);
 
 	previous_time = std::chrono::steady_clock::now();
 	while (!window.ShouldClose())
 	{
 		//Making the game frame rate independent.
-		std::chrono::microseconds delta_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - previous_time);
+		const std::chrono::microseconds delta_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - previous_time);
 		lag += delta_time;
 		previous_time += delta_time;
 
@@ -59,7 +57,7 @@ int main()
 				game_over = 1;
 			}
 
-			if (enemy_manager.reached_player(player.get_y()))
+			if (enemy_manager.reached_player(static_cast<unsigned short>(player.get_y())))
 			{
 				player.die();
 			}
@@ -78,6 +76,7 @@ int main()
 						player.reset();
 						enemy_manager.reset(level);
 						ufo.reset(1, random_engine);
+						bases.reset();
 					}
 					else //Here we're showing the next level transition.
 					{
@@ -93,24 +92,27 @@ int main()
 					background.update(player);
 					enemy_manager.update(random_engine);
 					ufo.update(random_engine);
+					bases.update(enemy_manager.get_enemy_bullets());
+					bases.update(player.get_player_bullets());
 				}
 			}
 			else if (IsKeyPressed(KEY_ENTER))
 			{
 				// player started a new game
-				game_over = 0;
+				game_over = false;
 				level = 0;
 				background.reset();
 				player.reset();
 				enemy_manager.reset(level);
 				ufo.reset(1, random_engine);
+				bases.reset();
 			}
 
 			if (FRAME_DURATION > lag)
 			{
 				{
 					// everything is either reset (new game) or updated (continuing game) time to draw
-					raylib::DrawSession ds(backbuffer, BLACK);
+					raylib::DrawSession ds(backbuffer.GetRenderTexture(), BLACK);
 					background.draw(ds);
 
 					// When the player dies, we will only the player and the banner
@@ -119,33 +121,22 @@ int main()
 					{
 						enemy_manager.draw(ds);
 						ufo.draw(ds);
+						bases.draw(ds);
 						powerup.draw(ds, player);
-						draw_text(ds, 10, 0.25f * BASE_SIZE, 0.25f * BASE_SIZE, "Level: " + std::to_string(level));
+						draw_text(ds, 10, static_cast<short>(0.25f * BASE_SIZE), static_cast<short>(0.25f * BASE_SIZE), "Level: " + std::to_string(level));
 					}
 					else
 					{
-						draw_text(ds, 20, 0.5f * (SCREEN_WIDTH - 5 * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Game over!");
+						draw_text_center(ds, 20, SCREEN_WIDTH, SCREEN_HEIGHT, "Game over!");
 					}
 
 					if (next_level)
 					{
-						draw_text(ds, 20, 0.5f * (SCREEN_WIDTH - 5.5f * BASE_SIZE), 0.5f * (SCREEN_HEIGHT - BASE_SIZE), "Next level!");
+						draw_text_center(ds, 20, SCREEN_WIDTH, SCREEN_HEIGHT, "Next level!");
 					}
-				}
-
-				{
-					// Draw backbuffer to front buffer
-					// -height flips the image the right way up
-					Vector2 pos{ 0,0 };
-					Rectangle source = { 0, 0, backbuffer.texture.width, -backbuffer.texture.height };
-
-					BeginDrawing();
-						Rectangle dest = { 0, 0, backbuffer.texture.width * SCREEN_RESIZE, backbuffer.texture.height * SCREEN_RESIZE };
-						DrawTexturePro(backbuffer.texture, source, dest, pos, 0.0f, WHITE);
-					EndDrawing();
-				}
+				}// DrawSession ds
+				backbuffer.flip();
 			}
 		}
 	}
-	UnloadRenderTexture(backbuffer);
 }

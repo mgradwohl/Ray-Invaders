@@ -7,24 +7,24 @@
 class Animation
 {
 public:
-	Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location);
+	Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location) noexcept;
 
-	bool change_current_frame();
-	bool update();
+	bool change_current_frame() noexcept;
+	bool update() noexcept;
 
-	void draw(raylib::DrawSession& ds, short i_x, short i_y, const Color& i_color = WHITE);
-	void reset();
+	void draw(raylib::DrawSession& ds, float x, float y, const Color& i_color = WHITE) const;
+	void reset() noexcept;
 
 private:
 	//When this iterator reaches the animation speed, we change the frame and reset the iterator.
-	unsigned short animation_iterator;
+	unsigned short _animation_iterator;
 	//The higher the value, the slower the animation.
-	unsigned short animation_speed;
-	unsigned short current_frame;
+	unsigned short _animation_speed;
+	unsigned short _current_frame;
 	//To make things easier, each image file will contain 1 animation. So that the frame heights are the same.
-	unsigned short frame_width;
+	unsigned short _frame_width;
 	//We can find this by dividing the width of the image by the frame width.
-	unsigned short total_frames;
+	unsigned short _total_frames;
 
-	Texture2D sprite;
+	Texture2D _sprite;
 };

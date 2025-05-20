@@ -7,8 +7,8 @@ namespace raylib
 	class DrawSession
 	{
 	public:
-		DrawSession(RenderTexture2D& backbuffer);
-		DrawSession(RenderTexture2D& backbuffer, Color clearColor);
+		DrawSession(const RenderTexture2D& backbuffer) noexcept;
+		DrawSession(const RenderTexture2D& backbuffer, const Color clearColor) noexcept;
 
 		~DrawSession();
 
@@ -18,11 +18,11 @@ namespace raylib
 		DrawSession& operator=(DrawSession& b) = delete;
 		DrawSession& operator=(DrawSession&& b) = delete;
 
-		void DrawRectangle(int x, int y, int width, int height, Color color);
-		void DrawText(const std::string& text, int x, int y, int fontSize, Color color);
+		void DrawRectangle(int x, int y, int width, int height, Color color) noexcept;
+		void DrawText(const std::string& text, int x, int y, int fontSize, Color color) noexcept;
 		void DrawFPS(int posX, int posY, int height);
-		void DrawTexture(Texture2D& texture, int x, int y, Color color);
-		void DrawTexture(Texture2D& texture, float x, float y, float width, float height, Vector2& pos, Color color);
-		void DrawTexture(Texture2D& texture, Rectangle& source, Vector2& pos, Color color);
+		void DrawTexture(const Texture2D& texture, const int x, const int y, const Color color) noexcept;
+		void DrawTexture(const Texture2D& texture, const float x, const float y, const float width, const float height, const Vector2& pos, const Color color) noexcept;
+		void DrawTexture(const Texture2D& texture, const Rectangle& source, const Vector2& pos, const Color color) noexcept;
 	};
 } // namespace raylib

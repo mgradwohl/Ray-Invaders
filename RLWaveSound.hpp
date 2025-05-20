@@ -7,7 +7,7 @@ namespace raylib
 	{
 	public:
 		WaveSound() = default;
-		WaveSound(const std::string& filename);
+		WaveSound(const std::string& filename) noexcept;
 		~WaveSound();
 
 		// move/copy constuct
@@ -22,7 +22,7 @@ namespace raylib
 		bool IsPlaying() const noexcept;
 
 	private:
-		Sound sound;
+		Sound _sound;
 	};
 }
 
