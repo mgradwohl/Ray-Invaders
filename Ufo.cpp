@@ -1,11 +1,12 @@
-#include <array>
-#include <chrono>
 #include <random>
 #include <raylib.h>
 
 #include "Animation.hpp"
 #include "Global.hpp"
 #include "Ufo.hpp"
+
+constexpr float UFO_EXPLOSION_Y_OFFSET = 0.5F;
+constexpr float UFO_EXPLOSION_MAGIC_OFFSET = 0.5F;
 
 Ufo::Ufo(std::mt19937_64& i_random_engine) :
 	_y(BASE_SIZE),
@@ -17,9 +18,9 @@ Ufo::Ufo(std::mt19937_64& i_random_engine) :
 	reset(true, i_random_engine);
 	_ufoappearsound = raylib::WaveSound("Resources/Sounds/UFO Enter.wav");
 
-	for (unsigned char a = 0; a < POWERUP_TYPES; a++)
+	for (unsigned char puType = 0; puType < POWERUP_TYPES; puType++)
 	{
-		_powerup_animations.emplace_back(POWERUP_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Powerup" + std::to_string(static_cast<unsigned short>(a)) + ".png");
+		_powerup_animations.emplace_back(POWERUP_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Powerup" + std::to_string(static_cast<unsigned short>(puType)) + ".png");
 	}
 }
 
@@ -32,7 +33,7 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 			_dead = true;
 			_ufoappearsound.Stop();			_explosion_x = _x;
 
-			_powerups.emplace_back(_x + 0.5f * BASE_SIZE, _y, static_cast<unsigned char>(_powerup_distribution(i_random_engine)));
+			_powerups.emplace_back(_x + 0.5F * BASE_SIZE, _y, static_cast<unsigned char>(_powerup_distribution(i_random_engine)));
 
 			return true;
 		}
@@ -63,11 +64,13 @@ void Ufo::draw(raylib::DrawSession& ds)
 	{
 		_animation.draw(ds, _x, _y, WHITE);
 	}
-
-	if (!_dead_animation_over)
+	else
 	{
-		_explosion.draw(ds, _explosion_x, _y - 0.5f * BASE_SIZE, Color(255, 36, 0, 255));
+		_explosion.draw(ds, _explosion_x, _y - (UFO_EXPLOSION_Y_OFFSET * BASE_SIZE), Color(255, 36, 0, 255));
+		_explosion.draw(ds, _explosion_x, (_y - (UFO_EXPLOSION_MAGIC_OFFSET * BASE_SIZE)), Color(255, 36, 0, 255));
+		_explosion.draw(ds, _explosion_x, _y - 0.5F * BASE_SIZE, Color(255, 36, 0, 255));
 	}
+
 	for (const PowerUpItem& powerup : _powerups)
 	{
 		_powerup_animations[powerup.get_type()].draw(ds, powerup.getx(), powerup.gety(), WHITE);
@@ -117,7 +120,7 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 			_dead_animation_over = _explosion.update();
 		}
 
-		if (!_timer)
+		if (_timer == 0)
 		{
 			reset(false, i_random_engine);
 		}
@@ -147,7 +150,7 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 	}
 	_powerups.erase(remove_if(_powerups.begin(), _powerups.end(), [](const PowerUpItem& i_powerup) noexcept
 	{
-		return true == i_powerup.isdead();
+		return i_powerup.isdead();
 	}), _powerups.end());
 }
 

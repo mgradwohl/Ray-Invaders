@@ -1,8 +1,6 @@
 //SO MANY CONSTANTS! AAAAAAAH!
 #pragma once
 
-#include <cmath>
-#include <array>
 #include <chrono>
 
 #include <raylib.h>

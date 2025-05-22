@@ -1,0 +1,12 @@
+Checks: >
+  clang-analyzer-*,
+  modernize-*,
+  performance-*,
+  readability-*,
+  bugprone-*,
+  cppcoreguidelines-*,
+  misc-*,
+  portability-*
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*\.(h|hpp)$'
+FormatStyle: file
