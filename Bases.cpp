@@ -6,7 +6,7 @@
 Bases::Bases(const std::string& filename)
 {
 	_sprite = LoadTexture(filename.c_str());
-	_framecount = static_cast<unsigned short>(_sprite.width / BASE_WIDTH - 1);
+	_framecount = static_cast<std::size_t>(_sprite.width / BASE_WIDTH - 1);
 
 	constexpr unsigned short offset = static_cast<unsigned short>((SCREEN_WIDTH - (BASE_COUNT * BASE_WIDTH)) / (BASE_COUNT + 1));
 	unsigned short x = offset;
@@ -35,13 +35,13 @@ void Bases::update(std::vector<Bullet>& i_enemy_bullets)
 {
 	for (Base& base : _bases)
 	{
-		base.update(i_enemy_bullets, _framecount);
+		base.update(i_enemy_bullets, static_cast<unsigned short>(_framecount));
 	};
 }
 
-void Bases::draw(raylib::DrawSession& ds)
+void Bases::draw(raylib::DrawSession& ds) const
 {
-	for (Base& base : _bases)
+	for (const Base& base : _bases)
 	{
 		base.draw(ds, _sprite);
 	};

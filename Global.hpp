@@ -39,6 +39,7 @@ constexpr unsigned char UFO_ANIMATION_SPEED = 8;
 constexpr unsigned char UFO_MOVE_SPEED = 1;
 constexpr unsigned char BASE_COUNT = 4;
 constexpr unsigned char BASE_WIDTH = 30;
+constexpr unsigned char FONT_SIZE_BIG = 32;
 
 //There are 64 enemies. So the probability that at least one of them shoots is 1 - (1 - 1 / 4096)^64 = 1.55%
 //Keep in mind that we do this every frame.

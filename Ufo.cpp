@@ -64,8 +64,9 @@ void Ufo::draw(raylib::DrawSession& ds)
 	{
 		_animation.draw(ds, _x, _y, WHITE);
 	}
-	else
+	else if (!_dead_animation_over)
 	{
+		// Only draw the explosion animation until it's finished
 		_explosion.draw(ds, _explosion_x, _y - (UFO_EXPLOSION_Y_OFFSET * BASE_SIZE), Color(255, 36, 0, 255));
 		_explosion.draw(ds, _explosion_x, (_y - (UFO_EXPLOSION_MAGIC_OFFSET * BASE_SIZE)), Color(255, 36, 0, 255));
 		_explosion.draw(ds, _explosion_x, _y - 0.5F * BASE_SIZE, Color(255, 36, 0, 255));

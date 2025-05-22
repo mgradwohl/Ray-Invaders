@@ -3,9 +3,8 @@
 #include "Global.hpp"
 #include "PowerUpManager.hpp"
 
-PowerUpManager::PowerUpManager(const std::string& spritefile)
+PowerUpManager::PowerUpManager(const std::string& spritefile) : _spritefile(spritefile)
 {
-	_spritefile = spritefile;
 	_powerup_bar_sprite = LoadTexture(_spritefile.c_str());
 }
 

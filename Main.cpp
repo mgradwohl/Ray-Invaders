@@ -122,16 +122,17 @@ int main()
 						ufo.draw(ds);
 						bases.draw(ds);
 						powerup.draw(ds, player);
-						ds.DrawText("Level: " + std::to_string(level), 10, static_cast<short>(0.25f * BASE_SIZE), static_cast<short>(0.25f * BASE_SIZE), WHITE);
+						const std::string levelText = "Level: " + std::to_string(level);
+						ds.DrawText(levelText, 10, static_cast<short>(0.25f * BASE_SIZE), static_cast<short>(0.25f * BASE_SIZE), WHITE);
 					}
 					else
 					{
-						ds.DrawText("Game over!", 20, SCREEN_HEIGHT / 2, 40, WHITE);
+						ds.DrawTextCentered("Game over!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, FONT_SIZE_BIG, WHITE);
 					}
 
 					if (next_level)
 					{
-						ds.DrawText("Next level!", 20, SCREEN_HEIGHT / 2, 40, WHITE);
+						ds.DrawTextCentered("Next level!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, FONT_SIZE_BIG, WHITE);
 					}
 				}// DrawSession ds
 				backbuffer.flip();

@@ -2,18 +2,14 @@
 #include "Global.hpp"
 #include "Bullet.hpp"
 
-Bullet::Bullet(float i_step_x, float i_step_y, short i_x, short i_y) :
-	_dead(false),
-	_real_x(i_x),
-	_real_y(i_y),
-	_step_x(i_step_x),
-	_x(i_x),
-	_step_y(i_step_y),
-	_y(i_y)
-{
-	_previous_x.fill(_x);
-	_previous_y.fill(_y);
+Bullet::Bullet(float i_step_x, float i_step_y, short i_x, short i_y) noexcept
+    : _step_x(i_step_x), _step_y(i_step_y), _x(static_cast<float>(i_x)), _y(static_cast<float>(i_y)), _real_x(static_cast<float>(i_x)), _real_y(static_cast<float>(i_y)), _dead(false) {
+    _previous_x.fill(_x);
+    _previous_y.fill(_y);
 }
+
+bool Bullet::IsDead() const noexcept { return _dead; }
+void Bullet::IsDead(bool dead) noexcept { _dead = dead; }
 
 void Bullet::update() noexcept
 {
@@ -45,15 +41,10 @@ void Bullet::update() noexcept
 Rectangle Bullet::get_hitbox() const noexcept
 {
 	//Smaller hitboxes make the game so much better!
-	return Rectangle(_x + 0.375F * BASE_SIZE, _y + 0.375F * BASE_SIZE, 0.25F * BASE_SIZE, 0.25F * BASE_SIZE);
+	return Rectangle(_x, _y, BASE_SIZE, BASE_SIZE);
 }
 
-bool Bullet::IsDead() const noexcept
-{
-	return _dead;
-};
-
-void Bullet::IsDead(bool d) noexcept
-{
-	_dead = d;
-}
+float Bullet::get_x() const noexcept { return _x; }
+float Bullet::get_y() const noexcept { return _y; }
+const std::array<float, 3>& Bullet::get_previous_x() const noexcept { return _previous_x; }
+const std::array<float, 3>& Bullet::get_previous_y() const noexcept { return _previous_y; }

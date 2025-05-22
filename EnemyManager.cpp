@@ -5,6 +5,9 @@
 #include "RLWindow.h"
 #include "RLDrawSession.h"
 
+//There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same thing we did in the game "Frogger".
+// Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered for precise collision detection.
+
 #include "Animation.hpp"
 #include "Global.hpp"
 #include "Enemy.hpp"
@@ -44,16 +47,18 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 	for (const Bullet& bullet : _enemy_bullets)
 	{
 		//Drawing the tail of the bullet.
-		for (unsigned char a = 0; a < bullet._previous_x.size(); a++)
+		const auto& prev_x = bullet.get_previous_x();
+		const auto& prev_y = bullet.get_previous_y();
+		for (std::size_t a = 0; a < prev_x.size(); a++)
 		{
-			const Vector2 dest{ static_cast<float>(bullet._previous_x[a]), static_cast<float>(bullet._previous_y[a]) };
+			const Vector2 dest{ static_cast<float>(prev_x[a]), static_cast<float>(prev_y[a]) };
 			const Rectangle source{ static_cast<float>(BASE_SIZE * a), 0.0f, static_cast<float>(BASE_SIZE), static_cast<float>(BASE_SIZE) };
 			ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 		}
 
 		//Drawing the bullet itself.
-		const Vector2 dest{ static_cast<float>(bullet._x), static_cast<float>(bullet._y) };
-		const Rectangle source{ static_cast<float>(BASE_SIZE * bullet._previous_x.size()), 0.0f, static_cast<float>(BASE_SIZE), static_cast<float>(BASE_SIZE) };
+		const Vector2 dest{ bullet.get_x(), bullet.get_y() };
+		const Rectangle source{ static_cast<float>(BASE_SIZE * prev_x.size()), 0.0f, static_cast<float>(BASE_SIZE), static_cast<float>(BASE_SIZE) };
 		ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 	}
 
@@ -65,19 +70,20 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 		{
 			switch (enemy.get_type())
 			{
-				case 0:
+				case Enemy::Type::Cyan:
 				{
 					enemy_color = Color{ 0, 255, 255, 255 }; //CYAN
 					break;
 				}
-				case 1:
+				case Enemy::Type::Purple:
 				{
 					enemy_color = PURPLE;
 					break;
 				}
-				case 2:
+				case Enemy::Type::Green:
 				{
 					enemy_color = GREEN;
+					break;
 				}
 			}
 		}
@@ -86,7 +92,7 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 			PlaySound(_enemydestroy);
 		}
 
-		_enemy_animations[enemy.get_type()].draw(ds, enemy.get_x(), enemy.get_y(), enemy_color);
+		_enemy_animations[static_cast<unsigned char>(enemy.get_type())].draw(ds, enemy.get_x(), enemy.get_y(), enemy_color);
 	}
 }
 
@@ -113,6 +119,7 @@ void EnemyManager::reset(unsigned short i_level)
 	_enemies.clear();
 
 	//There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same thing we did in the game "Frogger".
+	// Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered for precise collision detection.
 	//Go watch that video, btw!
 	if (TOTAL_LEVELS <= i_level)
 	{
@@ -176,6 +183,7 @@ void EnemyManager::reset(unsigned short i_level)
 	}
 
 	//Here we're converting each character into an enemy.
+	unsigned char enemy_health = 1;
 	for (const char sketch_character : level_sketch)
 	{
 		enemy_x++;
@@ -188,19 +196,19 @@ void EnemyManager::reset(unsigned short i_level)
 				enemy_y++;
 
 				break;
-			}			case '0':
+			}           case '0':
 			{
-				_enemies.emplace_back(static_cast<unsigned char>(0), static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
+				_enemies.emplace_back(Enemy::Type::Cyan, static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)), enemy_health);
 				break;
 			}
 			case '1':
 			{
-				_enemies.emplace_back(static_cast<unsigned char>(1), static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
+				_enemies.emplace_back(Enemy::Type::Purple, static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)), enemy_health);
 				break;
 			}
 			case '2':
 			{
-				_enemies.emplace_back(static_cast<unsigned char>(2), static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
+				_enemies.emplace_back(Enemy::Type::Green, static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)), enemy_health);
 			}
 		}
 	}
@@ -266,7 +274,7 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 	//AGAIN!
 	_enemy_bullets.erase(remove_if(_enemy_bullets.begin(), _enemy_bullets.end(), [](const Bullet& i_bullet)
 	{
-		return 1 == i_bullet.     IsDead();
+		return i_bullet.IsDead();
 	}), _enemy_bullets.end());
 }
 

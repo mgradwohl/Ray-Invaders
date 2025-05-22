@@ -16,12 +16,11 @@ public:
 	bool check_bullet_collision(std::mt19937_64& i_random_engine, const Rectangle& i_bullet_hitbox);
 
 	unsigned char check_powerup_collision(const Rectangle& i_player_hitbox) noexcept;
-
 	void draw(raylib::DrawSession& ds);
 	void reset(bool i_dead, std::mt19937_64& i_random_engine);
 	void update(std::mt19937_64& i_random_engine);
 
-	Rectangle get_hitbox() const noexcept;
+	[[nodiscard]] Rectangle get_hitbox() const noexcept;
 private:
 	bool _dead;
 	bool _dead_animation_over;
