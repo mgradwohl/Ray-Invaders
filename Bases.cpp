@@ -31,7 +31,7 @@ void Bases::reset()
 	}
 }
 
-void Bases::update(std::vector<Bullet>& i_enemy_bullets)
+void Bases::update(std::vector<Bullet>& i_bullets)
 {
 	// Since _framecount is now an int, we can do a direct comparison
 	// without needing intermediate casts
@@ -40,7 +40,7 @@ void Bases::update(std::vector<Bullet>& i_enemy_bullets)
 		
 	for (Base& base : _bases)
 	{
-		base.update(i_enemy_bullets, frameCount);
+		base.update(i_bullets, frameCount);
 	};
 }
 

@@ -39,7 +39,9 @@ namespace raylib
     void DrawSession::DrawTexture(const Texture2D& texture, const Rectangle& source, const Vector2& pos, const Color color) noexcept
     {
         ::DrawTextureRec(texture, source, pos, color);
-    }    void DrawSession::DrawText(const std::string& text, const int x, const int y, const int fontSize, const Color color) noexcept
+    }
+    
+    void DrawSession::DrawText(const std::string& text, const int x, const int y, const int fontSize, const Color color) noexcept
     {
         ::DrawText(text.c_str(), x, y, fontSize, color);
     }    void DrawSession::DrawTextCentered(const std::string& text, const int x, const int y, const int fontSize, const Color color) noexcept
@@ -62,7 +64,11 @@ namespace raylib
             color = RED;
         }
 
-        const std::string fpsStr = std::format("FPS: {}", fps); // Use local fps instead of calling GetFPS() again
-        DrawText(fpsStr, posX, posY, height, color);
+        const std::string fpsStr = std::format("FPS: {}", fps); // Use local fps instead of calling GetFPS() again        DrawText(fpsStr, posX, posY, height, color);
+    }
+
+    void DrawSession::DrawCircle(const float centerX, const float centerY, const float radius, const Color color) noexcept
+    {
+        ::DrawCircle(static_cast<int>(centerX), static_cast<int>(centerY), radius, color);
     }
 } // namespace raylib
