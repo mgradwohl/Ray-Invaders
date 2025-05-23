@@ -22,7 +22,7 @@ namespace raylib
 		bool IsPlaying() const noexcept;
 
 	private:
-		Sound _sound;
+		Sound _sound{};
 	};
 }
 

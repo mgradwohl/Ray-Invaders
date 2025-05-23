@@ -17,7 +17,7 @@ public:
 	void reset() noexcept;
 
 private:
-	Texture2D _backgroundsprite;
-	Rectangle _source{ 0, 0, 0, 0 };
+	Texture2D _backgroundsprite{}; // Already properly initialized
+	Rectangle _source{ 0.0f, 0.0f, 0.0f, 0.0f };
 };
 

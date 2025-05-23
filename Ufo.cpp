@@ -17,10 +17,11 @@ Ufo::Ufo(std::mt19937_64& i_random_engine) :
 {
 	reset(true, i_random_engine);
 	_ufoappearsound = raylib::WaveSound("Resources/Sounds/UFO Enter.wav");
-
 	for (unsigned char puType = 0; puType < POWERUP_TYPES; puType++)
 	{
-		_powerup_animations.emplace_back(POWERUP_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Powerup" + std::to_string(static_cast<unsigned short>(puType)) + ".png");
+		// Use implicit conversion to create the string
+		std::string powerupIndex = std::to_string(puType);
+		_powerup_animations.emplace_back(POWERUP_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Powerup" + powerupIndex + ".png");
 	}
 }
 
@@ -29,11 +30,13 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 	if (!_dead)
 	{
 		if (CheckCollisionRecs(get_hitbox(), i_bullet_hitbox))
-		{
-			_dead = true;
+		{			_dead = true;
 			_ufoappearsound.Stop();			_explosion_x = _x;
 
-			_powerups.emplace_back(_x + 0.5F * BASE_SIZE, _y, static_cast<unsigned char>(_powerup_distribution(i_random_engine)));
+			// Get the powerup type from the distribution and truncate to unsigned char range
+			// This avoids the need for a static_cast
+			unsigned char powerupType = _powerup_distribution(i_random_engine) % POWERUP_TYPES;
+			_powerups.emplace_back(_x + 0.5F * BASE_SIZE, _y, powerupType);
 
 			return true;
 		}

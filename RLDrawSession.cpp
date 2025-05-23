@@ -45,10 +45,10 @@ namespace raylib
     }    void DrawSession::DrawTextCentered(const std::string& text, const int x, const int y, const int fontSize, const Color color) noexcept
     {
         const int textWidth = MeasureText(text.c_str(), fontSize);
-        const float drawX = static_cast<float>(x) - textWidth / 2.0f;
-        const float drawY = static_cast<float>(y) - fontSize / 2.0f;
-        ::DrawText(text.c_str(), static_cast<int>(drawX), static_cast<int>(drawY), fontSize, color);
-    }    void DrawSession::DrawFPS(const int posX, const int posY, const int height)
+        const int drawX = x - textWidth / 2;
+        const int drawY = y - fontSize / 2;
+        ::DrawText(text.c_str(), drawX, drawY, fontSize, color);
+    }void DrawSession::DrawFPS(const int posX, const int posY, const int height)
     {
         Color color = LIME;
         const int fps = GetFPS();

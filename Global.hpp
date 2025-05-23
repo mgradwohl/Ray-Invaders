@@ -54,3 +54,27 @@ constexpr unsigned short UFO_TIMER_MAX = 1024;
 constexpr unsigned short UFO_TIMER_MIN = 768;
 
 constexpr std::chrono::microseconds FRAME_DURATION(16667);
+
+// Float constants to avoid casting operations
+namespace F {
+    // Size constants
+    constexpr float BASE_SIZE = 16.0f;    // ::BASE_SIZE
+    constexpr float BASE_WIDTH = 30.0f;   // ::BASE_WIDTH
+    
+    // Speed constants
+    constexpr float ENEMY_BULLET_SPEED = 2.0f; // ::ENEMY_BULLET_SPEED
+    constexpr float ENEMY_MOVE_SPEED = 2.0f;   // ::ENEMY_MOVE_SPEED
+    constexpr float PLAYER_BULLET_SPEED = 4.0f; // ::PLAYER_BULLET_SPEED
+    constexpr float PLAYER_MOVE_SPEED = 2.0f;   // ::PLAYER_MOVE_SPEED
+    constexpr float POWERUP_SPEED = 2.0f;       // ::POWERUP_SPEED
+    constexpr float UFO_MOVE_SPEED = 1.0f;      // ::UFO_MOVE_SPEED
+    
+    // Screen dimensions
+    constexpr float SCREEN_HEIGHT = 180.0f; // ::SCREEN_HEIGHT
+    constexpr float SCREEN_WIDTH = 320.0f;  // ::SCREEN_WIDTH
+    constexpr float SCREEN_RESIZE = 5.0f;   // ::SCREEN_RESIZE
+    
+    // Common position fractions (actually used in code)
+    constexpr float QUARTER = 0.25f;
+    constexpr float THREE_QUARTERS = 0.75f;
+}

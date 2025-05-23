@@ -4,7 +4,7 @@
 
 class Bullet {
 public:
-    explicit Bullet(float i_step_x, float i_step_y, short i_x, short i_y) noexcept;
+    explicit Bullet(float i_step_x, float i_step_y, float i_x, float i_y) noexcept;
     Bullet(const Bullet&) = default;
     Bullet(Bullet&&) noexcept = default;
     Bullet& operator=(const Bullet&) = default;

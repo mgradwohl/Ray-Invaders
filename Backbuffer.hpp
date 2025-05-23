@@ -17,7 +17,7 @@ public:
 	}
 
 private:
-	RenderTexture2D _backbuffer;
-	float _scale;
+	RenderTexture2D _backbuffer{};
+	float _scale{1.0f};
 };
 

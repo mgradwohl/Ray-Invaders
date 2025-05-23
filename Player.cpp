@@ -61,17 +61,12 @@ void Player::draw(raylib::DrawSession& ds)
 	{
 		//sprite.setPosition(x, y);
 		//sprite.setTextureRect(sf::IntRect(BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE));
-
 		Vector2 dest{ _x, _y};
-		// const float src_x = float(BASE_SIZE) * float(_current_power);
-		// const float src_y = 0.0f;
-		// const float src_w = float(BASE_SIZE);
-		// const float src_h = float(BASE_SIZE);
-		const Rectangle source{
-			static_cast<float>(BASE_SIZE * static_cast<int>(_current_power)),
+		// Using float constants to avoid static_cast
+		const Rectangle source{			F::BASE_SIZE * _current_power, // _current_power is unsigned char, safe implicit conversion to float
 			0.0f,
-			static_cast<float>(BASE_SIZE),
-			static_cast<float>(BASE_SIZE)
+			F::BASE_SIZE,
+			F::BASE_SIZE
 		};
 		ds.DrawTexture(_player_sprite, source, dest, WHITE);
 
@@ -106,10 +101,9 @@ void Player::reset()
 
 	_current_power = 0;
 	_reload_timer = 0;
-
 	_power_timer = 0;
-	_x = 0.5f * static_cast<float>(SCREEN_WIDTH - BASE_SIZE);
-	_y = static_cast<float>(SCREEN_HEIGHT - 2 * BASE_SIZE);
+	_x = 0.5f * (F::SCREEN_WIDTH - F::BASE_SIZE);
+	_y = F::SCREEN_HEIGHT - 2.0f * F::BASE_SIZE;
 
 	_bullets.clear();
 
@@ -121,24 +115,22 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 	if (!_dead)
 	{
 		unsigned char powerup_type;
-
 		if (IsKeyDown(KEY_LEFT))
 		{
 			if (4 == _current_power)
 			{
 				//Mirrored controls power-DOWN!
 				_x = std::min(
-					static_cast<float>(PLAYER_MOVE_SPEED) + _x,
-					static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE)
+					F::PLAYER_MOVE_SPEED + _x,
+					F::SCREEN_WIDTH - 2.0f * F::BASE_SIZE
 				);
 			}
 			else
 			{
-				float new_x = std::max(
-					_x - static_cast<float>(PLAYER_MOVE_SPEED),
-					static_cast<float>(BASE_SIZE)
+				_x = std::max(
+					_x - F::PLAYER_MOVE_SPEED,
+					F::BASE_SIZE
 				);
-				_x = new_x;
 			}
 		}
 
@@ -150,17 +142,15 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 				//I'm never gonna get tired of this joke.
 				//NEVER!
 				_x = std::max(
-					_x - static_cast<float>(PLAYER_MOVE_SPEED),
-					static_cast<float>(BASE_SIZE)
+					_x - F::PLAYER_MOVE_SPEED,
+					F::BASE_SIZE
 				);
 			}
-			else
-			{
-				float new_x = std::min(
-					static_cast<float>(PLAYER_MOVE_SPEED) + _x,
-					static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE)
+			else			{
+				_x = std::min(
+					F::PLAYER_MOVE_SPEED + _x,
+					F::SCREEN_WIDTH - 2.0f * F::BASE_SIZE
 				);
-				_x = new_x;
 			}
 		}
 
@@ -175,14 +165,16 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 					_reload_timer = FAST_RELOAD_DURATION;
 				}
 				else
-				{
-					_reload_timer = RELOAD_DURATION;
-				}				_bullets.emplace_back(0.0f, static_cast<float>(-PLAYER_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
+				{				_reload_timer = RELOAD_DURATION;
+				}                // No need for conversions since Bullet constructor now accepts float params directly
+                _bullets.emplace_back(0.0f, -F::PLAYER_BULLET_SPEED, _x, _y);
 
 				if (3 == _current_power)
 				{
-					_bullets.emplace_back(0.0f, static_cast<float>(-PLAYER_BULLET_SPEED), static_cast<short>(_x - 0.375f * BASE_SIZE), static_cast<short>(_y));
-					_bullets.emplace_back(0.0f, static_cast<float>(-PLAYER_BULLET_SPEED), static_cast<short>(_x + 0.375f * BASE_SIZE), static_cast<short>(_y));
+					const float leftX = _x - 0.375f * F::BASE_SIZE;
+					const float rightX = _x + 0.375f * F::BASE_SIZE;
+					_bullets.emplace_back(0.0f, -F::PLAYER_BULLET_SPEED, leftX, _y);
+					_bullets.emplace_back(0.0f, -F::PLAYER_BULLET_SPEED, rightX, _y);
 				}
 			}
 		}
@@ -278,5 +270,11 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 
 Rectangle Player::get_hitbox() const noexcept
 {
-	return Rectangle(_x + 0.125f * BASE_SIZE, _y + 0.125f * BASE_SIZE, 0.75f * BASE_SIZE, 0.75f * BASE_SIZE);
+	// Use the fraction constants from the F namespace
+	return Rectangle(
+		_x + 0.125f * F::BASE_SIZE, 
+		_y + 0.125f * F::BASE_SIZE, 
+		F::THREE_QUARTERS * F::BASE_SIZE, 
+		F::THREE_QUARTERS * F::BASE_SIZE
+	);
 }

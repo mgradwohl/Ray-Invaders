@@ -54,9 +54,8 @@ int main()
 			if (player.get_dead_animation_over())
 			{
 				game_over = 1;
-			}
-
-			if (enemy_manager.reached_player(static_cast<unsigned short>(player.get_y())))
+			}			// Player's Y position is already a float, so we can check directly
+			if (enemy_manager.reached_player(player.get_y()))
 			{
 				player.die();
 			}
@@ -121,18 +120,17 @@ int main()
 						enemy_manager.draw(ds);
 						ufo.draw(ds);
 						bases.draw(ds);
-						powerup.draw(ds, player);
-						const std::string levelText = "Level: " + std::to_string(level);
-						ds.DrawText(levelText, 10, static_cast<short>(0.25f * BASE_SIZE), static_cast<short>(0.25f * BASE_SIZE), WHITE);
-					}
-					else
+						powerup.draw(ds, player);						const std::string levelText = "Level: " + std::to_string(level);
+						const int textY = static_cast<int>(F::QUARTER * F::BASE_SIZE); // Using F::QUARTER constant
+						ds.DrawText(levelText, 10, textY, textY, WHITE);
+					}					else
 					{
-						ds.DrawTextCentered("Game over!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, FONT_SIZE_BIG, WHITE);
+						ds.DrawTextCentered("Game over!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 32, WHITE); // Using literal instead of FONT_SIZE_BIG
 					}
 
 					if (next_level)
 					{
-						ds.DrawTextCentered("Next level!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, FONT_SIZE_BIG, WHITE);
+						ds.DrawTextCentered("Next level!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 32, WHITE); // Using literal instead of FONT_SIZE_BIG
 					}
 				}// DrawSession ds
 				backbuffer.flip();

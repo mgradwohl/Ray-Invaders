@@ -10,7 +10,7 @@ public:
 	void update(const Player& player);
 	void draw(raylib::DrawSession& ds, const Player& player) const;
 
-private:	Texture2D _powerup_bar_sprite;
+private:	Texture2D _powerup_bar_sprite{};
 	Color _color = WHITE;
 	const std::string _spritefile;
 };

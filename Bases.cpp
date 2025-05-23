@@ -1,20 +1,20 @@
 #include <vector>
+#include <climits> // For USHRT_MAX
 #include <raylib.h>
 #include "Bullet.hpp"
 #include "Bases.hpp"
 
 Bases::Bases(const std::string& filename)
-{
-	_sprite = LoadTexture(filename.c_str());
-	_framecount = static_cast<std::size_t>(_sprite.width / BASE_WIDTH - 1);
-
-	constexpr unsigned short offset = static_cast<unsigned short>((SCREEN_WIDTH - (BASE_COUNT * BASE_WIDTH)) / (BASE_COUNT + 1));
-	unsigned short x = offset;
+{	_sprite = LoadTexture(filename.c_str());
+	// Calculate framecount directly to int to avoid casting
+	_framecount = static_cast<int>(_sprite.width / F::BASE_WIDTH - 1.0f);
+	const float offset = (F::SCREEN_WIDTH - (BASE_COUNT * F::BASE_WIDTH)) / (BASE_COUNT + 1);
+	float x = offset;
 	for (int i = 0; i < BASE_COUNT; i++)
 	{
 		_bases.emplace_back(x);
-		x = static_cast<unsigned short>(x + offset); // spacing
-		x = static_cast<unsigned short>(x + BASE_WIDTH); // BASE WIDTH
+		x += offset; // spacing
+		x += F::BASE_WIDTH; // BASE WIDTH
 	};
 }
 
@@ -33,9 +33,14 @@ void Bases::reset()
 
 void Bases::update(std::vector<Bullet>& i_enemy_bullets)
 {
+	// Since _framecount is now an int, we can do a direct comparison
+	// without needing intermediate casts
+	const unsigned short frameCount = (_framecount > USHRT_MAX) ? 
+		USHRT_MAX : static_cast<unsigned short>(_framecount);
+		
 	for (Base& base : _bases)
 	{
-		base.update(i_enemy_bullets, static_cast<unsigned short>(_framecount));
+		base.update(i_enemy_bullets, frameCount);
 	};
 }
 

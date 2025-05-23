@@ -17,14 +17,14 @@ public:
 
 private:
 	//When this iterator reaches the animation speed, we change the frame and reset the iterator.
-	unsigned short _animation_iterator;
+	int _animation_iterator{0};
 	//The higher the value, the slower the animation.
-	unsigned short _animation_speed;
-	unsigned short _current_frame;
+	int _animation_speed{1};
+	int _current_frame{0};
 	//To make things easier, each image file will contain 1 animation. So that the frame heights are the same.
-	unsigned short _frame_width;
+	float _frame_width{0.0f}; // Using float for consistent positioning
 	//We can find this by dividing the width of the image by the frame width.
-	unsigned short _total_frames;
+	int _total_frames{0};
 
-	Texture2D _sprite;
+	Texture2D _sprite{};
 };

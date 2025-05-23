@@ -8,13 +8,13 @@
 #include "Global.hpp"
 #include "Enemy.hpp"
 
-Enemy::Enemy(Type i_type, unsigned short i_x, unsigned short i_y, unsigned char health) noexcept :
+Enemy::Enemy(Type i_type, float i_x, float i_y, unsigned char health) noexcept :
     _direction(Direction::Down),
     _health(health),
     _hit_timer(0),
     _type(i_type),
-    _x(static_cast<float>(i_x)),
-    _y(static_cast<float>(i_y))
+    _x(i_x), // No cast needed with float parameters
+    _y(i_y) // No cast needed with float parameters
 {
     _enemylaser = LoadSound("Resources/Sounds/Enemy Laser.wav");
 }
@@ -34,47 +34,68 @@ void Enemy::move()
 {
     if (_direction != Direction::Down)
     {
-        if ((_direction == Direction::Right && _x == static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE)) ||
-            (_direction == Direction::Left && _x == static_cast<float>(BASE_SIZE)))
+        const float rightBoundary = F::SCREEN_WIDTH - 2.0f * F::BASE_SIZE;
+        const float leftBoundary = F::BASE_SIZE;
+        
+        if ((_direction == Direction::Right && _x >= rightBoundary) ||
+            (_direction == Direction::Left && _x <= leftBoundary))
         {
             _direction = Direction::Down;
-            _y += static_cast<float>(ENEMY_MOVE_SPEED);
-        }
-        else
+            _y += F::ENEMY_MOVE_SPEED;
+        }        else
         {
-            _x = std::clamp<float>(_x + static_cast<float>(ENEMY_MOVE_SPEED) * static_cast<int>(_direction), static_cast<float>(BASE_SIZE), static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE));
+            // Direction enum is defined with underlying type char, which can be converted to float
+            // We can avoid the static_cast by using a switch statement or direct mapping
+            float moveOffset = 0.0f;
+            
+            switch (_direction) {
+                case Direction::Left:
+                    moveOffset = -F::ENEMY_MOVE_SPEED;
+                    break;
+                case Direction::Right:
+                    moveOffset = F::ENEMY_MOVE_SPEED;
+                    break;
+                default: // Direction::Down
+                    moveOffset = 0.0f;
+                    break;
+            }
+            
+            _x = std::clamp<float>(_x + moveOffset, leftBoundary, rightBoundary);
         }
     }
     else
-    {
-        _y = std::min<float>(_y + static_cast<float>(ENEMY_MOVE_SPEED), static_cast<float>(BASE_SIZE * ceil(_y / static_cast<float>(BASE_SIZE))));
-        if (_y == static_cast<float>(BASE_SIZE * ceil(_y / static_cast<float>(BASE_SIZE))))
-        {
-            _direction = (0 == (static_cast<int>(_y) / BASE_SIZE) % 2) ? Direction::Left : Direction::Right;
+    {        _y = std::min<float>(_y + F::ENEMY_MOVE_SPEED, F::BASE_SIZE * ceil(_y / F::BASE_SIZE));
+        if (_y >= F::BASE_SIZE * ceil(_y / F::BASE_SIZE) - 0.1f) // Using approximate comparison for float
+        {            // Calculate row using floor division with floats
+            const float rowFloat = _y / F::BASE_SIZE;
+            // This cast is necessary for the modulo operation which requires an integer
+            const int rowInt = static_cast<int>(rowFloat);
+            _direction = (rowInt % 2 == 0) ? Direction::Left : Direction::Right;
         }
     }
 }
 
 void Enemy::shoot(std::vector<Bullet>& i_enemy_bullets)
 {
+    // No need for conversions now
     switch (_type)
     {
         case Type::Cyan:
         {
-            i_enemy_bullets.emplace_back(0.0f, static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
+            i_enemy_bullets.emplace_back(0.0f, F::ENEMY_BULLET_SPEED, _x, _y);
             break;
         }
         case Type::Purple:
         {
-            i_enemy_bullets.emplace_back(0.125F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
-            i_enemy_bullets.emplace_back(-0.125F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
+            i_enemy_bullets.emplace_back(0.125F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(-0.125F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
             break;
         }
         case Type::Green:
         {
-            i_enemy_bullets.emplace_back(0.0f, static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
-            i_enemy_bullets.emplace_back(0.25F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
-            i_enemy_bullets.emplace_back(-0.25F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
+            i_enemy_bullets.emplace_back(0.0f, F::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(0.25F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(-0.25F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
             break;
         }
     }
@@ -87,8 +108,10 @@ void Enemy::update() noexcept
 	{
 		if (1 == _hit_timer)
 		{
-			int new_health = std::max(0, static_cast<int>(_health) - 1);
-			_health = static_cast<unsigned char>(new_health);
+			// Decrement health directly when it's above 0
+			if (_health > 0) {
+				_health--;
+			}
 		}
 
 		_hit_timer--;
@@ -97,5 +120,5 @@ void Enemy::update() noexcept
 
 Rectangle Enemy::get_hitbox() const noexcept
 {
-	return Rectangle(_x + 0.25f * BASE_SIZE, _y + 0.25f * BASE_SIZE, 0.5f * BASE_SIZE, 0.5f * BASE_SIZE);
+	return Rectangle(_x + 0.25f * F::BASE_SIZE, _y + 0.25f * F::BASE_SIZE, 0.5f * F::BASE_SIZE, 0.5f * F::BASE_SIZE);
 }
