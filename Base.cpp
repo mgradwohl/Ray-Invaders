@@ -33,8 +33,8 @@ void Base::draw(raylib::DrawSession& ds, const Texture2D& sprite) const {
 }
 
 Rectangle Base::get_hitbox() const noexcept {
-    // Set hitbox to match the actual visible sprite width from analysis (93.3% for most frames)
-    constexpr float hitbox_scale = 0.933f; // Based on sprite bitmap analysis
-    constexpr float x_offset = (1.0f - hitbox_scale) * 0.5f * F::BASE_WIDTH; // Center the hitbox
-    return Rectangle(_x + x_offset, _y, F::BASE_WIDTH * hitbox_scale, F::BASE_SIZE * 3.0f);
+    // The sprite width is 30 pixels but the actual visible hitbox is 28 pixels
+    constexpr float hitbox_width = 28.0f;
+    constexpr float x_offset = (F::BASE_WIDTH - hitbox_width) * 0.5f; // Center the 28px hitbox within the 30px sprite
+    return Rectangle(_x + x_offset, _y, hitbox_width, F::BASE_SIZE * 3.0f);
 }

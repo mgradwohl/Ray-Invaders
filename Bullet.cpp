@@ -47,7 +47,9 @@ void Bullet::update() noexcept
 Rectangle Bullet::get_hitbox() const noexcept
 {
 	//Smaller hitboxes make the game so much better!
-	return Rectangle(_x, _y, F::BASE_SIZE, F::BASE_SIZE);
+	constexpr float bullet_width = 2.0f; // Make the bullet hitbox 2 pixels wide
+	constexpr float x_offset = (F::BASE_SIZE - bullet_width) * 0.5f; // Center the 2px hitbox within the sprite
+	return Rectangle(_x + x_offset, _y, bullet_width, F::BASE_SIZE);
 }
 
 float Bullet::get_x() const noexcept { return _x; }
