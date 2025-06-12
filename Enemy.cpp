@@ -8,41 +8,22 @@
 #include "Global.hpp"
 #include "Enemy.hpp"
 
-Enemy::Enemy(unsigned char i_type, unsigned short i_x, unsigned short i_y) noexcept :
-	_direction(0 == (i_y / BASE_SIZE) % 2 ? -1 : 1),
-	_health(1 + i_type),
-	_hit_timer(0),
-	_type(i_type),
-	_x(static_cast<float>(i_x)),
-	_y(static_cast<float>(i_y))
+Enemy::Enemy(Type i_type, float i_x, float i_y, unsigned char health) noexcept :
+    _direction(Direction::Down),
+    _health(health),
+    _hit_timer(0),
+    _type(i_type),
+    _x(i_x), // No cast needed with float parameters
+    _y(i_y) // No cast needed with float parameters
 {
-	_enemylaser = LoadSound("Resources/Sounds/Enemy Laser.wav");
+    _enemylaser = LoadSound("Resources/Sounds/Enemy Laser.wav");
 }
 
-unsigned char Enemy::get_health() const noexcept
-{
-	return _health;
-}
-
-unsigned char Enemy::get_hit_timer() const noexcept
-{
-	return _hit_timer;
-}
-
-unsigned char Enemy::get_type() const noexcept
-{
-	return _type;
-}
-
-float Enemy::get_x() const noexcept
-{
-	return _x;
-}
-
-float Enemy::get_y() const noexcept
-{
-	return _y;
-}
+unsigned char Enemy::get_health() const noexcept { return _health; }
+unsigned char Enemy::get_hit_timer() const noexcept { return _hit_timer; }
+[[nodiscard]] Enemy::Type Enemy::get_type() const noexcept { return _type; }
+float Enemy::get_x() const noexcept { return _x; }
+float Enemy::get_y() const noexcept { return _y; }
 
 void Enemy::hit() noexcept
 { 
@@ -51,52 +32,74 @@ void Enemy::hit() noexcept
 
 void Enemy::move()
 {
-	if (0 != _direction)
-	{
-		if ((1 == _direction && _x == static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE)) || (-1 == _direction && _x == static_cast<float>(BASE_SIZE)))
-		{
-			_direction = 0;
-			_y += static_cast<float>(ENEMY_MOVE_SPEED);
-		}
-		else
-		{
-			_x = std::clamp<float>(_x + static_cast<float>(ENEMY_MOVE_SPEED) * _direction, static_cast<float>(BASE_SIZE), static_cast<float>(SCREEN_WIDTH - 2 * BASE_SIZE));
-		}
-	}
-	else
-	{
-		_y = std::min<float>(_y + static_cast<float>(ENEMY_MOVE_SPEED), static_cast<float>(BASE_SIZE * ceil(_y / static_cast<float>(BASE_SIZE))));
-		if (_y == static_cast<float>(BASE_SIZE * ceil(_y / static_cast<float>(BASE_SIZE))))
-		{
-			_direction = 0 == (static_cast<int>(_y) / BASE_SIZE) % 2 ? -1 : 1;
-		}
-	}
+    if (_direction != Direction::Down)
+    {
+        const float rightBoundary = F::SCREEN_WIDTH - 2.0f * F::BASE_SIZE;
+        const float leftBoundary = F::BASE_SIZE;
+        
+        if ((_direction == Direction::Right && _x >= rightBoundary) ||
+            (_direction == Direction::Left && _x <= leftBoundary))
+        {
+            _direction = Direction::Down;
+            _y += F::ENEMY_MOVE_SPEED;
+        }        else
+        {
+            // Direction enum is defined with underlying type char, which can be converted to float
+            // We can avoid the static_cast by using a switch statement or direct mapping
+            float moveOffset = 0.0f;
+            
+            switch (_direction) {
+                case Direction::Left:
+                    moveOffset = -F::ENEMY_MOVE_SPEED;
+                    break;
+                case Direction::Right:
+                    moveOffset = F::ENEMY_MOVE_SPEED;
+                    break;
+                default: // Direction::Down
+                    moveOffset = 0.0f;
+                    break;
+            }
+            
+            _x = std::clamp<float>(_x + moveOffset, leftBoundary, rightBoundary);
+        }
+    }
+    else
+    {        _y = std::min<float>(_y + F::ENEMY_MOVE_SPEED, F::BASE_SIZE * ceil(_y / F::BASE_SIZE));
+        if (_y >= F::BASE_SIZE * ceil(_y / F::BASE_SIZE) - 0.1f) // Using approximate comparison for float
+        {            // Calculate row using floor division with floats
+            const float rowFloat = _y / F::BASE_SIZE;
+            // This cast is necessary for the modulo operation which requires an integer
+            const int rowInt = static_cast<int>(rowFloat);
+            _direction = (rowInt % 2 == 0) ? Direction::Left : Direction::Right;
+        }
+    }
 }
 
 void Enemy::shoot(std::vector<Bullet>& i_enemy_bullets)
-{	switch (_type)
-	{
-		case 0:
-		{
-			i_enemy_bullets.emplace_back(0.0f, static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
-
-			break;
-		}
-		case 1:
-		{
-			i_enemy_bullets.emplace_back(0.125F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
-			i_enemy_bullets.emplace_back(-0.125F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
-
-			break;
-		}
-		case 2:
-		{
-			i_enemy_bullets.emplace_back(0.0f, static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
-			i_enemy_bullets.emplace_back(0.25F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
-			i_enemy_bullets.emplace_back(-0.25F * static_cast<float>(ENEMY_BULLET_SPEED), static_cast<float>(ENEMY_BULLET_SPEED), static_cast<short>(_x), static_cast<short>(_y));
-		}
-	}
-	PlaySound(_enemylaser);
+{
+    // No need for conversions now
+    switch (_type)
+    {
+        case Type::Cyan:
+        {
+            i_enemy_bullets.emplace_back(0.0f, F::ENEMY_BULLET_SPEED, _x, _y);
+            break;
+        }
+        case Type::Purple:
+        {
+            i_enemy_bullets.emplace_back(0.125F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(-0.125F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
+            break;
+        }
+        case Type::Green:
+        {
+            i_enemy_bullets.emplace_back(0.0f, F::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(0.25F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(-0.25F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
+            break;
+        }
+    }
+    PlaySound(_enemylaser);
 }
 
 void Enemy::update() noexcept
@@ -105,8 +108,10 @@ void Enemy::update() noexcept
 	{
 		if (1 == _hit_timer)
 		{
-			int new_health = std::max(0, static_cast<int>(_health) - 1);
-			_health = static_cast<unsigned char>(new_health);
+			// Decrement health directly when it's above 0
+			if (_health > 0) {
+				_health--;
+			}
 		}
 
 		_hit_timer--;
@@ -115,5 +120,8 @@ void Enemy::update() noexcept
 
 Rectangle Enemy::get_hitbox() const noexcept
 {
-	return Rectangle(_x + 0.25f * BASE_SIZE, _y + 0.25f * BASE_SIZE, 0.5f * BASE_SIZE, 0.5f * BASE_SIZE);
+	// The sprite width is 16 pixels but the hitbox should be 12 pixels wide, centered
+	constexpr float hitbox_width = 12.0f;
+	constexpr float x_offset = (F::BASE_SIZE - hitbox_width) * 0.5f; // Center the 12px hitbox within the 16px sprite
+	return Rectangle(_x + x_offset, _y + 0.25f * F::BASE_SIZE, hitbox_width, 0.5f * F::BASE_SIZE);
 }

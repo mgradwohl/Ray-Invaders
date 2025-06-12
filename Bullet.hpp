@@ -2,28 +2,32 @@
 #include <array>
 #include <raylib.h>
 
-class Bullet
-{
+class Bullet {
 public:
-	Bullet(float i_step_x, float i_step_y, short i_x, short i_y);
-	[[nodiscard]] bool IsDead() const noexcept;
-	void IsDead(bool dead) noexcept;
-	void update() noexcept;
-	[[nodiscard]] Rectangle get_hitbox() const noexcept;
+    explicit Bullet(float i_step_x, float i_step_y, float i_x, float i_y) noexcept;
+    Bullet(const Bullet&) = default;
+    Bullet(Bullet&&) noexcept = default;
+    Bullet& operator=(const Bullet&) = default;
+    Bullet& operator=(Bullet&&) noexcept = default;
+    ~Bullet() = default;
 
-	// TODO why are these public
-	//We also use this struct in the Player class. But the player's bullets don't have a tail. So it may seem a bit redundant. But I'm too lazy to fix it.
-	std::array<float, 3> _previous_x;
-	std::array<float, 3> _previous_y;
-
-	float _x;
-	float _y;
+    [[nodiscard]] bool IsDead() const noexcept;
+    void IsDead(bool dead) noexcept;
+    void update() noexcept;
+    [[nodiscard]] Rectangle get_hitbox() const noexcept;
+    [[nodiscard]] float get_x() const noexcept;
+    [[nodiscard]] float get_y() const noexcept;
+    [[nodiscard]] const std::array<float, 3>& get_previous_x() const noexcept;
+    [[nodiscard]] const std::array<float, 3>& get_previous_y() const noexcept;
 
 private:
-	bool _dead;
-
-	float _real_x;
-	float _real_y;
-	float _step_x;
-	float _step_y;
+    std::array<float, 3> _previous_x{};
+    std::array<float, 3> _previous_y{};
+    float _x = 0;
+    float _y = 0;
+    bool _dead = false;
+    float _real_x = 0;
+    float _real_y = 0;
+    float _step_x = 0;
+    float _step_y = 0;
 };

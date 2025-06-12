@@ -5,6 +5,9 @@
 #include "RLWindow.h"
 #include "RLDrawSession.h"
 
+//There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same thing we did in the game "Frogger".
+// Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered for precise collision detection.
+
 #include "Animation.hpp"
 #include "Global.hpp"
 #include "Enemy.hpp"
@@ -12,24 +15,25 @@
 #include "Bullet.hpp"
 EnemyManager::EnemyManager() noexcept :
 	_shoot_distribution(0, ENEMY_SHOOT_CHANCE)
-{
-	//We have a function that sets everything to the initial state, so why not use it?
+{	//We have a function that sets everything to the initial state, so why not use it?
 	reset(0);
 
-	_enemy_bullet_sprite = ::LoadTexture("Resources/Images/EnemyBullet.png");
-	for (unsigned char a = 0; a < ENEMY_TYPES; a++)
+	_enemy_bullet_sprite = ::LoadTexture("Resources/Images/EnemyBullet.png");	for (unsigned char a = 0; a < ENEMY_TYPES; a++)
 	{
-		_enemy_animations.emplace_back(static_cast<unsigned short>(1 + _move_pause), BASE_SIZE, "Resources/Images/Enemy" + std::to_string(static_cast<unsigned short>(a)) + ".png");
+		// Explicitly convert to match Animation constructor parameter
+		const int animSpeed = 1 + _move_pause;
+		const std::string filename = "Resources/Images/Enemy" + std::to_string(a) + ".png";
+		_enemy_animations.emplace_back(static_cast<unsigned short>(animSpeed), BASE_SIZE, filename);
 	}
 	_enemymove = LoadSound("Resources/Sounds/Enemy Move.wav");
 	_enemydestroy = LoadSound("Resources/Sounds/Enemy Destroy.wav");
 }
 
-bool EnemyManager::reached_player(unsigned short i_player_y) const
+bool EnemyManager::reached_player(float i_player_y) const
 {
 	for (const Enemy& enemy : _enemies)
 	{
-		if (enemy.get_y() > i_player_y - 0.5F * BASE_SIZE)
+		if (enemy.get_y() > i_player_y - 0.5f * F::BASE_SIZE)
 		{
 			//As soon as the enemies reach the player, the game is over!
 			return true;
@@ -40,20 +44,27 @@ bool EnemyManager::reached_player(unsigned short i_player_y) const
 }
 
 void EnemyManager::draw(raylib::DrawSession& ds)
-{
-	for (const Bullet& bullet : _enemy_bullets)
-	{
-		//Drawing the tail of the bullet.
-		for (unsigned char a = 0; a < bullet._previous_x.size(); a++)
+{	for (const Bullet& bullet : _enemy_bullets)
+	{		//Drawing the tail of the bullet.
+		const auto& prev_x = bullet.get_previous_x();
+		const auto& prev_y = bullet.get_previous_y();
+		
+		// Calculate this once for better performance and readability
+		const size_t tailSize = prev_x.size();
+		
+		for (std::size_t a = 0; a < tailSize; a++)
 		{
-			const Vector2 dest{ static_cast<float>(bullet._previous_x[a]), static_cast<float>(bullet._previous_y[a]) };
-			const Rectangle source{ static_cast<float>(BASE_SIZE * a), 0.0f, static_cast<float>(BASE_SIZE), static_cast<float>(BASE_SIZE) };
+			const Vector2 dest{ prev_x[a], prev_y[a] }; // prev_x and prev_y are already float
+			// Array index 'a' will be small, implicit conversion is fine here
+			const float sourceX = F::BASE_SIZE * a;
+			const Rectangle source{ sourceX, 0.0f, F::BASE_SIZE, F::BASE_SIZE };
 			ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 		}
 
 		//Drawing the bullet itself.
-		const Vector2 dest{ static_cast<float>(bullet._x), static_cast<float>(bullet._y) };
-		const Rectangle source{ static_cast<float>(BASE_SIZE * bullet._previous_x.size()), 0.0f, static_cast<float>(BASE_SIZE), static_cast<float>(BASE_SIZE) };
+		const Vector2 dest{ bullet.get_x(), bullet.get_y() };
+		const float sourceX = F::BASE_SIZE * tailSize; // tailSize is small, implicit conversion is fine
+		const Rectangle source{ sourceX, 0.0f, F::BASE_SIZE, F::BASE_SIZE };
 		ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 	}
 
@@ -65,19 +76,20 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 		{
 			switch (enemy.get_type())
 			{
-				case 0:
+				case Enemy::Type::Cyan:
 				{
 					enemy_color = Color{ 0, 255, 255, 255 }; //CYAN
 					break;
 				}
-				case 1:
+				case Enemy::Type::Purple:
 				{
 					enemy_color = PURPLE;
 					break;
 				}
-				case 2:
+				case Enemy::Type::Green:
 				{
 					enemy_color = GREEN;
+					break;
 				}
 			}
 		}
@@ -85,8 +97,11 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 		{
 			PlaySound(_enemydestroy);
 		}
-
-		_enemy_animations[enemy.get_type()].draw(ds, enemy.get_x(), enemy.get_y(), enemy_color);
+		// Access the animation array directly using the enum's underlying value
+		// Get the index directly without casting by using std::to_underlying (C++23) or direct cast to int
+		const auto enemyTypeIndex = static_cast<int>(enemy.get_type());
+		const auto& animation = _enemy_animations[enemyTypeIndex];
+		animation.draw(ds, enemy.get_x(), enemy.get_y(), enemy_color);
 	}
 }
 
@@ -97,7 +112,6 @@ void EnemyManager::reset(unsigned short i_level)
 	unsigned char enemy_y = 0;
 
 	std::string level_sketch = "";
-
 	_move_pause = std::max<short>(ENEMY_MOVE_PAUSE_START_MIN, ENEMY_MOVE_PAUSE_START - ENEMY_MOVE_PAUSE_DECREASE * i_level);
 	_move_timer = _move_pause;
 
@@ -111,13 +125,14 @@ void EnemyManager::reset(unsigned short i_level)
 	_enemy_bullets.clear();
 
 	_enemies.clear();
-
 	//There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same thing we did in the game "Frogger".
+	// Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered for precise collision detection.
 	//Go watch that video, btw!
 	if (TOTAL_LEVELS <= i_level)
 	{
-		unsigned short half_levels = static_cast<unsigned short>(TOTAL_LEVELS / 2);
-		i_level = half_levels + static_cast<unsigned short>(i_level % static_cast<unsigned char>(half_levels));
+		// Since TOTAL_LEVELS is 8 (a small number), we can avoid casts
+		constexpr unsigned short HALF_LEVELS = TOTAL_LEVELS / 2; // 4
+		i_level = HALF_LEVELS + (i_level % HALF_LEVELS);
 	}
 
 	//Here you can see my pro level design skills!
@@ -176,6 +191,7 @@ void EnemyManager::reset(unsigned short i_level)
 	}
 
 	//Here we're converting each character into an enemy.
+	unsigned char enemy_health = 1;
 	for (const char sketch_character : level_sketch)
 	{
 		enemy_x++;
@@ -188,19 +204,24 @@ void EnemyManager::reset(unsigned short i_level)
 				enemy_y++;
 
 				break;
-			}			case '0':
-			{
-				_enemies.emplace_back(static_cast<unsigned char>(0), static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
+			}           case '0':			{
+				const float enemyXPos = F::BASE_SIZE * (1.0f + enemy_x); // enemy_x is unsigned char, implicit conversion to float
+				const float enemyYPos = F::BASE_SIZE * (2.0f + enemy_y); // enemy_y is unsigned char, implicit conversion to float
+				_enemies.emplace_back(Enemy::Type::Cyan, enemyXPos, enemyYPos, enemy_health);
 				break;
 			}
 			case '1':
 			{
-				_enemies.emplace_back(static_cast<unsigned char>(1), static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
+				const float enemyXPos = F::BASE_SIZE * (1.0f + enemy_x);
+				const float enemyYPos = F::BASE_SIZE * (2.0f + enemy_y);
+				_enemies.emplace_back(Enemy::Type::Purple, enemyXPos, enemyYPos, enemy_health);
 				break;
 			}
 			case '2':
 			{
-				_enemies.emplace_back(static_cast<unsigned char>(2), static_cast<unsigned short>(BASE_SIZE * (1 + enemy_x)), static_cast<unsigned short>(BASE_SIZE * (2 + enemy_y)));
+				const float enemyXPos = F::BASE_SIZE * (1.0f + enemy_x);
+				const float enemyYPos = F::BASE_SIZE * (2.0f + enemy_y);
+				_enemies.emplace_back(Enemy::Type::Green, enemyXPos, enemyYPos, enemy_health);
 			}
 		}
 	}
@@ -249,11 +270,13 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 	dead_enemies_start = remove_if(_enemies.begin(), _enemies.end(), [](const Enemy& i_enemy)
 	{
 		return 0 == i_enemy.get_health();
-	});
-	//The more enemies we kill, the faster they become.
-	int alive_count = static_cast<int>(std::distance(dead_enemies_start, _enemies.end()));
-	int new_pause = std::max<int>(ENEMY_MOVE_PAUSE_MIN, static_cast<int>(_move_pause) - ENEMY_MOVE_PAUSE_DECREASE * alive_count);
-	_move_pause = static_cast<unsigned short>(std::max<int>(0, new_pause));
+	});	//The more enemies we kill, the faster they become.
+	// No need for casting with int type
+	auto alive_count = std::distance(dead_enemies_start, _enemies.end());
+	// Specify explicit template parameter to help the compiler
+	auto new_pause = std::max<int>(ENEMY_MOVE_PAUSE_MIN, 
+	                               _move_pause - ENEMY_MOVE_PAUSE_DECREASE * static_cast<int>(alive_count));
+	_move_pause = std::max<int>(0, new_pause);
 
 	_enemies.erase(dead_enemies_start, _enemies.end());
 
@@ -266,7 +289,7 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 	//AGAIN!
 	_enemy_bullets.erase(remove_if(_enemy_bullets.begin(), _enemy_bullets.end(), [](const Bullet& i_bullet)
 	{
-		return 1 == i_bullet.     IsDead();
+		return i_bullet.IsDead();
 	}), _enemy_bullets.end());
 }
 

@@ -23,8 +23,8 @@ public:
 	float gety() const noexcept;
 
 private:
-	float _x;
-	float _y;
-	bool _dead;
-	unsigned char _type;
+	float _x{0.0f};
+	float _y{0.0f};
+	bool _dead{false};
+	unsigned char _type{0};
 };

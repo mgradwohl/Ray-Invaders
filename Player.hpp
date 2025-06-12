@@ -30,28 +30,27 @@ public:
 		return _bullets;
 	}
 
-private:
-	//Is it okay to call this variable "dead"?
+private:	//Is it okay to call this variable "dead"?
 	//I mean, it's a spaceship.
 	//And spaceships don't die, they get destroyed.
-	bool _dead;
-	bool _dead_animation_over;
-	bool _shield_animation_over;
+	bool _dead{false};
+	bool _dead_animation_over{false};
+	bool _shield_animation_over{false};
 
-	unsigned char _current_power;
-	unsigned char _reload_timer;
+	unsigned char _current_power{0};
+	unsigned char _reload_timer{0};
 
-	unsigned short _power_timer;
-	float _x;
-	float _y;
+	unsigned short _power_timer{0};
+	float _x{0.0f};
+	float _y{0.0f};
 
-	std::vector<Bullet> _bullets;
+	std::vector<Bullet> _bullets{};
 
-	Texture2D _bullet_sprite;
-	Texture2D _player_sprite;
-	Sound _playerlasersound;
-	Sound _powerupsound;
-	Sound _playerdestroysound;
+	Texture2D _bullet_sprite{};
+	Texture2D _player_sprite{};
+	Sound _playerlasersound{};
+	Sound _powerupsound{};
+	Sound _playerdestroysound{};
 
 	Animation _explosion;
 };

@@ -2,18 +2,20 @@
 #include "Global.hpp"
 #include "Bullet.hpp"
 
-Bullet::Bullet(float i_step_x, float i_step_y, short i_x, short i_y) :
-	_dead(false),
-	_real_x(i_x),
-	_real_y(i_y),
-	_step_x(i_step_x),
-	_x(i_x),
-	_step_y(i_step_y),
-	_y(i_y)
-{
-	_previous_x.fill(_x);
-	_previous_y.fill(_y);
+Bullet::Bullet(float i_step_x, float i_step_y, float i_x, float i_y) noexcept
+    : _step_x(i_step_x), 
+      _step_y(i_step_y), 
+      _x(i_x), // No conversion needed
+      _y(i_y), // No conversion needed
+      _real_x(i_x), // No conversion needed
+      _real_y(i_y), 
+      _dead(false) {
+    _previous_x.fill(_x);
+    _previous_y.fill(_y);
 }
+
+bool Bullet::IsDead() const noexcept { return _dead; }
+void Bullet::IsDead(bool dead) noexcept { _dead = dead; }
 
 void Bullet::update() noexcept
 {
@@ -32,10 +34,10 @@ void Bullet::update() noexcept
 		_previous_x[_previous_x.size() - 1] = _x;
 		_previous_y[_previous_y.size() - 1] = _y;
 
-		_x = static_cast<short>(round(_real_x));
-		_y = static_cast<short>(round(_real_y));
+		_x = _real_x;  // no need for cast, both are float now
+		_y = _real_y;  // no need for cast, both are float now
 
-		if (_x <= -BASE_SIZE || _y <= -BASE_SIZE || SCREEN_HEIGHT <= _y || SCREEN_WIDTH <= _x)
+		if (_x <= -F::BASE_SIZE || _y <= -F::BASE_SIZE || _y >= F::SCREEN_HEIGHT || _x >= F::SCREEN_WIDTH)
 		{
 			_dead = true;
 		}
@@ -45,15 +47,12 @@ void Bullet::update() noexcept
 Rectangle Bullet::get_hitbox() const noexcept
 {
 	//Smaller hitboxes make the game so much better!
-	return Rectangle(_x + 0.375F * BASE_SIZE, _y + 0.375F * BASE_SIZE, 0.25F * BASE_SIZE, 0.25F * BASE_SIZE);
+	constexpr float bullet_width = 2.0f; // Make the bullet hitbox 2 pixels wide
+	constexpr float x_offset = (F::BASE_SIZE - bullet_width) * 0.5f; // Center the 2px hitbox within the sprite
+	return Rectangle(_x + x_offset, _y, bullet_width, F::BASE_SIZE);
 }
 
-bool Bullet::IsDead() const noexcept
-{
-	return _dead;
-};
-
-void Bullet::IsDead(bool d) noexcept
-{
-	_dead = d;
-}
+float Bullet::get_x() const noexcept { return _x; }
+float Bullet::get_y() const noexcept { return _y; }
+const std::array<float, 3>& Bullet::get_previous_x() const noexcept { return _previous_x; }
+const std::array<float, 3>& Bullet::get_previous_y() const noexcept { return _previous_y; }

@@ -6,8 +6,7 @@ public:
 	Backbuffer(unsigned short width, unsigned short height, unsigned short scale) noexcept;
 	~Backbuffer();
 	void flip() const noexcept;
-
-	RenderTexture2D& GetRenderTexture() noexcept
+	[[nodiscard]] RenderTexture2D& GetRenderTexture() noexcept
 	{
 		return _backbuffer;
 	}
@@ -18,7 +17,7 @@ public:
 	}
 
 private:
-	RenderTexture2D _backbuffer;
-	float _scale;
+	RenderTexture2D _backbuffer{};
+	float _scale{1.0f};
 };
 
