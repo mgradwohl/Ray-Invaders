@@ -30,7 +30,10 @@ namespace raylib
     }
     void WaveSound::Stop() const noexcept
     {
-        StopSound(_sound);
+        if (::IsSoundValid(_sound))
+        {
+            StopSound(_sound);
+        }
     }
 
     bool WaveSound::IsPlaying() const noexcept
