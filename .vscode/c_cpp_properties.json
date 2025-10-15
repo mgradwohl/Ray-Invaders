@@ -34,6 +34,24 @@
             "cStandard": "c17",
             "cppStandard": "c++23",
             "intelliSenseMode": "windows-msvc-x64"
+        },
+        {
+            "name": "Win32-Clang",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "c:\\raylib\\include",
+                "C:\\Program Files\\LLVM\\lib\\clang\\21\\include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.26120.0",
+            "compilerPath": "C:/Program Files/LLVM/bin/clang++.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++23",
+            "intelliSenseMode": "windows-clang-x64"
         }
     ],
     "version": 4

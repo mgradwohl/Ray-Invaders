@@ -67,36 +67,39 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 		const Rectangle source{ sourceX, 0.0f, F::BASE_SIZE, F::BASE_SIZE };
 		ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 	}
-
 	for (const Enemy& enemy : _enemies)
 	{
 		Color enemy_color = WHITE;
-
-		if (!enemy.get_hit_timer())
+		
+		// Determine the base color of the enemy
+		switch (enemy.get_type())
 		{
-			switch (enemy.get_type())
+			case Enemy::Type::Cyan:
 			{
-				case Enemy::Type::Cyan:
-				{
-					enemy_color = Color{ 0, 255, 255, 255 }; //CYAN
-					break;
-				}
-				case Enemy::Type::Purple:
-				{
-					enemy_color = PURPLE;
-					break;
-				}
-				case Enemy::Type::Green:
-				{
-					enemy_color = GREEN;
-					break;
-				}
+				enemy_color = Color{ 0, 255, 255, 255 }; // CYAN
+				break;
+			}
+			case Enemy::Type::Purple:
+			{
+				enemy_color = PURPLE;
+				break;
+			}
+			case Enemy::Type::Green:
+			{
+				enemy_color = GREEN;
+				break;
 			}
 		}
-		else
+		
+		// If enemy is hit, apply transparency and play sound
+		if (enemy.get_hit_timer())
 		{
+			// Use semi-transparent white color to create a flash effect without disappearing
+			// This creates a flashing effect by blending with white
+			enemy_color = Color{ 255, 255, 255, 128 };
 			PlaySound(_enemydestroy);
 		}
+		
 		// Access the animation array directly using the enum's underlying value
 		// Get the index directly without casting by using std::to_underlying (C++23) or direct cast to int
 		const auto enemyTypeIndex = static_cast<int>(enemy.get_type());

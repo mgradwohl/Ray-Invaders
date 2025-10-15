@@ -62,7 +62,8 @@ void Animation::draw(raylib::DrawSession& ds, float x, float y, const Color& i_c
 	// Cache the height conversion to avoid repeated casts
 	const float spriteHeight = static_cast<float>(_sprite.height);
 	const Rectangle source{ _current_frame * _frame_width, 0.0f, _frame_width, spriteHeight };
-	const Color ani{ i_color.r, i_color.g, i_color.b, 255 };
+	// Use the alpha from the passed color to support transparency
+	const Color ani{ i_color.r, i_color.g, i_color.b, i_color.a };
 	ds.DrawTexture(_sprite, source, dest, ani);
 }
 

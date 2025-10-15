@@ -76,12 +76,13 @@
             },
             "dependsOn": "Build Debug (Linux - Makefile)"
         },
-        {   
+        {
             "type": "cppbuild",
             "label": "C/C++: cl.exe build active file (Debug) - Windows",
             "command": "cl.exe",
-                "args": [
-                "/std:c++23",
+            "args": [
+                "/std:c++latest",
+                "/Zc:__cplusplus",
                 "/Zi",
                 "/EHsc",
                 "/W4",
@@ -136,7 +137,8 @@
             "label": "C/C++: cl.exe build active file (Release) - Windows",
             "command": "cl.exe",
             "args": [
-                "/std:c++23",
+                "/std:c++latest",
+                "/Zc:__cplusplus",
                 "/EHsc",
                 "/W4",
                 "/utf-8",
@@ -282,6 +284,46 @@
             "problemMatcher": [],
             "group": "test",
             "detail": "Run clang-tidy with --fix on the currently active file (automatically applies fixes)",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "C/C++: clang++ build active file (Debug) - Windows",
+            "command": "${workspaceFolder}/build-clang-debug.bat",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile",
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "Build Ray-Invaders project with Clang 21 (Debug) - Windows",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "C/C++: clang++ build active file (Release) - Windows",
+            "command": "${workspaceFolder}/build-clang-release.bat",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile",
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "Build Ray-Invaders project with Clang 21 (Release) - Windows",
             "presentation": {
                 "echo": true,
                 "reveal": "always",

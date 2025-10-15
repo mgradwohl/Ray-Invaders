@@ -22,8 +22,8 @@ public:
     void draw(raylib::DrawSession& ds) const;
 
 private:
-  std::vector<Base> _bases;
-  // Change to int to avoid casting between size_t and unsigned short
-  int       _framecount = 0;
-  Texture2D _sprite{};
+    std::vector<Base> _bases;
+    // Change to int to avoid casting between size_t and unsigned short
+    int _framecount = 0;
+    Image _baseImage{}; // Store the original base image to reset bases
 };

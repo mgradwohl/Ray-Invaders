@@ -59,6 +59,32 @@
             "environment": [],
             "console": "externalTerminal",
             "preLaunchTask": "C/C++: cl.exe build active file (Release) - Windows"
+        },
+        {
+            "name": "(Windows) Launch Debug - Clang",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/Debug/Ray-Invaders.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "externalTerminal",
+            "preLaunchTask": "C/C++: clang++ build active file (Debug) - Windows",
+            "symbolSearchPath": "${workspaceFolder}/bin/Debug"
+        },
+        {
+            "name": "(Windows) Launch Release - Clang",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/Release/Ray-Invaders.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "externalTerminal",
+            "preLaunchTask": "C/C++: clang++ build active file (Release) - Windows",
+            "symbolSearchPath": "${workspaceFolder}/bin/Release"
         }
     ]
 }
