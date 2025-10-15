@@ -17,8 +17,8 @@ auto main() -> int
 {
 	bool game_over = false;
 	bool next_level = false;
-	unsigned short level = 0;
-	unsigned short next_level_timer = NEXT_LEVEL_TRANSITION;
+	GameTypes::Level level = 0;
+	GameTypes::Timer next_level_timer = NEXT_LEVEL_TRANSITION;
 
 	//We'll use this to make the game frame rate independent.
 	std::chrono::microseconds lag(0);

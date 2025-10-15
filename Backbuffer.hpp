@@ -1,9 +1,10 @@
 #pragma once
 #include <raylib.h>
+#include "Global.hpp"
 class Backbuffer
 {
 public:
-	Backbuffer(unsigned short width, unsigned short height, unsigned short scale) noexcept;
+	Backbuffer(GameTypes::Coordinate width, GameTypes::Coordinate height, GameTypes::Size scale) noexcept;
 	~Backbuffer();
 	void flip() const noexcept;
     [[nodiscard]] auto GetRenderTexture() noexcept -> RenderTexture2D & { return _backbuffer; }

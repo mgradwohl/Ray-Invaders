@@ -26,7 +26,7 @@ void Bullet::update() noexcept
 		_real_x += _step_x;
 		_real_y += _step_y;
 
-		for (unsigned char a = 0; a < _previous_x.size() - 1; a++)
+		for (GameTypes::Count a = 0; a < _previous_x.size() - 1; a++)
 		{
 			_previous_x[a] = _previous_x[1 + a];
 			_previous_y[a] = _previous_y[1 + a];

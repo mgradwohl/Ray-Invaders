@@ -17,8 +17,9 @@ void Background::draw(raylib::DrawSession& ds) const
 	ds.DrawTexture(_backgroundsprite, _source, pos, WHITE);
 }
 
-void Background::update(Player& player) noexcept
+void Background::update([[maybe_unused]] Player& player) noexcept
 {
+	(void) player; //unused
 	if (IsKeyDown(KEY_RIGHT))
 	{
 		//player moving right, move background from right to left

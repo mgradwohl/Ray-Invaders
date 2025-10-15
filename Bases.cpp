@@ -35,8 +35,8 @@ void Bases::update(std::vector<Bullet>& i_bullets)
 {
 	// Since _framecount is now an int, we can do a direct comparison
 	// without needing intermediate casts
-	const unsigned short frameCount = (_framecount > USHRT_MAX) ? 
-		USHRT_MAX : static_cast<unsigned short>(_framecount);
+	const GameTypes::Count frameCount = (_framecount > UINT8_MAX) ? 
+		UINT8_MAX : static_cast<GameTypes::Count>(_framecount);
 		
 	for (Base& base : _bases)
 	{

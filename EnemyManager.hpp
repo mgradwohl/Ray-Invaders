@@ -2,6 +2,7 @@
 #include <vector>
 #include <random>
 #include <raylib.h>
+#include "Global.hpp"
 #include "Bullet.hpp"
 #include "Enemy.hpp"
 #include "Animation.hpp"
@@ -13,7 +14,7 @@ public:
     [[nodiscard]] auto reached_player(float i_player_y) const -> bool;
 
     void draw(raylib::DrawSession& ds);
-	void reset(unsigned short i_level);
+	void reset(GameTypes::Level i_level);
 	void update(std::mt19937_64& i_random_engine);
 
     auto get_enemy_bullets() noexcept -> std::vector<Bullet> &;
@@ -26,7 +27,7 @@ public:
 	int _move_timer{0};
 
 	//To use the randomness from the <random> library, we need to define the distribution.
-	std::uniform_int_distribution<unsigned short> _shoot_distribution;
+	std::uniform_int_distribution<GameTypes::Probability> _shoot_distribution;
     std::vector<Animation>                        _enemy_animations;
     std::vector<Bullet>                           _enemy_bullets;
     std::vector<Enemy>                            _enemies;

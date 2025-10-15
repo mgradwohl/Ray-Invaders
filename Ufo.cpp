@@ -17,7 +17,7 @@ Ufo::Ufo(std::mt19937_64& i_random_engine) :
 {
 	reset(true, i_random_engine);
 	_ufoappearsound = raylib::WaveSound("Resources/Sounds/UFO Enter.wav");
-	for (unsigned char puType = 0; puType < POWERUP_TYPES; puType++)
+	for (GameTypes::Count puType = 0; puType < POWERUP_TYPES; puType++)
 	{
 		// Use implicit conversion to create the string
 		std::string powerupIndex = std::to_string(puType);
@@ -35,7 +35,7 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 
 			// Get the powerup type from the distribution and truncate to unsigned char range
 			// This avoids the need for a static_cast
-			unsigned char powerupType = _powerup_distribution(i_random_engine) % POWERUP_TYPES;
+			GameTypes::Count powerupType = _powerup_distribution(i_random_engine) % POWERUP_TYPES;
 			_powerups.emplace_back(_x + 0.5F * BASE_SIZE, _y, powerupType);
 
 			return true;
@@ -45,7 +45,7 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 	return false;
 }
 
-unsigned char Ufo::check_powerup_collision(const Rectangle& i_player_hitbox) noexcept
+GameTypes::Count Ufo::check_powerup_collision(const Rectangle& i_player_hitbox) noexcept
 {
 	for (PowerUpItem& powerup : _powerups)
 	{

@@ -3,11 +3,12 @@
 #include <raylib.h>
 #include "RLWindow.h"
 #include "RLDrawSession.h"
+#include "Global.hpp"
 
 class Animation
 {
 public:
-	Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location) noexcept;
+	Animation(GameTypes::Speed i_animation_speed, GameTypes::Size i_frame_width, const std::string& i_texture_location) noexcept;
 
     auto change_current_frame() noexcept -> bool;
     auto update() noexcept -> bool;

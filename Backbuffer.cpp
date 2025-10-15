@@ -1,7 +1,7 @@
 #include <raylib.h>
 #include "Backbuffer.hpp"
 
-Backbuffer::Backbuffer(unsigned short width, unsigned short height, unsigned short scale) noexcept
+Backbuffer::Backbuffer(GameTypes::Coordinate width, GameTypes::Coordinate height, GameTypes::Size scale) noexcept
 {
 	_backbuffer = ::LoadRenderTexture(width, height);
 	_scale = scale;

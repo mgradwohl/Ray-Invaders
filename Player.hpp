@@ -2,6 +2,7 @@
 #include <random>
 #include <raylib.h>
 #include "RLDrawSession.h"
+#include "Global.hpp"
 #include "Animation.hpp"
 #include "Ufo.hpp"
 #include "Enemy.hpp"
@@ -14,9 +15,9 @@ public:
     [[nodiscard]] auto get_dead() const noexcept -> bool;
     [[nodiscard]] auto get_dead_animation_over() const noexcept -> bool;
 
-    [[nodiscard]] auto get_current_power() const noexcept -> unsigned char;
+    [[nodiscard]] auto get_current_power() const noexcept -> GameTypes::Count;
 
-    [[nodiscard]] auto get_power_timer() const noexcept -> unsigned short;
+    [[nodiscard]] auto get_power_timer() const noexcept -> GameTypes::Duration;
     [[nodiscard]] auto get_y() const noexcept -> float;
 
     void die() noexcept;
@@ -34,10 +35,10 @@ public:
 	bool _dead_animation_over{false};
 	bool _shield_animation_over{false};
 
-	unsigned char _current_power{0};
-	unsigned char _reload_timer{0};
+	GameTypes::Count _current_power{0};
+	GameTypes::Timer _reload_timer{0};
 
-	unsigned short _power_timer{0};
+	GameTypes::Duration _power_timer{0};
     float          _x{0.0F};
     float          _y{0.0F};
 

@@ -24,7 +24,7 @@ public:    Base() = default;
     auto operator=(Base &&) noexcept -> Base & = default;
 
     void reset() noexcept;
-    void update(std::vector<Bullet>& i_bullets, unsigned short framecount);
+    void update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount);
     void draw(raylib::DrawSession& ds, const Texture2D& sprite) const;
     [[nodiscard]] auto get_hitbox() const noexcept -> Rectangle;
     [[nodiscard]] auto is_dead() const noexcept -> bool { return _dead; }

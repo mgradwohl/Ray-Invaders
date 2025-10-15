@@ -5,7 +5,7 @@
 class PowerUpItem
 {
 public:
-	PowerUpItem(float i_x, float i_y, unsigned char i_type) noexcept;
+	PowerUpItem(float i_x, float i_y, GameTypes::Count i_type) noexcept;
 
 	//0 - Shield
 	//1 - Fast reload
@@ -13,9 +13,9 @@ public:
 	//3 - Mirrored controls (power-DOWN! I'm so proud of this joke)
 	//Damn, I should've used enums. That would've made the code more readable.
 
-	void bump_y(unsigned short ybump) noexcept;
+	void bump_y(GameTypes::Distance ybump) noexcept;
     [[nodiscard]] auto get_hitbox() const noexcept -> Rectangle;
-    [[nodiscard]] auto get_type() const noexcept -> unsigned char;
+    [[nodiscard]] auto get_type() const noexcept -> GameTypes::Count;
 
     [[nodiscard]] auto isdead() const noexcept -> bool;
     void isdead(bool dead) noexcept;
@@ -26,5 +26,5 @@ public:
     float         _x{0.0F};
     float         _y{0.0F};
     bool _dead{false};
-	unsigned char _type{0};
+	GameTypes::Count _type{0};
 };

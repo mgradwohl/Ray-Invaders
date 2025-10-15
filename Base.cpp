@@ -12,7 +12,7 @@ void Base::reset() noexcept {
     _impacts.clear();
 }
 
-void Base::update(std::vector<Bullet>& i_bullets, unsigned short framecount) {
+void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount) {
     if (_dead) return;
     
     // Calculate total damage from all impacts

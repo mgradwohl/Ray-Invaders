@@ -34,12 +34,12 @@ bool Player::get_dead_animation_over() const noexcept
 	return _dead_animation_over;
 }
 
-unsigned char Player::get_current_power() const noexcept
+GameTypes::Count Player::get_current_power() const noexcept
 {
 	return _current_power;
 }
 
-unsigned short Player::get_power_timer() const noexcept
+GameTypes::Duration Player::get_power_timer() const noexcept
 {
 	return _power_timer;
 }
@@ -114,7 +114,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 {
 	if (!_dead)
 	{
-		unsigned char powerup_type;
+		GameTypes::Count powerup_type;
 		if (IsKeyDown(KEY_LEFT))
 		{
 			if (4 == _current_power)

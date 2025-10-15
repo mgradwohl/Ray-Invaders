@@ -9,7 +9,7 @@
 #include "Global.hpp"
 #include "Enemy.hpp"
 
-Enemy::Enemy(Type i_type, float i_x, float i_y, unsigned char health) noexcept :
+Enemy::Enemy(Type i_type, float i_x, float i_y, GameTypes::Health health) noexcept :
     _direction(Direction::Down),
     _health(health),
     _hit_timer(0),
@@ -20,8 +20,8 @@ Enemy::Enemy(Type i_type, float i_x, float i_y, unsigned char health) noexcept :
     _enemylaser = LoadSound("Resources/Sounds/Enemy Laser.wav");
 }
 
-unsigned char Enemy::get_health() const noexcept { return _health; }
-unsigned char Enemy::get_hit_timer() const noexcept { return _hit_timer; }
+GameTypes::Health Enemy::get_health() const noexcept { return _health; }
+GameTypes::Timer Enemy::get_hit_timer() const noexcept { return _hit_timer; }
 [[nodiscard]] Enemy::Type Enemy::get_type() const noexcept { return _type; }
 float Enemy::get_x() const noexcept { return _x; }
 float Enemy::get_y() const noexcept { return _y; }

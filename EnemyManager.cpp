@@ -18,7 +18,7 @@ EnemyManager::EnemyManager() noexcept :
 {	//We have a function that sets everything to the initial state, so why not use it?
 	reset(0);
 
-	_enemy_bullet_sprite = ::LoadTexture("Resources/Images/EnemyBullet.png");	for (unsigned char a = 0; a < ENEMY_TYPES; a++)
+	_enemy_bullet_sprite = ::LoadTexture("Resources/Images/EnemyBullet.png");	for (GameTypes::Count a = 0; a < ENEMY_TYPES; a++)
 	{
 		// Explicitly convert to match Animation constructor parameter
 		const int animSpeed = 1 + _move_pause;
@@ -105,17 +105,17 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 	}
 }
 
-void EnemyManager::reset(unsigned short i_level)
+void EnemyManager::reset(GameTypes::Level i_level)
 {
 	//RESET EVERYTHING!!!!
-	unsigned char enemy_x = 0;
-	unsigned char enemy_y = 0;
+	GameTypes::Count enemy_x = 0;
+	GameTypes::Count enemy_y = 0;
 
 	std::string level_sketch = "";
 	_move_pause = std::max<short>(ENEMY_MOVE_PAUSE_START_MIN, ENEMY_MOVE_PAUSE_START - ENEMY_MOVE_PAUSE_DECREASE * i_level);
 	_move_timer = _move_pause;
 
-	_shoot_distribution = std::uniform_int_distribution<unsigned short>(0, std::max<short>(ENEMY_SHOOT_CHANCE_MIN, ENEMY_SHOOT_CHANCE - ENEMY_SHOOT_CHANCE_INCREASE * i_level));
+	_shoot_distribution = std::uniform_int_distribution<GameTypes::Probability>(0, std::max<GameTypes::Probability>(ENEMY_SHOOT_CHANCE_MIN, ENEMY_SHOOT_CHANCE - ENEMY_SHOOT_CHANCE_INCREASE * i_level));
 
 	for (Animation& enemy_animation : _enemy_animations)
 	{
@@ -191,7 +191,7 @@ void EnemyManager::reset(unsigned short i_level)
 	}
 
 	//Here we're converting each character into an enemy.
-	unsigned char enemy_health = 1;
+	GameTypes::Health enemy_health = 1;
 	for (const char sketch_character : level_sketch)
 	{
 		enemy_x++;
