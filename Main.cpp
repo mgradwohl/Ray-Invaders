@@ -1,18 +1,19 @@
+#include "Backbuffer.hpp"
+#include "Background.hpp"
+#include "Bases.hpp"
+#include "EnemyManager.hpp"
+#include "Global.hpp"
+#include "Player.hpp"
+#include "PowerUpManager.hpp"
+#include "RLDrawSession.h"
+#include "RLWindow.h"
+#include "Ufo.hpp"
 #include <chrono>
 #include <random>
 #include <raylib.h>
-#include "RLWindow.h"
-#include "RLDrawSession.h"
-#include "Global.hpp"
-#include "Backbuffer.hpp"
-#include "Background.hpp"
-#include "EnemyManager.hpp"
-#include "Ufo.hpp"
-#include "Player.hpp"
-#include "PowerUpManager.hpp"
-#include "Bases.hpp"
+#include <string>
 
-int main()
+auto main() -> int
 {
 	bool game_over = false;
 	bool next_level = false;
@@ -26,9 +27,10 @@ int main()
 	//Setting a random seed to make sure the random engine will randomly generate random numbers.
 	std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
-	raylib::Window window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60, "Space Invaders");
+    raylib::Window const window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60,
+                                "Space Invaders");
 
-	Background background("Resources/Images/BigGalaxy.png");
+    Background background("Resources/Images/BigGalaxy.png");
 	EnemyManager enemy_manager;
 	Player player;
 	PowerUpManager powerup("Resources/Images/PowerupBar.png");
@@ -63,10 +65,10 @@ int main()
 			if (!game_over)
 			{
 				// no more enemies left
-				if (enemy_manager.get_enemies().size() == 0)
-				{
+                if (enemy_manager.get_enemies().empty())
+                {
 					if (!next_level_timer)
-					{
+                    {
 						next_level = 0;
 						level++;
 						next_level_timer = NEXT_LEVEL_TRANSITION;

@@ -14,17 +14,17 @@ public:
 	//Damn, I should've used enums. That would've made the code more readable.
 
 	void bump_y(unsigned short ybump) noexcept;
-	[[nodiscard]] Rectangle get_hitbox() const noexcept;
-	unsigned char get_type() const noexcept;
+    [[nodiscard]] auto get_hitbox() const noexcept -> Rectangle;
+    [[nodiscard]] auto get_type() const noexcept -> unsigned char;
 
-	bool isdead() const noexcept;
-	void isdead(bool dead) noexcept;
-	float getx() const noexcept;
-	float gety() const noexcept;
+    [[nodiscard]] auto isdead() const noexcept -> bool;
+    void isdead(bool dead) noexcept;
+    [[nodiscard]] auto getx() const noexcept -> float;
+    [[nodiscard]] auto gety() const noexcept -> float;
 
-private:
-	float _x{0.0f};
-	float _y{0.0f};
-	bool _dead{false};
+  private:
+    float         _x{0.0F};
+    float         _y{0.0F};
+    bool _dead{false};
 	unsigned char _type{0};
 };

@@ -9,10 +9,10 @@ class Animation
 public:
 	Animation(unsigned short i_animation_speed, unsigned short i_frame_width, const std::string& i_texture_location) noexcept;
 
-	bool change_current_frame() noexcept;
-	bool update() noexcept;
+    auto change_current_frame() noexcept -> bool;
+    auto update() noexcept -> bool;
 
-	void draw(raylib::DrawSession& ds, float x, float y, const Color& i_color = WHITE) const;
+    void draw(raylib::DrawSession& ds, float x, float y, const Color& i_color = WHITE) const;
 	void reset() noexcept;
 
 private:
@@ -22,9 +22,9 @@ private:
 	int _animation_speed{1};
 	int _current_frame{0};
 	//To make things easier, each image file will contain 1 animation. So that the frame heights are the same.
-	float _frame_width{0.0f}; // Using float for consistent positioning
-	//We can find this by dividing the width of the image by the frame width.
-	int _total_frames{0};
+    float _frame_width{0.0F}; // Using float for consistent positioning
+    // We can find this by dividing the width of the image by the frame width.
+    int _total_frames{0};
 
 	Texture2D _sprite{};
 };

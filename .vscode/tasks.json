@@ -217,6 +217,77 @@
             "problemMatcher": ["$gcc"],
             "group": "build",
             "detail": "Build Ray-Invaders project with Clang 21 (Direct compilation) - Linux"
+        },
+        {
+            "type": "shell",
+            "label": "Clang-Tidy: Analyze All Files",
+            "command": "find",
+            "args": [
+                ".",
+                "-name", "*.cpp",
+                "-exec", "clang-tidy-21", "{}", "--", "-std=c++23", "-I.", "-I/usr/local/include", ";"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": "test",
+            "detail": "Run clang-tidy on all .cpp files in the project",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "type": "shell", 
+            "label": "Clang-Tidy: Analyze Current File",
+            "command": "clang-tidy-21",
+            "args": [
+                "${file}",
+                "--",
+                "-std=c++23",
+                "-I${workspaceFolder}",
+                "-I/usr/local/include"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": "test",
+            "detail": "Run clang-tidy on the currently active file",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Clang-Tidy: Fix Current File",
+            "command": "clang-tidy-21",
+            "args": [
+                "${file}",
+                "--fix",
+                "--",
+                "-std=c++23", 
+                "-I${workspaceFolder}",
+                "-I/usr/local/include"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": "test",
+            "detail": "Run clang-tidy with --fix on the currently active file (automatically applies fixes)",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
         }
     ],
     "version": "2.0.0"

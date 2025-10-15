@@ -16,12 +16,12 @@ namespace raylib
 		//WaveSound& operator=(WaveSound& b) = delete;
 		//WaveSound& operator=(WaveSound&& b) = delete;
 
-		bool Play() const noexcept;
-		void Stop() const noexcept;
+        [[nodiscard]] auto Play() const noexcept -> bool;
+        void Stop() const noexcept;
 
-		bool IsPlaying() const noexcept;
+        [[nodiscard]] auto IsPlaying() const noexcept -> bool;
 
-	private:
+      private:
 		Sound _sound{};
 	};
 }

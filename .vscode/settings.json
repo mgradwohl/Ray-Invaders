@@ -5,5 +5,14 @@
     },
     "terminal.integrated.env.windows": {
         "RAYLIB_PATH": "c:\\raylib"
-    }
+    },
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy-21",
+    "C_Cpp.codeAnalysis.clangTidy.config": "",
+    "C_Cpp.codeAnalysis.clangTidy.fallbackConfig": "file",
+    "C_Cpp.codeAnalysis.clangTidy.headerFilter": ".*\\.(h|hpp)$",
+    "C_Cpp.codeAnalysis.clangTidy.args": [
+        "-std=c++23"
+    ],
+    "C_Cpp.codeAnalysis.runAutomatically": true
 }

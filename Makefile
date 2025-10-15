@@ -67,6 +67,16 @@ install:
 	sudo apt update
 	sudo apt install -y clang-21 build-essential git cmake libasound2-dev mesa-common-dev libx11-dev libxrandr-dev libxi-dev xorg-dev libgl1-mesa-dev libglu1-mesa-dev
 
+# Code analysis with clang-tidy
+analyze:
+	@echo "Running clang-tidy analysis..."
+	./run-clang-tidy.sh
+
+# Code analysis with automatic fixes
+fix:
+	@echo "Running clang-tidy with automatic fixes..."
+	./run-clang-tidy.sh --fix
+
 # Show help
 help:
 	@echo "Ray-Invaders Makefile"
@@ -76,6 +86,8 @@ help:
 	@echo "  release  - Build optimized release version"
 	@echo "  clean    - Remove build artifacts"
 	@echo "  run      - Build and run the game"
+	@echo "  analyze  - Run clang-tidy code analysis"
+	@echo "  fix      - Run clang-tidy with automatic fixes"
 	@echo "  install  - Install build dependencies"
 	@echo "  help     - Show this help message"
 

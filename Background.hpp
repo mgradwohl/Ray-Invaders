@@ -18,6 +18,6 @@ public:
 
 private:
 	Texture2D _backgroundsprite{}; // Already properly initialized
-	Rectangle _source{ 0.0f, 0.0f, 0.0f, 0.0f };
+    Rectangle _source{0.0F, 0.0F, 0.0F, 0.0F};
 };
 
