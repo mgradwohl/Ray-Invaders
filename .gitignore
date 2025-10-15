@@ -361,3 +361,17 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Linux/Unix build artifacts
+build/
+*.o
+*.d
+*.a
+*.so
+*.so.*
+core
+*.core
+
+# macOS
+.DS_Store
+*.dSYM/

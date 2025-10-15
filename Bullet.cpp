@@ -3,16 +3,17 @@
 #include "Bullet.hpp"
 
 Bullet::Bullet(float i_step_x, float i_step_y, float i_x, float i_y) noexcept
-    : _step_x(i_step_x), 
-      _step_y(i_step_y), 
-      _x(i_x), // No conversion needed
-      _y(i_y), // No conversion needed
-      _real_x(i_x), // No conversion needed
-      _real_y(i_y), 
-      _dead(false) {
-    _previous_x.fill(_x);
-    _previous_y.fill(_y);
-}
+    : _x(i_x),
+      _y(i_y), 
+      _dead(false),
+      _real_x(i_x),
+      _real_y(i_y),
+      _step_x(i_step_x), 
+      _step_y(i_step_y)
+	  {
+		_previous_x.fill(_x);
+		_previous_y.fill(_y);
+	}
 
 bool Bullet::IsDead() const noexcept { return _dead; }
 void Bullet::IsDead(bool dead) noexcept { _dead = dead; }

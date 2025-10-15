@@ -1,11 +1,87 @@
 {
     "tasks": [
+        {
+            "type": "shell",
+            "label": "Build Debug (Linux - Makefile)",
+            "command": "make",
+            "args": ["debug"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Build Ray-Invaders project with Clang 21 (Debug) - Linux",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Build Release (Linux - Makefile)",
+            "command": "make",
+            "args": ["release"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": "build",
+            "detail": "Build Ray-Invaders project with Clang 21 (Release) - Linux",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Clean Build (Linux)",
+            "command": "make",
+            "args": ["clean"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": "build",
+            "detail": "Clean build artifacts - Linux",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Run Game (Linux)",
+            "command": "make",
+            "args": ["run"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": "test",
+            "detail": "Build and run Ray-Invaders - Linux",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "dependsOn": "Build Debug (Linux - Makefile)"
+        },
         {   
             "type": "cppbuild",
-            "label": "C/C++: cl.exe build active file (Debug)",
+            "label": "C/C++: cl.exe build active file (Debug) - Windows",
             "command": "cl.exe",
                 "args": [
-                "/std:c++20",
+                "/std:c++23",
                 "/Zi",
                 "/EHsc",
                 "/W4",
@@ -52,17 +128,15 @@
                 "cwd": "${workspaceFolder}"
             },
             "problemMatcher": ["$msCompile"],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "Build Ray-Invaders project with MSVC (Debug)"
+            "group": "build",
+            "detail": "Build Ray-Invaders project with MSVC (Debug) - Windows"
         },
-        {   "type": "cppbuild",
-            "label": "C/C++: cl.exe build active file (Release)",
+        {   
+            "type": "cppbuild",
+            "label": "C/C++: cl.exe build active file (Release) - Windows",
             "command": "cl.exe",
             "args": [
-                "/std:c++20",
+                "/std:c++23",
                 "/EHsc",
                 "/W4",
                 "/utf-8",
@@ -111,7 +185,38 @@
             },
             "problemMatcher": ["$msCompile"],
             "group": "build",
-            "detail": "Build Ray-Invaders project with MSVC (Release)"
+            "detail": "Build Ray-Invaders project with MSVC (Release) - Windows"
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: clang++-21 build active file (Direct) - Linux",
+            "command": "clang++-21",
+            "args": [
+                "-std=c++23",
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-g",
+                "-O0",
+                "-I${workspaceFolder}",
+                "-I/usr/local/include",
+                "${workspaceFolder}/*.cpp",
+                "-o",
+                "${workspaceFolder}/build/ray-invaders",
+                "-lraylib",
+                "-lGL",
+                "-lm",
+                "-lpthread",
+                "-ldl",
+                "-lrt",
+                "-lX11"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": "build",
+            "detail": "Build Ray-Invaders project with Clang 21 (Direct compilation) - Linux"
         }
     ],
     "version": "2.0.0"

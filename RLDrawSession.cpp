@@ -44,13 +44,17 @@ namespace raylib
     void DrawSession::DrawText(const std::string& text, const int x, const int y, const int fontSize, const Color color) noexcept
     {
         ::DrawText(text.c_str(), x, y, fontSize, color);
-    }    void DrawSession::DrawTextCentered(const std::string& text, const int x, const int y, const int fontSize, const Color color) noexcept
+    }
+    
+    void DrawSession::DrawTextCentered(const std::string& text, const int x, const int y, const int fontSize, const Color color) noexcept
     {
         const int textWidth = MeasureText(text.c_str(), fontSize);
         const int drawX = x - textWidth / 2;
         const int drawY = y - fontSize / 2;
         ::DrawText(text.c_str(), drawX, drawY, fontSize, color);
-    }void DrawSession::DrawFPS(const int posX, const int posY, const int height)
+    }
+    
+    void DrawSession::DrawFPS(const int posX, const int posY, const int height)
     {
         Color color = LIME;
         const int fps = GetFPS();
@@ -64,7 +68,8 @@ namespace raylib
             color = RED;
         }
 
-        const std::string fpsStr = std::format("FPS: {}", fps); // Use local fps instead of calling GetFPS() again        DrawText(fpsStr, posX, posY, height, color);
+        const std::string fpsStr = std::format("FPS: {}", fps); // Use local fps instead of calling GetFPS() again
+        DrawText(fpsStr, posX, posY, height, color);
     }
 
     void DrawSession::DrawCircle(const float centerX, const float centerY, const float radius, const Color color) noexcept

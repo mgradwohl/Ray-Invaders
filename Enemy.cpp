@@ -2,6 +2,7 @@
 #include <chrono>
 #include <algorithm>
 #include <vector>
+#include <cmath>
 
 #include <raylib.h>
 

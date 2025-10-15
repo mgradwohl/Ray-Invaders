@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "optional": "cpp"
+        "optional": "cpp",
+        "cmath": "cpp"
     },
     "terminal.integrated.env.windows": {
         "RAYLIB_PATH": "c:\\raylib"

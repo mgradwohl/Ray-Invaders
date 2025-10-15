@@ -19,7 +19,7 @@ void Background::draw(raylib::DrawSession& ds) const
 
 void Background::update(Player& player) noexcept
 {
-	player;	if (IsKeyDown(KEY_RIGHT))
+	if (IsKeyDown(KEY_RIGHT))
 	{
 		//player moving right, move background from right to left
 		_source.x += 1.0f;
