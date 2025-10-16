@@ -2,7 +2,6 @@
 #include "Player.hpp"
 
 // Standard library headers
-#include <array>
 #include <chrono>
 #include <random>
 

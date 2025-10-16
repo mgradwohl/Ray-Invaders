@@ -4,6 +4,9 @@
 // Third-party headers
 #include <raylib.h>
 
+// Project headers
+#include "Global.hpp"
+
 PowerUpItem::PowerUpItem(float i_x, float i_y, GameTypes::Count i_type) noexcept :
 	_x(i_x),
 	_y(i_y),

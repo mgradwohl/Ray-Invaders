@@ -1,4 +1,15 @@
+// Corresponding header
 #include "Background.hpp"
+
+// Standard library headers
+#include <string>
+
+// Third-party headers
+#include <raylib.h>
+
+// Project headers
+#include "Player.hpp"
+#include "RLDrawSession.h"
 
 Background::Background(const std::string& spritefile)
 {

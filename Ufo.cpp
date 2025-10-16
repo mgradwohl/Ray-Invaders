@@ -1,9 +1,17 @@
+// Corresponding header
+#include "Ufo.hpp"
+
+// Standard library headers
 #include <random>
+#include <string>
+
+// Third-party headers
 #include <raylib.h>
 
+// Project headers
 #include "Animation.hpp"
 #include "Global.hpp"
-#include "Ufo.hpp"
+#include "RLWaveSound.hpp"
 
 constexpr float UFO_EXPLOSION_Y_OFFSET = 0.5F;
 constexpr float UFO_EXPLOSION_MAGIC_OFFSET = 0.5F;
