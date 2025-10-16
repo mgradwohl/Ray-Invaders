@@ -1,3 +1,13 @@
+// Standard library headers
+#include <chrono>
+#include <cstdlib>
+#include <random>
+#include <string>
+
+// Third-party headers
+#include <raylib.h>
+
+// Project headers
 #include "Backbuffer.hpp"
 #include "Background.hpp"
 #include "Bases.hpp"
@@ -8,11 +18,6 @@
 #include "RLDrawSession.h"
 #include "RLWindow.h"
 #include "Ufo.hpp"
-#include <chrono>
-#include <random>
-#include <raylib.h>
-#include <string>
-#include <cstdlib>
 
 auto main() -> int
 {

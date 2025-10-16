@@ -1,8 +1,13 @@
 //I didn't use the constants from "Global.hpp" to make this class more universal.
-#include <raylib.h>
-#include "RLDrawSession.h"
 
+// Corresponding header
 #include "Animation.hpp"
+
+// Third-party headers
+#include <raylib.h>
+
+// Project headers
+#include "RLDrawSession.h"
 
 Animation::Animation(GameTypes::Speed i_animation_speed, GameTypes::Size i_frame_width, const std::string& i_texture_location) noexcept :
 	_animation_iterator(0),

@@ -1,5 +1,8 @@
-#include <raylib.h>
+// Corresponding header
 #include "Backbuffer.hpp"
+
+// Third-party headers
+#include <raylib.h>
 
 Backbuffer::Backbuffer(GameTypes::Coordinate width, GameTypes::Coordinate height, GameTypes::Size scale) noexcept
 {

@@ -1,6 +1,11 @@
-#include <raylib.h>
-#include "Global.hpp"
+// Corresponding header
 #include "Bullet.hpp"
+
+// Third-party headers
+#include <raylib.h>
+
+// Project headers
+#include "Global.hpp"
 
 Bullet::Bullet(float i_step_x, float i_step_y, float i_x, float i_y) noexcept
     : _x(i_x),

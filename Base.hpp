@@ -1,11 +1,15 @@
 #pragma once
-#include <string>
+
+// Standard library headers
 #include <vector>
+
+// Third-party headers
 #include <raylib.h>
-#include "RLDrawSession.h"
-#include "RLWaveSound.hpp"
-#include "Global.hpp"
+
+// Project headers
 #include "Bullet.hpp"
+#include "Global.hpp"
+#include "RLDrawSession.h"
 
 class Base {
 public:

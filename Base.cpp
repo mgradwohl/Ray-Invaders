@@ -1,8 +1,15 @@
-#include <raylib.h>
-#include <cmath>
-#include <algorithm>
-#include "Bullet.hpp"
+// Corresponding header
 #include "Base.hpp"
+
+// Standard library headers
+#include <algorithm>
+#include <cmath>
+
+// Third-party headers
+#include <raylib.h>
+
+// Project headers
+#include "Bullet.hpp"
 
 
 

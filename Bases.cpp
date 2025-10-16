@@ -1,7 +1,14 @@
-#include <vector>
-#include <raylib.h>
-#include "Bullet.hpp"
+// Corresponding header
 #include "Bases.hpp"
+
+// Standard library headers
+#include <vector>
+
+// Third-party headers
+#include <raylib.h>
+
+// Project headers
+#include "Bullet.hpp"
 
 Bases::Bases(const std::string& filename)
 {

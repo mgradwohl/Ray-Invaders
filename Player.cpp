@@ -1,16 +1,21 @@
+// Corresponding header
+#include "Player.hpp"
+
+// Standard library headers
 #include <array>
 #include <chrono>
 #include <random>
+
+// Third-party headers
 #include <raylib.h>
 
-#include "RLWindow.h"
-#include "RLDrawSession.h"
-
+// Project headers
 #include "Animation.hpp"
-#include "Global.hpp"
 #include "Enemy.hpp"
+#include "Global.hpp"
+#include "RLDrawSession.h"
+#include "RLWindow.h"
 #include "Ufo.hpp"
-#include "Player.hpp"
 
 Player::Player() :
 	_explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, GlobalConstant::Int::BASE_SIZE, "Resources/Images/Explosion.png")

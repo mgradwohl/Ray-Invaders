@@ -1,13 +1,18 @@
+// Corresponding header
+#include "Enemy.hpp"
+
+// Standard library headers
+#include <algorithm>
 #include <array>
 #include <chrono>
-#include <algorithm>
-#include <vector>
 #include <cmath>
+#include <vector>
 
+// Third-party headers
 #include <raylib.h>
 
+// Project headers
 #include "Global.hpp"
-#include "Enemy.hpp"
 
 Enemy::Enemy(Type i_type, float i_x, float i_y, GameTypes::Health health) noexcept :
     _direction(Direction::Down),

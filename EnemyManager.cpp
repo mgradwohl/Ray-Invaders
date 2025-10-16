@@ -1,18 +1,24 @@
+// Corresponding header
+#include "EnemyManager.hpp"
+
+// Standard library headers
 #include <array>
 #include <chrono>
 #include <random>
+
+// Third-party headers
 #include <raylib.h>
-#include "RLWindow.h"
+
+// Project headers  
+#include "Animation.hpp"
+#include "Bullet.hpp"
+#include "Enemy.hpp"
+#include "Global.hpp"
 #include "RLDrawSession.h"
+#include "RLWindow.h"
 
 //There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same thing we did in the game "Frogger".
 // Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered for precise collision detection.
-
-#include "Animation.hpp"
-#include "Global.hpp"
-#include "Enemy.hpp"
-#include "EnemyManager.hpp"
-#include "Bullet.hpp"
 EnemyManager::EnemyManager() noexcept :
 	_shoot_distribution(0, GlobalConstant::Int::ENEMY_SHOOT_CHANCE)
 {	//We have a function that sets everything to the initial state, so why not use it?
