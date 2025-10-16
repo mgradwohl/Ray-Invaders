@@ -10,6 +10,7 @@
 #include "Bullet.hpp"
 #include "Global.hpp"
 #include "RLDrawSession.h"
+#include "RLWaveSound.hpp"
 
 class Base {
 public:
@@ -60,6 +61,8 @@ private:
     float _x{0.0F};
     float _y{0.0F};
     std::vector<ImpactMarker> _impact_markers{};
+    raylib::WaveSound _basehitsound;
+    
 public:
 };
 

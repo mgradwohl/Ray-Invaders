@@ -10,18 +10,12 @@
 
 // Project headers
 #include "Bullet.hpp"
+#include "RLWaveSound.hpp"
 
-
-
-Base::Base(float x) noexcept : _x(x), _y(GlobalConstant::SCREEN_HEIGHT - 3.0f * GlobalConstant::BASE_SIZE) {
+Base::Base(float x) noexcept : _x(x), _y(GlobalConstant::SCREEN_HEIGHT - 3.0f * GlobalConstant::BASE_SIZE)
+{
+	_basehitsound = raylib::WaveSound("Resources/Sounds/Base Hit.wav");
     // Texture is initialized in reset()
-}
-
-Base::~Base() {
-    if (_texture.id > 0) UnloadTexture(_texture);
-    if (_damage_tex.id > 0) UnloadTexture(_damage_tex);
-    if (_damage_image.data) UnloadImage(_damage_image);
-    if (_base_alpha.data) UnloadImage(_base_alpha);
 }
 
 Base::Base(Base&& other) noexcept : 
@@ -41,6 +35,7 @@ Base::Base(Base&& other) noexcept :
     other._damage_image.data = nullptr;
     other._base_alpha.data = nullptr;
     other._base_mask.clear();
+	_basehitsound = raylib::WaveSound("Resources/Sounds/Base Hit.wav");
 }
 
 Base& Base::operator=(Base&& other) noexcept {
@@ -56,21 +51,30 @@ Base& Base::operator=(Base&& other) noexcept {
         _texture = other._texture;
         _damage_image = other._damage_image;
         _damage_tex = other._damage_tex;
-    _base_alpha = other._base_alpha;
-    _base_mask = std::move(other._base_mask);
+        _base_alpha = other._base_alpha;
+        _base_mask = std::move(other._base_mask);
         _damage = other._damage;
         _dead = other._dead;
         _frame = other._frame;
         _x = other._x;
         _y = other._y;
+        _basehitsound = std::move(other._basehitsound);
         
         // Prevent double free
         other._texture.id = 0;
         other._damage_tex.id = 0;
         other._damage_image.data = nullptr;
-    other._base_alpha.data = nullptr;
+        other._base_alpha.data = nullptr;
     }
+
     return *this;
+}
+
+Base::~Base() {
+    if (_texture.id > 0) UnloadTexture(_texture);
+    if (_damage_tex.id > 0) UnloadTexture(_damage_tex);
+    if (_damage_image.data) UnloadImage(_damage_image);
+    if (_base_alpha.data) UnloadImage(_base_alpha);
 }
 
 void Base::reset(const Image& baseImage) noexcept {
@@ -189,6 +193,8 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount) {
             if (!collision_counts) continue;
 
             _impacts.push_back({ rel_x, rel_y, radius, 60 }); // visible for 60 frames
+            _basehitsound.Play();
+            // play the sound effect for the impact
 
             // Mutate the CPU damage image: increase alpha in a radial falloff so damage accumulates
             if (_damage_image.data) {
