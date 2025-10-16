@@ -1,14 +1,11 @@
 @echo off
 rem Build script for Ray-Invaders with Clang (Release)
-echo Building Ray-Invaders with Clang 21 (Release)...
+echo Building Ray-Invaders (Release)...
 
-rem Ensure bin\Release directory exists
-if not exist "bin\Release" mkdir "bin\Release"
+if not exist "bin\Release" mkdir "bin\Release" >nul 2>&1
 
-rem First, let's make sure Clang is using the Visual Studio environment
-call "C:\Program Files\Microsoft Visual Studio\18\Insiders\VC\Auxiliary\Build\vcvars64.bat"
-
-rem Build with Clang using MSVC-compatible options
+rem Set up VS environment
+call "C:\Program Files\Microsoft Visual Studio\18\Insiders\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1
 "C:\Program Files\LLVM\bin\clang++.exe" ^
   -std=c++23 ^
   -fcolor-diagnostics ^
@@ -36,4 +33,14 @@ rem Build with Clang using MSVC-compatible options
   -Xlinker /LTCG ^
   -fuse-ld=lld-link
 
-echo Build completed. Check for errors above.
+if %ERRORLEVEL% NEQ 0 (
+    echo Build failed.
+    exit /b %ERRORLEVEL%
+)
+
+if exist bin\Release\Ray-Invaders.exe (
+    echo Build successful.
+) else (
+    echo Build failed: Executable not found.
+    exit /b 1
+)
