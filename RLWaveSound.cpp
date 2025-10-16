@@ -1,7 +1,11 @@
-
-#include <string>
-#include <raylib.h>
+// Corresponding header
 #include "RLWaveSound.hpp"
+
+// Standard library headers
+#include <string>
+
+// Third-party headers
+#include <raylib.h>
 
 namespace raylib
 {

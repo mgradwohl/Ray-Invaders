@@ -1,9 +1,12 @@
-#include <string>
-#include <format>
-
-#include <raylib.h>
-
+// Corresponding header
 #include "RLDrawSession.h"
+
+// Standard library headers
+#include <format>
+#include <string>
+
+// Third-party headers
+#include <raylib.h>
 namespace raylib
 {
     DrawSession::DrawSession(const RenderTexture2D& backbuffer, const Color clearColor) noexcept

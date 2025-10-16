@@ -1,7 +1,11 @@
-#include <string>
-#include <raylib.h>
-
+// Corresponding header
 #include "RLWindow.h"
+
+// Standard library headers
+#include <string>
+
+// Third-party headers
+#include <raylib.h>
 namespace raylib
 {
     Window::Window(const uint16_t width, const uint16_t height, const uint16_t fps, const std::string& title)

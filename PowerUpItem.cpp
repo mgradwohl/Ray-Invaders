@@ -1,5 +1,8 @@
-#include <raylib.h>
+// Corresponding header
 #include "PowerUpItem.hpp"
+
+// Third-party headers
+#include <raylib.h>
 
 PowerUpItem::PowerUpItem(float i_x, float i_y, GameTypes::Count i_type) noexcept :
 	_x(i_x),

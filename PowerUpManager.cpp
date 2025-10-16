@@ -1,7 +1,12 @@
-#include <raylib.h>
-#include "RLDrawSession.h"
-#include "Global.hpp"
+// Corresponding header
 #include "PowerUpManager.hpp"
+
+// Third-party headers
+#include <raylib.h>
+
+// Project headers
+#include "Global.hpp"
+#include "RLDrawSession.h"
 
 PowerUpManager::PowerUpManager(const std::string& spritefile) : _spritefile(spritefile)
 {
