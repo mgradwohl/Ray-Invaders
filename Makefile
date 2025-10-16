@@ -29,7 +29,6 @@ OBJECTS = $(SOURCES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 all: debug
 
 # Debug build (default)
-debug: CXXFLAGS += -DDEBUG
 debug: $(BUILD_DIR)/$(TARGET)
 
 # Release build

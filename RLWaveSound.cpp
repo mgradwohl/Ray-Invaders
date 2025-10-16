@@ -18,12 +18,10 @@ namespace raylib
 
     bool WaveSound::Play() const noexcept
     {
-#ifdef DEBUG
         if (!IsSoundValid(_sound))
         {
             return false;
         }
-#endif
         
         PlaySound(_sound);
         return true;

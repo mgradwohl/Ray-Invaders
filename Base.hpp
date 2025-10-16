@@ -29,8 +29,8 @@ public:
     
     // Records a bullet impact at the specified position and modifies the texture
     void apply_impact(float rel_x, float rel_y, float damage_amount);
-    // Debug markers to visualize impacts for a few frames
-    struct DebugMarker { float x; float y; int ttl; };
+    // Visual markers to show impact points for a few frames
+    struct ImpactMarker { float x; float y; int ttl; };
     // Impact entries for draw-time rendering (do not mutate texture)
     struct Impact { float x; float y; float radius; int ttl; };
 
@@ -55,11 +55,7 @@ private:
     float _frame{0.0F};   // Changed from std::size_t to float
     float _x{0.0F};
     float _y{0.0F};
-    std::vector<DebugMarker> _debug_markers{};
-    // Optional: index of this base (0..n-1) for clearer debug output
-    int _index{ -1 };
+    std::vector<ImpactMarker> _impact_markers{};
 public:
-    // Set the index for debug/logging purposes
-    void set_index(int idx) { _index = idx; }
 };
 
