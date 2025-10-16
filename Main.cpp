@@ -12,6 +12,7 @@
 #include <random>
 #include <raylib.h>
 #include <string>
+#include <cstdlib>
 
 auto main() -> int
 {
@@ -36,6 +37,9 @@ auto main() -> int
 	PowerUpManager powerup("Resources/Images/PowerupBar.png");
 	Ufo ufo(random_engine);
 	Bases bases("Resources/Images/Base.png");
+
+	// AUTO_FIRE debug helper removed: spawning enemy bullets at startup was
+	// intrusive during regular testing and is no longer desirable.
 
 	// we draw everything to this, and then render this to the screen
 	Backbuffer backbuffer(GlobalConstant::Int::SCREEN_WIDTH, GlobalConstant::Int::SCREEN_HEIGHT, GlobalConstant::Int::SCREEN_RESIZE);

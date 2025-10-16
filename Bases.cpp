@@ -18,6 +18,8 @@ Bases::Bases(const std::string& filename)
     for (int i = 0; i < GlobalConstant::Int::BASE_COUNT; i++)
     {
         _bases.emplace_back(x);
+        // assign index for better debug output
+        _bases.back().set_index(i);
         x += offset; // spacing
         x += GlobalConstant::BASE_WIDTH; // BASE WIDTH
     }
@@ -34,9 +36,10 @@ Bases::~Bases()
 
 void Bases::reset()
 {
-    for (Base& base : _bases)
+    for (std::size_t i = 0; i < _bases.size(); ++i)
     {
-        base.reset(_baseImage);
+        _bases[i].set_index(static_cast<int>(i));
+        _bases[i].reset(_baseImage);
     }
 }
 
