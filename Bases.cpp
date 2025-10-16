@@ -8,18 +8,18 @@ Bases::Bases(const std::string& filename)
 {
     // Load the base image and calculate framecount
     _baseImage = LoadImage(filename.c_str());
-    _framecount = static_cast<int>(_baseImage.width / F::BASE_WIDTH - 1.0f);
+    _framecount = static_cast<int>(_baseImage.width / GlobalConstant::BASE_WIDTH - 1.0f);
     
     // Calculate positioning for bases
-    const float offset = (F::SCREEN_WIDTH - (BASE_COUNT * F::BASE_WIDTH)) / (BASE_COUNT + 1);
+    const float offset = (GlobalConstant::SCREEN_WIDTH - (GlobalConstant::Int::BASE_COUNT * GlobalConstant::BASE_WIDTH)) / (GlobalConstant::Int::BASE_COUNT + 1);
     float x = offset;
     
     // Create empty bases at the correct positions first
-    for (int i = 0; i < BASE_COUNT; i++)
+    for (int i = 0; i < GlobalConstant::Int::BASE_COUNT; i++)
     {
         _bases.emplace_back(x);
         x += offset; // spacing
-        x += F::BASE_WIDTH; // BASE WIDTH
+        x += GlobalConstant::BASE_WIDTH; // BASE WIDTH
     }
     
     // Reset all bases with the base image
@@ -60,3 +60,8 @@ void Bases::draw(raylib::DrawSession& ds) const
         base.draw(ds);
     }
 }
+
+
+
+
+

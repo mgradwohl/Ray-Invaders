@@ -53,13 +53,19 @@ void PowerUpManager::draw(raylib::DrawSession& ds, const Player& player) const
 	// but Rectangle and Vector2 expect floats
 	// Cache the value to avoid repeated conversions
 	const float spriteWidth = static_cast<float>(_powerup_bar_sprite.width);
-	Vector2 dest{ F::SCREEN_WIDTH - spriteWidth - 0.25F * F::BASE_SIZE, 0.25F * F::BASE_SIZE };
-	Rectangle source{ 0.0f, 0.0f, spriteWidth, F::BASE_SIZE };
+	Vector2 dest{ GlobalConstant::SCREEN_WIDTH - spriteWidth - 0.25F * GlobalConstant::BASE_SIZE, 0.25F * GlobalConstant::BASE_SIZE };
+	Rectangle source{ 0.0f, 0.0f, spriteWidth, GlobalConstant::BASE_SIZE };
 	ds.DrawTexture(_powerup_bar_sprite, source, dest, WHITE);
 
-	dest = Vector2(F::SCREEN_WIDTH - spriteWidth - 0.125F * F::BASE_SIZE, 0.25F * F::BASE_SIZE);
+	dest = Vector2(GlobalConstant::SCREEN_WIDTH - spriteWidth - 0.125F * GlobalConstant::BASE_SIZE, 0.25F * GlobalConstant::BASE_SIZE);
 	
-	const float barWidth = ceil(player.get_power_timer() * (spriteWidth - 0.25F * F::BASE_SIZE) / POWERUP_DURATION);
-	source = Rectangle(0.125F * F::BASE_SIZE, F::BASE_SIZE, barWidth, F::BASE_SIZE);
+	const float barWidth = ceil(player.get_power_timer() * (spriteWidth - 0.25F * GlobalConstant::BASE_SIZE) / GlobalConstant::Int::POWERUP_DURATION);
+	source = Rectangle(0.125F * GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE, barWidth, GlobalConstant::BASE_SIZE);
 	ds.DrawTexture(_powerup_bar_sprite, source, dest, _color);
 }
+
+
+
+
+
+

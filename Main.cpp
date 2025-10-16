@@ -18,7 +18,7 @@ auto main() -> int
 	bool game_over = false;
 	bool next_level = false;
 	GameTypes::Level level = 0;
-	GameTypes::Timer next_level_timer = NEXT_LEVEL_TRANSITION;
+	GameTypes::Timer next_level_timer = GlobalConstant::Int::NEXT_LEVEL_TRANSITION;
 
 	//We'll use this to make the game frame rate independent.
 	std::chrono::microseconds lag(0);
@@ -27,7 +27,7 @@ auto main() -> int
 	//Setting a random seed to make sure the random engine will randomly generate random numbers.
 	std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
-    raylib::Window const window(SCREEN_WIDTH * SCREEN_RESIZE, SCREEN_HEIGHT * SCREEN_RESIZE, 60,
+    raylib::Window const window(GlobalConstant::Int::SCREEN_WIDTH * GlobalConstant::Int::SCREEN_RESIZE, GlobalConstant::Int::SCREEN_HEIGHT * GlobalConstant::Int::SCREEN_RESIZE, 60,
                                 "Space Invaders");
 
     Background background("Resources/Images/BigGalaxy.png");
@@ -38,7 +38,7 @@ auto main() -> int
 	Bases bases("Resources/Images/Base.png");
 
 	// we draw everything to this, and then render this to the screen
-	Backbuffer backbuffer(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_RESIZE);
+	Backbuffer backbuffer(GlobalConstant::Int::SCREEN_WIDTH, GlobalConstant::Int::SCREEN_HEIGHT, GlobalConstant::Int::SCREEN_RESIZE);
 
 	previous_time = std::chrono::steady_clock::now();
 	while (!window.ShouldClose())
@@ -48,9 +48,9 @@ auto main() -> int
 		lag += delta_time;
 		previous_time += delta_time;
 
-		while (FRAME_DURATION <= lag)
+		while (GlobalConstant::Time::FRAME_DURATION <= lag)
 		{
-			lag -= FRAME_DURATION;
+			lag -= GlobalConstant::Time::FRAME_DURATION;
 
 			//We're gonna show the "Game over!" text after the player's death animation.
 			if (player.get_dead_animation_over())
@@ -71,7 +71,7 @@ auto main() -> int
                     {
 						next_level = 0;
 						level++;
-						next_level_timer = NEXT_LEVEL_TRANSITION;
+						next_level_timer = GlobalConstant::Int::NEXT_LEVEL_TRANSITION;
 						background.reset();
 						player.reset();
 						enemy_manager.reset(level);
@@ -108,7 +108,7 @@ auto main() -> int
 				bases.reset();
 			}
 
-			if (FRAME_DURATION > lag)
+			if (GlobalConstant::Time::FRAME_DURATION > lag)
 			{
 				{
 					// everything is either reset (new game) or updated (continuing game) time to draw
@@ -123,16 +123,16 @@ auto main() -> int
 						ufo.draw(ds);
 						bases.draw(ds);
 						powerup.draw(ds, player);						const std::string levelText = "Level: " + std::to_string(level);
-						const int textY = static_cast<int>(F::QUARTER * F::BASE_SIZE); // Using F::QUARTER constant
+						const int textY = static_cast<int>(GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE); // Using GlobalConstant::QUARTER constant
 						ds.DrawText(levelText, 10, textY, textY, WHITE);
 					}					else
 					{
-						ds.DrawTextCentered("Game over!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 32, WHITE); // Using literal instead of FONT_SIZE_BIG
+						ds.DrawTextCentered("Game over!", GlobalConstant::Int::SCREEN_WIDTH / 2, GlobalConstant::Int::SCREEN_HEIGHT / 2, GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
 					}
 
 					if (next_level)
 					{
-						ds.DrawTextCentered("Next level!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 32, WHITE); // Using literal instead of FONT_SIZE_BIG
+						ds.DrawTextCentered("Next level!", GlobalConstant::Int::SCREEN_WIDTH / 2, GlobalConstant::Int::SCREEN_HEIGHT / 2, GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
 					}
 				}// DrawSession ds
 				backbuffer.flip();
@@ -140,3 +140,7 @@ auto main() -> int
 		}
 	}
 }
+
+
+
+

@@ -13,7 +13,7 @@
 #include "Player.hpp"
 
 Player::Player() :
-	_explosion(EXPLOSION_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Explosion.png")
+	_explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, GlobalConstant::Int::BASE_SIZE, "Resources/Images/Explosion.png")
 {
 	reset();
 
@@ -63,10 +63,10 @@ void Player::draw(raylib::DrawSession& ds)
 		//sprite.setTextureRect(sf::IntRect(BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE));
 		Vector2 dest{ _x, _y};
 		// Using float constants to avoid static_cast
-		const Rectangle source{			F::BASE_SIZE * _current_power, // _current_power is unsigned char, safe implicit conversion to float
+		const Rectangle source{			GlobalConstant::BASE_SIZE * _current_power, // _current_power is unsigned char, safe implicit conversion to float
 			0.0f,
-			F::BASE_SIZE,
-			F::BASE_SIZE
+			GlobalConstant::BASE_SIZE,
+			GlobalConstant::BASE_SIZE
 		};
 		ds.DrawTexture(_player_sprite, source, dest, WHITE);
 
@@ -102,8 +102,8 @@ void Player::reset()
 	_current_power = 0;
 	_reload_timer = 0;
 	_power_timer = 0;
-	_x = 0.5f * (F::SCREEN_WIDTH - F::BASE_SIZE);
-	_y = F::SCREEN_HEIGHT - 2.0f * F::BASE_SIZE;
+	_x = 0.5f * (GlobalConstant::SCREEN_WIDTH - GlobalConstant::BASE_SIZE);
+	_y = GlobalConstant::SCREEN_HEIGHT - 2.0f * GlobalConstant::BASE_SIZE;
 
 	_bullets.clear();
 
@@ -121,15 +121,15 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 			{
 				//Mirrored controls power-DOWN!
 				_x = std::min(
-					F::PLAYER_MOVE_SPEED + _x,
-					F::SCREEN_WIDTH - 2.0f * F::BASE_SIZE
+					GlobalConstant::PLAYER_MOVE_SPEED + _x,
+					GlobalConstant::SCREEN_WIDTH - 2.0f * GlobalConstant::BASE_SIZE
 				);
 			}
 			else
 			{
 				_x = std::max(
-					_x - F::PLAYER_MOVE_SPEED,
-					F::BASE_SIZE
+					_x - GlobalConstant::PLAYER_MOVE_SPEED,
+					GlobalConstant::BASE_SIZE
 				);
 			}
 		}
@@ -142,14 +142,14 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 				//I'm never gonna get tired of this joke.
 				//NEVER!
 				_x = std::max(
-					_x - F::PLAYER_MOVE_SPEED,
-					F::BASE_SIZE
+					_x - GlobalConstant::PLAYER_MOVE_SPEED,
+					GlobalConstant::BASE_SIZE
 				);
 			}
 			else			{
 				_x = std::min(
-					F::PLAYER_MOVE_SPEED + _x,
-					F::SCREEN_WIDTH - 2.0f * F::BASE_SIZE
+					GlobalConstant::PLAYER_MOVE_SPEED + _x,
+					GlobalConstant::SCREEN_WIDTH - 2.0f * GlobalConstant::BASE_SIZE
 				);
 			}
 		}
@@ -162,19 +162,19 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 
 				if (2 == _current_power)
 				{
-					_reload_timer = FAST_RELOAD_DURATION;
+					_reload_timer = GlobalConstant::Int::FAST_RELOAD_DURATION;
 				}
 				else
-				{				_reload_timer = RELOAD_DURATION;
+				{				_reload_timer = GlobalConstant::Int::RELOAD_DURATION;
 				}                // No need for conversions since Bullet constructor now accepts float params directly
-                _bullets.emplace_back(0.0f, -F::PLAYER_BULLET_SPEED, _x, _y);
+                _bullets.emplace_back(0.0f, -GlobalConstant::PLAYER_BULLET_SPEED, _x, _y);
 
 				if (3 == _current_power)
 				{
-					const float leftX = _x - 0.375f * F::BASE_SIZE;
-					const float rightX = _x + 0.375f * F::BASE_SIZE;
-					_bullets.emplace_back(0.0f, -F::PLAYER_BULLET_SPEED, leftX, _y);
-					_bullets.emplace_back(0.0f, -F::PLAYER_BULLET_SPEED, rightX, _y);
+					const float leftX = _x - 0.375f * GlobalConstant::BASE_SIZE;
+					const float rightX = _x + 0.375f * GlobalConstant::BASE_SIZE;
+					_bullets.emplace_back(0.0f, -GlobalConstant::PLAYER_BULLET_SPEED, leftX, _y);
+					_bullets.emplace_back(0.0f, -GlobalConstant::PLAYER_BULLET_SPEED, rightX, _y);
 				}
 			}
 		}
@@ -211,7 +211,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 		{
 			_current_power = powerup_type;
 
-			_power_timer = POWERUP_DURATION;
+			_power_timer = GlobalConstant::Int::POWERUP_DURATION;
 			PlaySound(_powerupsound);
 		}
 
@@ -272,9 +272,14 @@ Rectangle Player::get_hitbox() const noexcept
 {
 	// Use the fraction constants from the F namespace
 	return Rectangle(
-		_x + 0.125f * F::BASE_SIZE, 
-		_y + 0.125f * F::BASE_SIZE, 
-		F::THREE_QUARTERS * F::BASE_SIZE, 
-		F::THREE_QUARTERS * F::BASE_SIZE
+		_x + 0.125f * GlobalConstant::BASE_SIZE, 
+		_y + 0.125f * GlobalConstant::BASE_SIZE, 
+		GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE, 
+		GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE
 	);
 }
+
+
+
+
+

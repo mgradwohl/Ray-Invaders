@@ -14,16 +14,16 @@
 #include "EnemyManager.hpp"
 #include "Bullet.hpp"
 EnemyManager::EnemyManager() noexcept :
-	_shoot_distribution(0, ENEMY_SHOOT_CHANCE)
+	_shoot_distribution(0, GlobalConstant::Int::ENEMY_SHOOT_CHANCE)
 {	//We have a function that sets everything to the initial state, so why not use it?
 	reset(0);
 
-	_enemy_bullet_sprite = ::LoadTexture("Resources/Images/EnemyBullet.png");	for (GameTypes::Count a = 0; a < ENEMY_TYPES; a++)
+	_enemy_bullet_sprite = ::LoadTexture("Resources/Images/EnemyBullet.png");	for (GameTypes::Count a = 0; a < GlobalConstant::Int::ENEMY_TYPES; a++)
 	{
 		// Explicitly convert to match Animation constructor parameter
 		const int animSpeed = 1 + _move_pause;
 		const std::string filename = "Resources/Images/Enemy" + std::to_string(a) + ".png";
-		_enemy_animations.emplace_back(static_cast<unsigned short>(animSpeed), BASE_SIZE, filename);
+		_enemy_animations.emplace_back(static_cast<unsigned short>(animSpeed), GlobalConstant::Int::BASE_SIZE, filename);
 	}
 	_enemymove = LoadSound("Resources/Sounds/Enemy Move.wav");
 	_enemydestroy = LoadSound("Resources/Sounds/Enemy Destroy.wav");
@@ -33,7 +33,7 @@ bool EnemyManager::reached_player(float i_player_y) const
 {
 	for (const Enemy& enemy : _enemies)
 	{
-		if (enemy.get_y() > i_player_y - 0.5f * F::BASE_SIZE)
+		if (enemy.get_y() > i_player_y - 0.5f * GlobalConstant::BASE_SIZE)
 		{
 			//As soon as the enemies reach the player, the game is over!
 			return true;
@@ -56,15 +56,15 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 		{
 			const Vector2 dest{ prev_x[a], prev_y[a] }; // prev_x and prev_y are already float
 			// Array index 'a' will be small, implicit conversion is fine here
-			const float sourceX = F::BASE_SIZE * a;
-			const Rectangle source{ sourceX, 0.0f, F::BASE_SIZE, F::BASE_SIZE };
+			const float sourceX = GlobalConstant::BASE_SIZE * a;
+			const Rectangle source{ sourceX, 0.0f, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE };
 			ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 		}
 
 		//Drawing the bullet itself.
 		const Vector2 dest{ bullet.get_x(), bullet.get_y() };
-		const float sourceX = F::BASE_SIZE * tailSize; // tailSize is small, implicit conversion is fine
-		const Rectangle source{ sourceX, 0.0f, F::BASE_SIZE, F::BASE_SIZE };
+		const float sourceX = GlobalConstant::BASE_SIZE * tailSize; // tailSize is small, implicit conversion is fine
+		const Rectangle source{ sourceX, 0.0f, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE };
 		ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
 	}
 	for (const Enemy& enemy : _enemies)
@@ -115,10 +115,10 @@ void EnemyManager::reset(GameTypes::Level i_level)
 	GameTypes::Count enemy_y = 0;
 
 	std::string level_sketch = "";
-	_move_pause = std::max<short>(ENEMY_MOVE_PAUSE_START_MIN, ENEMY_MOVE_PAUSE_START - ENEMY_MOVE_PAUSE_DECREASE * i_level);
+	_move_pause = std::max<short>(GlobalConstant::Int::ENEMY_MOVE_PAUSE_START_MIN, GlobalConstant::Int::ENEMY_MOVE_PAUSE_START - GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * i_level);
 	_move_timer = _move_pause;
 
-	_shoot_distribution = std::uniform_int_distribution<GameTypes::Probability>(0, std::max<GameTypes::Probability>(ENEMY_SHOOT_CHANCE_MIN, ENEMY_SHOOT_CHANCE - ENEMY_SHOOT_CHANCE_INCREASE * i_level));
+	_shoot_distribution = std::uniform_int_distribution<GameTypes::Probability>(0, std::max<GameTypes::Probability>(GlobalConstant::Int::ENEMY_SHOOT_CHANCE_MIN, GlobalConstant::Int::ENEMY_SHOOT_CHANCE - GlobalConstant::Int::ENEMY_SHOOT_CHANCE_INCREASE * i_level));
 
 	for (Animation& enemy_animation : _enemy_animations)
 	{
@@ -131,10 +131,10 @@ void EnemyManager::reset(GameTypes::Level i_level)
 	//There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same thing we did in the game "Frogger".
 	// Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered for precise collision detection.
 	//Go watch that video, btw!
-	if (TOTAL_LEVELS <= i_level)
+	if (GlobalConstant::Int::TOTAL_LEVELS <= i_level)
 	{
-		// Since TOTAL_LEVELS is 8 (a small number), we can avoid casts
-		constexpr unsigned short HALF_LEVELS = TOTAL_LEVELS / 2; // 4
+		// Since GlobalConstant::Int::TOTAL_LEVELS is 8 (a small number), we can avoid casts
+		constexpr unsigned short HALF_LEVELS = GlobalConstant::Int::TOTAL_LEVELS / 2; // 4
 		i_level = HALF_LEVELS + (i_level % HALF_LEVELS);
 	}
 
@@ -208,22 +208,22 @@ void EnemyManager::reset(GameTypes::Level i_level)
 
 				break;
 			}           case '0':			{
-				const float enemyXPos = F::BASE_SIZE * (1.0f + enemy_x); // enemy_x is unsigned char, implicit conversion to float
-				const float enemyYPos = F::BASE_SIZE * (2.0f + enemy_y); // enemy_y is unsigned char, implicit conversion to float
+				const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0f + enemy_x); // enemy_x is unsigned char, implicit conversion to float
+				const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0f + enemy_y); // enemy_y is unsigned char, implicit conversion to float
 				_enemies.emplace_back(Enemy::Type::Cyan, enemyXPos, enemyYPos, enemy_health);
 				break;
 			}
 			case '1':
 			{
-				const float enemyXPos = F::BASE_SIZE * (1.0f + enemy_x);
-				const float enemyYPos = F::BASE_SIZE * (2.0f + enemy_y);
+				const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0f + enemy_x);
+				const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0f + enemy_y);
 				_enemies.emplace_back(Enemy::Type::Purple, enemyXPos, enemyYPos, enemy_health);
 				break;
 			}
 			case '2':
 			{
-				const float enemyXPos = F::BASE_SIZE * (1.0f + enemy_x);
-				const float enemyYPos = F::BASE_SIZE * (2.0f + enemy_y);
+				const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0f + enemy_x);
+				const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0f + enemy_y);
 				_enemies.emplace_back(Enemy::Type::Green, enemyXPos, enemyYPos, enemy_health);
 			}
 		}
@@ -277,8 +277,8 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 	// No need for casting with int type
 	auto alive_count = std::distance(dead_enemies_start, _enemies.end());
 	// Specify explicit template parameter to help the compiler
-	auto new_pause = std::max<int>(ENEMY_MOVE_PAUSE_MIN, 
-	                               _move_pause - ENEMY_MOVE_PAUSE_DECREASE * static_cast<int>(alive_count));
+	auto new_pause = std::max<int>(GlobalConstant::Int::ENEMY_MOVE_PAUSE_MIN, 
+	                               _move_pause - GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * static_cast<int>(alive_count));
 	_move_pause = std::max<int>(0, new_pause);
 
 	_enemies.erase(dead_enemies_start, _enemies.end());
@@ -306,3 +306,7 @@ std::vector<Enemy>& EnemyManager::get_enemies() noexcept
 {
 	return _enemies;
 }
+
+
+
+

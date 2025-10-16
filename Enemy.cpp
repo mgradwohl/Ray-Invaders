@@ -28,21 +28,21 @@ float Enemy::get_y() const noexcept { return _y; }
 
 void Enemy::hit() noexcept
 { 
-	_hit_timer = ENEMY_HIT_TIMER_DURATION;
+	_hit_timer = GlobalConstant::Int::ENEMY_HIT_TIMER_DURATION;
 }
 
 void Enemy::move()
 {
     if (_direction != Direction::Down)
     {
-        const float rightBoundary = F::SCREEN_WIDTH - 2.0f * F::BASE_SIZE;
-        const float leftBoundary = F::BASE_SIZE;
+        const float rightBoundary = GlobalConstant::SCREEN_WIDTH - 2.0f * GlobalConstant::BASE_SIZE;
+        const float leftBoundary = GlobalConstant::BASE_SIZE;
         
         if ((_direction == Direction::Right && _x >= rightBoundary) ||
             (_direction == Direction::Left && _x <= leftBoundary))
         {
             _direction = Direction::Down;
-            _y += F::ENEMY_MOVE_SPEED;
+            _y += GlobalConstant::ENEMY_MOVE_SPEED;
         }        else
         {
             // Direction enum is defined with underlying type char, which can be converted to float
@@ -51,10 +51,10 @@ void Enemy::move()
             
             switch (_direction) {
                 case Direction::Left:
-                    moveOffset = -F::ENEMY_MOVE_SPEED;
+                    moveOffset = -GlobalConstant::ENEMY_MOVE_SPEED;
                     break;
                 case Direction::Right:
-                    moveOffset = F::ENEMY_MOVE_SPEED;
+                    moveOffset = GlobalConstant::ENEMY_MOVE_SPEED;
                     break;
                 default: // Direction::Down
                     moveOffset = 0.0f;
@@ -65,10 +65,10 @@ void Enemy::move()
         }
     }
     else
-    {        _y = std::min<float>(_y + F::ENEMY_MOVE_SPEED, F::BASE_SIZE * ceil(_y / F::BASE_SIZE));
-        if (_y >= F::BASE_SIZE * ceil(_y / F::BASE_SIZE) - 0.1f) // Using approximate comparison for float
+    {        _y = std::min<float>(_y + GlobalConstant::ENEMY_MOVE_SPEED, GlobalConstant::BASE_SIZE * ceil(_y / GlobalConstant::BASE_SIZE));
+        if (_y >= GlobalConstant::BASE_SIZE * ceil(_y / GlobalConstant::BASE_SIZE) - 0.1f) // Using approximate comparison for float
         {            // Calculate row using floor division with floats
-            const float rowFloat = _y / F::BASE_SIZE;
+            const float rowFloat = _y / GlobalConstant::BASE_SIZE;
             // This cast is necessary for the modulo operation which requires an integer
             const int rowInt = static_cast<int>(rowFloat);
             _direction = (rowInt % 2 == 0) ? Direction::Left : Direction::Right;
@@ -83,20 +83,20 @@ void Enemy::shoot(std::vector<Bullet>& i_enemy_bullets)
     {
         case Type::Cyan:
         {
-            i_enemy_bullets.emplace_back(0.0f, F::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(0.0f, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
             break;
         }
         case Type::Purple:
         {
-            i_enemy_bullets.emplace_back(0.125F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
-            i_enemy_bullets.emplace_back(-0.125F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(0.125F * GlobalConstant::ENEMY_BULLET_SPEED, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(-0.125F * GlobalConstant::ENEMY_BULLET_SPEED, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
             break;
         }
         case Type::Green:
         {
-            i_enemy_bullets.emplace_back(0.0f, F::ENEMY_BULLET_SPEED, _x, _y);
-            i_enemy_bullets.emplace_back(0.25F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
-            i_enemy_bullets.emplace_back(-0.25F * F::ENEMY_BULLET_SPEED, F::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(0.0f, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(0.25F * GlobalConstant::ENEMY_BULLET_SPEED, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
+            i_enemy_bullets.emplace_back(-0.25F * GlobalConstant::ENEMY_BULLET_SPEED, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
             break;
         }
     }
@@ -123,6 +123,11 @@ Rectangle Enemy::get_hitbox() const noexcept
 {
 	// The sprite width is 16 pixels but the hitbox should be 12 pixels wide, centered
 	constexpr float hitbox_width = 12.0f;
-	constexpr float x_offset = (F::BASE_SIZE - hitbox_width) * 0.5f; // Center the 12px hitbox within the 16px sprite
-	return Rectangle(_x + x_offset, _y + 0.25f * F::BASE_SIZE, hitbox_width, 0.5f * F::BASE_SIZE);
+	constexpr float x_offset = (GlobalConstant::BASE_SIZE - hitbox_width) * 0.5f; // Center the 12px hitbox within the 16px sprite
+	return Rectangle(_x + x_offset, _y + 0.25f * GlobalConstant::BASE_SIZE, hitbox_width, 0.5f * GlobalConstant::BASE_SIZE);
 }
+
+
+
+
+

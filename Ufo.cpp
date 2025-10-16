@@ -9,19 +9,19 @@ constexpr float UFO_EXPLOSION_Y_OFFSET = 0.5F;
 constexpr float UFO_EXPLOSION_MAGIC_OFFSET = 0.5F;
 
 Ufo::Ufo(std::mt19937_64& i_random_engine) :
-	_y(BASE_SIZE),
-	_powerup_distribution(0, POWERUP_TYPES - 1),
-	_timer_distribution(UFO_TIMER_MIN, UFO_TIMER_MAX),
-	_animation(UFO_ANIMATION_SPEED, 2 * BASE_SIZE, "Resources/Images/Ufo.png"),
-	_explosion(EXPLOSION_ANIMATION_SPEED, 2 * BASE_SIZE, "Resources/Images/ExplosionBig.png")
+	_y(GlobalConstant::BASE_SIZE),
+	_powerup_distribution(0, GlobalConstant::Int::POWERUP_TYPES - 1),
+	_timer_distribution(GlobalConstant::Int::UFO_TIMER_MIN, GlobalConstant::Int::UFO_TIMER_MAX),
+	_animation(GlobalConstant::Int::UFO_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/Ufo.png"),
+	_explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/ExplosionBig.png")
 {
 	reset(true, i_random_engine);
 	_ufoappearsound = raylib::WaveSound("Resources/Sounds/UFO Enter.wav");
-	for (GameTypes::Count puType = 0; puType < POWERUP_TYPES; puType++)
+	for (GameTypes::Count puType = 0; puType < GlobalConstant::Int::POWERUP_TYPES; puType++)
 	{
 		// Use implicit conversion to create the string
 		std::string powerupIndex = std::to_string(puType);
-		_powerup_animations.emplace_back(POWERUP_ANIMATION_SPEED, BASE_SIZE, "Resources/Images/Powerup" + powerupIndex + ".png");
+		_powerup_animations.emplace_back(GlobalConstant::Int::POWERUP_ANIMATION_SPEED, GlobalConstant::BASE_SIZE, "Resources/Images/Powerup" + powerupIndex + ".png");
 	}
 }
 
@@ -35,8 +35,8 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 
 			// Get the powerup type from the distribution and truncate to unsigned char range
 			// This avoids the need for a static_cast
-			GameTypes::Count powerupType = _powerup_distribution(i_random_engine) % POWERUP_TYPES;
-			_powerups.emplace_back(_x + 0.5F * BASE_SIZE, _y, powerupType);
+			GameTypes::Count powerupType = _powerup_distribution(i_random_engine) % GlobalConstant::Int::POWERUP_TYPES;
+			_powerups.emplace_back(_x + 0.5F * GlobalConstant::BASE_SIZE, _y, powerupType);
 
 			return true;
 		}
@@ -70,9 +70,9 @@ void Ufo::draw(raylib::DrawSession& ds)
 	else if (!_dead_animation_over)
 	{
 		// Only draw the explosion animation until it's finished
-		_explosion.draw(ds, _explosion_x, _y - (UFO_EXPLOSION_Y_OFFSET * BASE_SIZE), Color(255, 36, 0, 255));
-		_explosion.draw(ds, _explosion_x, (_y - (UFO_EXPLOSION_MAGIC_OFFSET * BASE_SIZE)), Color(255, 36, 0, 255));
-		_explosion.draw(ds, _explosion_x, _y - 0.5F * BASE_SIZE, Color(255, 36, 0, 255));
+		_explosion.draw(ds, _explosion_x, _y - (UFO_EXPLOSION_Y_OFFSET * GlobalConstant::BASE_SIZE), Color(255, 36, 0, 255));
+		_explosion.draw(ds, _explosion_x, (_y - (UFO_EXPLOSION_MAGIC_OFFSET * GlobalConstant::BASE_SIZE)), Color(255, 36, 0, 255));
+		_explosion.draw(ds, _explosion_x, _y - 0.5F * GlobalConstant::BASE_SIZE, Color(255, 36, 0, 255));
 	}
 
 	for (const PowerUpItem& powerup : _powerups)
@@ -86,8 +86,8 @@ void Ufo::reset(bool i_dead, std::mt19937_64& i_random_engine)
 	_dead = i_dead;
 	_dead_animation_over = false;
 
-	_explosion_x = SCREEN_WIDTH;
-	_x = SCREEN_WIDTH;
+	_explosion_x = GlobalConstant::SCREEN_WIDTH;
+	_x = GlobalConstant::SCREEN_WIDTH;
 
 	_timer = _timer_distribution(i_random_engine);
 
@@ -106,10 +106,10 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 			_ufoappearsound.Play();
 		}
 
-		_x -= UFO_MOVE_SPEED;
+		_x -= GlobalConstant::UFO_MOVE_SPEED;
 
 		//As soon as the UFO leaves the screen, it gets destroyed. But no powerups will appear.
-		if (_x <= -2 * BASE_SIZE)
+		if (_x <= -2 * GlobalConstant::BASE_SIZE)
 		{
 			_dead = true;
 			_ufoappearsound.Stop();
@@ -140,9 +140,9 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 		//I did it for the Bullet struct.
 		//But not for the PowerUpItem struct.
 		//
-		// powerup._y += POWERUP_SPEED;
-		powerup.bump_y(POWERUP_SPEED);
-		if (SCREEN_HEIGHT <= powerup.gety())
+		// powerup._y += GlobalConstant::POWERUP_SPEED;
+		powerup.bump_y(GlobalConstant::POWERUP_SPEED);
+		if (GlobalConstant::SCREEN_HEIGHT <= powerup.gety())
 		{
 			powerup.isdead(true);
 		}
@@ -160,5 +160,10 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 
 Rectangle Ufo::get_hitbox() const noexcept
 {
-	return Rectangle(_x, _y, 2 * BASE_SIZE, BASE_SIZE);
+	return Rectangle(_x, _y, 2 * GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE);
 }
+
+
+
+
+

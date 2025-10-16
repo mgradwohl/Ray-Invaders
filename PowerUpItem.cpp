@@ -17,7 +17,7 @@ void PowerUpItem::bump_y(GameTypes::Distance ybump) noexcept
 
 [[nodiscard]] Rectangle PowerUpItem::get_hitbox() const noexcept
 {
-	return Rectangle(_x + 0.25F * BASE_SIZE, _y + 0.25F * BASE_SIZE, 0.5F * BASE_SIZE, 0.5F * BASE_SIZE);
+	return Rectangle(_x + 0.25F * GlobalConstant::BASE_SIZE, _y + 0.25F * GlobalConstant::BASE_SIZE, 0.5F * GlobalConstant::BASE_SIZE, 0.5F * GlobalConstant::BASE_SIZE);
 }
 
 GameTypes::Count PowerUpItem::get_type() const noexcept
@@ -44,3 +44,8 @@ float PowerUpItem::gety() const noexcept
 { 
 	return _y; 
 }
+
+
+
+
+

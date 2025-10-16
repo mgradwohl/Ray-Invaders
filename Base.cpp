@@ -4,7 +4,7 @@
 #include "Bullet.hpp"
 #include "Base.hpp"
 
-Base::Base(float x) noexcept : _x(x), _y(F::SCREEN_HEIGHT - 3.0f * F::BASE_SIZE) {
+Base::Base(float x) noexcept : _x(x), _y(GlobalConstant::SCREEN_HEIGHT - 3.0f * GlobalConstant::BASE_SIZE) {
     // Texture is initialized in reset()
 }
 
@@ -58,7 +58,7 @@ void Base::reset(const Image& baseImage) noexcept {
     }
     
     // Extract just the first frame from the spritesheet
-    Rectangle sourceRec = { 0.0f, 0.0f, F::BASE_WIDTH, static_cast<float>(baseImage.height) };
+    Rectangle sourceRec = { 0.0f, 0.0f, GlobalConstant::BASE_WIDTH, static_cast<float>(baseImage.height) };
     Image baseCopy = ImageCopy(baseImage);
     ImageCrop(&baseCopy, sourceRec);
     
@@ -97,8 +97,8 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount) {
 
 void Base::apply_impact(float rel_x, float rel_y, float damage_amount) {
     // Ensure impact is within base boundary
-    rel_x = std::max(0.0f, std::min(rel_x, F::BASE_WIDTH));
-    rel_y = std::max(0.0f, std::min(rel_y, F::BASE_SIZE));
+    rel_x = std::max(0.0f, std::min(rel_x, GlobalConstant::BASE_WIDTH));
+    rel_y = std::max(0.0f, std::min(rel_y, GlobalConstant::BASE_SIZE));
     
     // Calculate radius for the impact
     float radius = 2.0f + damage_amount * 0.5f;
@@ -165,5 +165,10 @@ void Base::draw(raylib::DrawSession& ds) const {
 Rectangle Base::get_hitbox() const noexcept {
     // Create hitbox that matches the texture dimensions exactly
     // This ensures proper collision detection with the visual representation
-    return Rectangle(_x, _y, F::BASE_WIDTH, F::BASE_SIZE);
+    return Rectangle(_x, _y, GlobalConstant::BASE_WIDTH, GlobalConstant::BASE_SIZE);
 }
+
+
+
+
+
