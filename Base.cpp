@@ -309,15 +309,19 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount) {
                             int new_alpha = std::min(255, old_alpha + incr);
                             if (new_alpha != old_alpha) {
                                 // Set RGB to black for multiplicative blending (black * base = transparent holes)
+#ifdef DEBUG
                                 if (g_dbg_visual_mode) {
                                     pix[0] = 255; pix[1] = 0; pix[2] = 0; // red debug
                                     pix[3] = 255; // full alpha for debug visibility
                                 } else {
+#endif
                                     // For alpha-based transparency: white RGB with alpha = transparency
                                     // High alpha = more transparent (holes), low alpha = more opaque (intact)
                                     pix[0] = 255; pix[1] = 255; pix[2] = 255; // white RGB
                                     pix[3] = new_alpha; // high alpha = transparent holes
+#ifdef DEBUG
                                 }
+#endif
                                 any_changed = true;
                                 ++changed_px;
                                 if (changed_px <= 6) {
@@ -435,11 +439,15 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount) {
                     int new_brightness = std::max(0, old_brightness - incr);
                     if (new_brightness != old_brightness) {
                         // Set RGB to the new brightness level (for multiplicative blending)
+#ifdef DEBUG
                         if (g_dbg_visual_mode) {
                             pix[0] = 255; pix[1] = 0; pix[2] = 0; // red debug
                         } else {
+#endif
                             pix[0] = new_brightness; pix[1] = new_brightness; pix[2] = new_brightness;
+#ifdef DEBUG
                         }
+#endif
                         pix[3] = 255; // keep alpha at 255 for multiplicative blending
                         any_changed = true;
                         ++changed_px;
