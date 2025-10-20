@@ -7,6 +7,7 @@
 #include "Global.hpp"
 #include "Bullet.hpp"
 #include "Base.hpp"
+#include "HitManager.hpp"
 
 class Bases {
 public:
@@ -18,7 +19,7 @@ public:
     auto operator=(Bases &&) noexcept -> Bases & = default;
 
     void reset();
-    void update(std::vector<Bullet>& i_enemy_bullets);
+    void update(std::vector<Bullet>& i_enemy_bullets, class HitManager& hits);
     void draw(raylib::DrawSession& ds) const;
 
 private:

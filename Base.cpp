@@ -11,6 +11,7 @@
 // Project headers
 #include "Bullet.hpp"
 #include "RLWaveSound.hpp"
+#include "HitManager.hpp"
 
 Base::Base(float x) noexcept : _x(x), _y(GlobalConstant::SCREEN_HEIGHT - 3.0f * GlobalConstant::BASE_SIZE)
 {
@@ -125,11 +126,10 @@ void Base::reset(const Image& baseImage) noexcept {
     if (_damage_tex.id > 0) UnloadTexture(_damage_tex);
     _damage_tex = LoadTextureFromImage(_damage_image);
     // No damage yet
-    _impacts.clear();
     _has_damage = false;
 }
 
-void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount) {
+void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, HitManager& hits) {
     if (_dead) return;
 
 
@@ -192,7 +192,8 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount) {
 
             if (!collision_counts) continue;
 
-            _impacts.push_back({ rel_x, rel_y, radius, 60 }); // visible for 60 frames
+            // Emit a global hit decal in world space at the impact point
+            hits.add_hit(HitSubject::Base, HitOutcome::NonFatal, _x + rel_x, _y + rel_y, radius);
             _basehitsound.Play();
             // play the sound effect for the impact
 
@@ -258,26 +259,7 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount) {
         }
     }
 
-    // Age impact markers and remove expired ones
-    for (auto it = _impact_markers.begin(); it != _impact_markers.end();) {
-        it->ttl -= 1;
-        if (it->ttl <= 0) it = _impact_markers.erase(it);
-        else ++it;
-    }
-
     // No fade logic - damage is now permanent (transparent holes stay transparent)
-
-        // Age and fade impacts: keep permanent impacts with ttl==0, otherwise decrement and erase
-        for (auto it = _impacts.begin(); it != _impacts.end();) {
-            if (it->ttl > 0) {
-                it->ttl -= 1;
-                if (it->ttl <= 0) it = _impacts.erase(it);
-                else ++it;
-            } else {
-                // ttl == 0 means permanent impact
-                ++it;
-            }
-        }
 
     // If any damage pixels were changed this frame (either new impacts or fade), update GPU texture
     if (_damage_gpu_dirty && _damage_image.data) {
@@ -287,7 +269,7 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount) {
 }
 
 void Base::apply_impact(float rel_x, float rel_y, float damage_amount) {
-    // Record impact into the impact list for draw-time rendering
+    // Clamp rel coords to the damage image / texture dimensions (avoid clamping to generic constants)
     // Clamp rel coords to the damage image / texture dimensions (avoid clamping to generic constants)
     if (_damage_image.data) {
         const float maxx = static_cast<float>(std::max(1, _damage_image.width) - 1);
@@ -298,16 +280,13 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount) {
         rel_x = std::max(0.0f, std::min(rel_x, GlobalConstant::BASE_WIDTH));
         rel_y = std::max(0.0f, std::min(rel_y, GlobalConstant::BASE_SIZE));
     }
-    float radius = 2.0f + damage_amount * 0.5f;
-    _impacts.push_back({ rel_x, rel_y, radius, 60 });
-
     // Mutate the CPU damage image similarly to update()
     if (_damage_image.data) {
         // increase alpha like in update(): radial falloff per-impact
         const int base_alpha_incr = static_cast<int>(std::ceil(128.0f * damage_amount * 2.5f)); // increased damage per hit
         const int px = static_cast<int>(std::floor(rel_x));
         const int py = static_cast<int>(std::floor(rel_y));
-        const int pr = static_cast<int>(std::ceil(radius)) + 1;
+        const int pr = static_cast<int>(std::ceil(2.0f + damage_amount * 0.5f)) + 1;
         bool any_changed = false;
 
         unsigned char* base_mask_ptr = _base_mask.empty() ? nullptr : _base_mask.data();
@@ -342,12 +321,9 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount) {
             _has_damage = true;
         }
     }
-
-    // Also add an impact marker (longer-lived for visibility)
-    _impact_markers.push_back({ rel_x + 0.5f, rel_y + 0.5f, 30 });
 }
 
-// create_impact_on_texture removed - impacts are rendered at draw time using _impacts
+// create_impact_on_texture removed - transient scorch visuals are rendered by HitManager
 
 void Base::draw(raylib::DrawSession& ds) const {
     // Apply damage by masking the base texture with the damage alpha channel
@@ -377,24 +353,7 @@ void Base::draw(raylib::DrawSession& ds) const {
         ds.DrawTexture(_texture, dest.x, dest.y, WHITE);
     }
 
-    // Draw transient impacts recorded (draw-time rendering) as red flashes
-    for (const Impact& imp : _impacts) {
-        unsigned char alpha = 255;
-        if (imp.ttl > 0) {
-            const int maxTtl = 60;
-            const int ttl = std::min(imp.ttl, maxTtl);
-            alpha = static_cast<unsigned char>(50 + (205 * ttl) / maxTtl);
-        }
-        Color holeColor = Color{ 200, 40, 40, alpha };
-        Color outline = Color{ 255, 120, 120, static_cast<unsigned char>(alpha) };
-        ds.DrawCircle(_x + imp.x, _y + imp.y, imp.radius, holeColor);
-        ds.DrawCircle(_x + imp.x, _y + imp.y, imp.radius + 1.0f, outline);
-    }
-
-    // Draw impact markers
-    for (const ImpactMarker& m : _impact_markers) {
-        ds.DrawCircle(_x + m.x, _y + m.y, 2.5f, RED);
-    }
+    // Transient impact visuals for bases now come from the global HitManager.
 }
 
 Rectangle Base::get_hitbox() const noexcept {

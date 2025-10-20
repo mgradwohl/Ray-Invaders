@@ -13,6 +13,7 @@
 #include "Bases.hpp"
 #include "EnemyManager.hpp"
 #include "Global.hpp"
+#include "HitManager.hpp"
 #include "Player.hpp"
 #include "PowerUpManager.hpp"
 #include "RLDrawSession.h"
@@ -38,6 +39,7 @@ auto main() -> int
 
     Background background("Resources/Images/BigGalaxy.png");
 	EnemyManager enemy_manager;
+		HitManager hit_manager;
 	Player player;
 	PowerUpManager powerup("Resources/Images/PowerupBar.png");
 	Ufo ufo(random_engine);
@@ -96,14 +98,15 @@ auto main() -> int
 				else
 				{
 					// enemies left, update everything
-					player.update(random_engine, enemy_manager.get_enemy_bullets(), enemy_manager.get_enemies(), ufo);
+					player.update(random_engine, enemy_manager.get_enemy_bullets(), enemy_manager.get_enemies(), ufo, hit_manager);
 					powerup.update(player);
 					background.update(player);
 					enemy_manager.update(random_engine);
 					ufo.update(random_engine);
-					bases.update(enemy_manager.get_enemy_bullets());
-					bases.update(player.get_player_bullets());
+					bases.update(enemy_manager.get_enemy_bullets(), hit_manager);
+					bases.update(player.get_player_bullets(), hit_manager);
 				}
+
 			}
 			else if (IsKeyPressed(KEY_ENTER))
 			{
@@ -116,6 +119,9 @@ auto main() -> int
 				ufo.reset(1, random_engine);
 				bases.reset();
 			}
+
+			// Always age out hits each tick, regardless of game state (transition, game over, etc.)
+			hit_manager.update();
 
 			if (GlobalConstant::Time::FRAME_DURATION > lag)
 			{
@@ -131,6 +137,8 @@ auto main() -> int
 						enemy_manager.draw(ds);
 						ufo.draw(ds);
 						bases.draw(ds);
+							// Global hit decals overlay world elements
+							hit_manager.draw(ds);
 						powerup.draw(ds, player);						const std::string levelText = "Level: " + std::to_string(level);
 						const int textY = static_cast<int>(GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE); // Using GlobalConstant::QUARTER constant
 						ds.DrawText(levelText, 10, textY, textY, WHITE);

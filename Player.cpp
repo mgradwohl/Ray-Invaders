@@ -11,6 +11,7 @@
 // Project headers
 #include "Animation.hpp"
 #include "Enemy.hpp"
+#include "HitManager.hpp"
 #include "Global.hpp"
 #include "RLDrawSession.h"
 #include "RLWindow.h"
@@ -26,6 +27,7 @@ Player::Player() :
 	_playerlasersound = LoadSound("Resources/Sounds/Player Laser.wav");
 	_powerupsound = LoadSound("Resources/Sounds/Power Up.wav");
 	_playerdestroysound = LoadSound("Resources/Sounds/Player Destroy.wav");
+	_playershieldsound = LoadSound("Resources/Sounds/Player Hit Shield.wav");
 }
 
 bool Player::get_dead() const noexcept
@@ -114,7 +116,7 @@ void Player::reset()
 	_explosion.reset();
 }
 
-void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_enemy_bullets, std::vector<Enemy>& i_enemies, Ufo& i_ufo)
+void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_enemy_bullets, std::vector<Enemy>& i_enemies, Ufo& i_ufo, HitManager& i_hits)
 {
 	if (!_dead)
 	{
@@ -189,22 +191,37 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 
 		for (Bullet& enemy_bullet : i_enemy_bullets)
 		{
-			if (CheckCollisionRecs( get_hitbox(), enemy_bullet.get_hitbox()))
+			if (CheckCollisionRecs(get_hitbox(), enemy_bullet.get_hitbox()))
 			{
+				// Compute intersection center for a precise impact point
+				const Rectangle pHB = get_hitbox();
+				const Rectangle bHB = enemy_bullet.get_hitbox();
+				const float inter_x1 = std::max(pHB.x, bHB.x);
+				const float inter_y1 = std::max(pHB.y, bHB.y);
+				const float inter_x2 = std::min(pHB.x + pHB.width, bHB.x + bHB.width);
+				const float inter_y2 = std::min(pHB.y + pHB.height, bHB.y + bHB.height);
+				const float inter_w = std::max(0.0f, inter_x2 - inter_x1);
+				const float inter_h = std::max(0.0f, inter_y2 - inter_y1);
+				const float impact_world_x = inter_x1 + 0.5f * inter_w;
+				const float impact_world_y = inter_y1 + 0.5f * inter_h;
+
 				if (1 == _current_power)
 				{
 					_current_power = 0;
-
 					_shield_animation_over = false;
+					// Non-fatal player hit (shielded) - presets for radius and TTL
+					PlaySound(_playershieldsound);
+					i_hits.add_hit(HitSubject::Player, HitOutcome::NonFatal, impact_world_x, impact_world_y);
 				}
 				else
 				{
 					_dead = true;
 					PlaySound(_playerdestroysound);
+					// Fatal player hit - presets for radius and TTL
+					i_hits.add_hit(HitSubject::Player, HitOutcome::Destroyed, impact_world_x, impact_world_y);
 				}
 
 				enemy_bullet.IsDead(true);
-
 				break;
 			}
 		}
@@ -246,6 +263,11 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 		{
 			if (i_ufo.check_bullet_collision(i_random_engine, bullet.get_hitbox()))
 			{
+				// Use UFO hitbox center as the impact point (explosion draws around _explosion_x/_y)
+				const Rectangle uHB = i_ufo.get_hitbox();
+				const float impact_world_x = uHB.x + 0.5f * uHB.width;
+				const float impact_world_y = uHB.y + 0.5f * uHB.height;
+				i_hits.add_hit(HitSubject::Ufo, HitOutcome::Destroyed, impact_world_x, impact_world_y);
 				bullet.IsDead(true);
 			}
 		}
@@ -271,10 +293,8 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 				const float impact_world_x = inter_x1 + 0.5f * inter_w;
 				const float impact_world_y = inter_y1 + 0.5f * inter_h;
 
-				// Convert to enemy-local coordinates so marker sticks to sprite as it moves
-				const float rel_x = impact_world_x - enemy.get_x();
-				const float rel_y = impact_world_y - enemy.get_y();
-				enemy.add_impact_marker(rel_x, rel_y);
+				// Emit a global Enemy hit decal via HitManager (world-space). Presets for radius and TTL
+				i_hits.add_hit(HitSubject::Enemy, HitOutcome::NonFatal, impact_world_x, impact_world_y);
 
 				enemy.hit();
 

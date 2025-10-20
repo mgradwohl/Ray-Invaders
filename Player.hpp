@@ -7,6 +7,8 @@
 #include "Ufo.hpp"
 #include "Enemy.hpp"
 #include "Bullet.hpp"
+
+class HitManager; // forward declaration
 class Player
 {
 public:
@@ -23,7 +25,7 @@ public:
     void die() noexcept;
 	void draw(raylib::DrawSession& ds);
 	void reset();
-	void update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_enemy_bullets, std::vector<Enemy>& i_enemies, Ufo& i_ufo);
+	void update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_enemy_bullets, std::vector<Enemy>& i_enemies, Ufo& i_ufo, HitManager& i_hits);
 
     [[nodiscard]] auto get_hitbox() const noexcept -> Rectangle;
     auto               get_player_bullets() noexcept -> std::vector<Bullet>               &{ return _bullets; }
@@ -49,6 +51,7 @@ public:
 	Sound _playerlasersound{};
 	Sound _powerupsound{};
 	Sound _playerdestroysound{};
+	Sound _playershieldsound{};
 
 	Animation _explosion;
 };

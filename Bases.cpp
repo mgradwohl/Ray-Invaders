@@ -9,6 +9,7 @@
 
 // Project headers
 #include "Bullet.hpp"
+#include "HitManager.hpp"
 
 Bases::Bases(const std::string& filename)
 {
@@ -46,7 +47,7 @@ void Bases::reset()
     }
 }
 
-void Bases::update(std::vector<Bullet>& i_bullets)
+void Bases::update(std::vector<Bullet>& i_bullets, HitManager& hits)
 {
     // Since _framecount is now an int, we can do a direct comparison
     // without needing intermediate casts
@@ -55,7 +56,7 @@ void Bases::update(std::vector<Bullet>& i_bullets)
         
     for (Base& base : _bases)
     {
-        base.update(i_bullets, frameCount);
+        base.update(i_bullets, frameCount, hits);
     }
 }
 
