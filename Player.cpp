@@ -259,6 +259,23 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 			{
 				bullet.IsDead(true);
 
+				// Compute intersection center for a precise impact point (similar to Base)
+				const Rectangle eHB = enemy.get_hitbox();
+				const Rectangle bHB = bullet.get_hitbox();
+				const float inter_x1 = std::max(eHB.x, bHB.x);
+				const float inter_y1 = std::max(eHB.y, bHB.y);
+				const float inter_x2 = std::min(eHB.x + eHB.width, bHB.x + bHB.width);
+				const float inter_y2 = std::min(eHB.y + eHB.height, bHB.y + bHB.height);
+				const float inter_w = std::max(0.0f, inter_x2 - inter_x1);
+				const float inter_h = std::max(0.0f, inter_y2 - inter_y1);
+				const float impact_world_x = inter_x1 + 0.5f * inter_w;
+				const float impact_world_y = inter_y1 + 0.5f * inter_h;
+
+				// Convert to enemy-local coordinates so marker sticks to sprite as it moves
+				const float rel_x = impact_world_x - enemy.get_x();
+				const float rel_y = impact_world_y - enemy.get_y();
+				enemy.add_impact_marker(rel_x, rel_y);
+
 				enemy.hit();
 
 				break;

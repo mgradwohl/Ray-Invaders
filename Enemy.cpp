@@ -35,6 +35,10 @@ void Enemy::hit() noexcept
 	_hit_timer = GlobalConstant::Int::ENEMY_HIT_TIMER_DURATION;
 }
 
+void Enemy::add_impact_marker(float rel_x, float rel_y, int ttl, float radius) noexcept {
+    _impact_markers.push_back(ImpactMarker{rel_x, rel_y, ttl, radius});
+}
+
 void Enemy::move()
 {
     if (_direction != Direction::Down)
@@ -121,6 +125,12 @@ void Enemy::update() noexcept
 
 		_hit_timer--;
 	}
+
+    // Age and prune transient impact markers
+    for (auto it = _impact_markers.begin(); it != _impact_markers.end();) {
+        it->ttl -= 1;
+        if (it->ttl <= 0) it = _impact_markers.erase(it); else ++it;
+    }
 }
 
 Rectangle Enemy::get_hitbox() const noexcept

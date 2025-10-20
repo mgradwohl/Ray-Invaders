@@ -110,6 +110,24 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 		const auto enemyTypeIndex = static_cast<int>(enemy.get_type());
 		const auto& animation = _enemy_animations[enemyTypeIndex];
 		animation.draw(ds, enemy.get_x(), enemy.get_y(), enemy_color);
+
+		// Draw transient impact markers (enemy-local coordinates) with fade
+		for (const auto& m : enemy.impact_markers()) {
+			// Map ttl to alpha (longer tail). Full bright until 40 frames, then ease out to 50 by 180 frames
+			const int maxTtl = 180;        // absolute fade end
+			const int sustain = 40;        // hold near full for first N frames
+			const int ttlClamped = m.ttl < 0 ? 0 : (m.ttl > maxTtl ? maxTtl : m.ttl);
+			int alphaInt;
+			if (ttlClamped >= sustain) {
+				alphaInt = 255; // sustain bright initially
+			} else {
+				// ease-out from 255 -> 50 over the remainder window
+				alphaInt = 50 + (205 * ttlClamped) / sustain; // linear for simplicity
+			}
+			const unsigned char alpha = static_cast<unsigned char>(alphaInt);
+			Color c = Color{255, 40, 40, alpha};
+			ds.DrawCircle(enemy.get_x() + m.x, enemy.get_y() + m.y, m.radius, c);
+		}
 	}
 }
 
