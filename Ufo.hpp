@@ -42,4 +42,5 @@ public:
     Animation _animation;
 	Animation _explosion;
 	raylib::WaveSound _ufoappearsound;
+    raylib::WaveSound _ufodestroysound;
 };
