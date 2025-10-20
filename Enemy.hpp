@@ -29,8 +29,8 @@ public:
 	struct ImpactMarker { float x; float y; int ttl; float radius; };
 
 	// Record a transient visual impact marker relative to the enemy's position
-	// Extended default TTL so the burn-off effect lasts longer
-	void add_impact_marker(float rel_x, float rel_y, int ttl = 120, float radius = 2.5f) noexcept;
+	// Extended default TTL so the burn-off effect lasts longer (doubled)
+	void add_impact_marker(float rel_x, float rel_y, int ttl = 480, float radius = 2.5f) noexcept;
 
 	// Access impact markers for rendering
 	[[nodiscard]] const std::vector<ImpactMarker>& impact_markers() const noexcept { return _impact_markers; }

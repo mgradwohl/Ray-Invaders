@@ -111,22 +111,22 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 		const auto& animation = _enemy_animations[enemyTypeIndex];
 		animation.draw(ds, enemy.get_x(), enemy.get_y(), enemy_color);
 
-		// Draw transient impact markers (enemy-local coordinates) with fade
+		// Draw transient impact markers matching base effect: filled core + light outline, base-style fade
 		for (const auto& m : enemy.impact_markers()) {
-			// Map ttl to alpha (longer tail). Full bright until 40 frames, then ease out to 50 by 180 frames
-			const int maxTtl = 180;        // absolute fade end
-			const int sustain = 40;        // hold near full for first N frames
-			const int ttlClamped = m.ttl < 0 ? 0 : (m.ttl > maxTtl ? maxTtl : m.ttl);
-			int alphaInt;
-			if (ttlClamped >= sustain) {
-				alphaInt = 255; // sustain bright initially
-			} else {
-				// ease-out from 255 -> 50 over the remainder window
-				alphaInt = 50 + (205 * ttlClamped) / sustain; // linear for simplicity
-			}
+			// Use the same fade shape as bases: linear from 255 -> 50 over a 60-frame window
+			// Keep markers alive longer overall via their ttl, but match the visual curve
+			constexpr int alphaWindow = 60; // base impact fade window
+			const int ttlWindowed = std::clamp(m.ttl, 0, alphaWindow);
+			const int alphaInt = 50 + (205 * ttlWindowed) / alphaWindow; // 50..255
 			const unsigned char alpha = static_cast<unsigned char>(alphaInt);
-			Color c = Color{255, 40, 40, alpha};
-			ds.DrawCircle(enemy.get_x() + m.x, enemy.get_y() + m.y, m.radius, c);
+
+			// Colors mirrored from Base::draw
+			Color core = Color{200, 40, 40, alpha};
+			Color outline = Color{255, 120, 120, alpha};
+			const float cx = enemy.get_x() + m.x;
+			const float cy = enemy.get_y() + m.y;
+			ds.DrawCircle(cx, cy, m.radius, core);
+			ds.DrawCircle(cx, cy, m.radius + 1.0f, outline);
 		}
 	}
 }
