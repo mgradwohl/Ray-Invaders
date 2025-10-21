@@ -22,8 +22,7 @@ Base::Base(float x) noexcept
 }
 
 Base::~Base() {
-    if (_texture.id > 0) UnloadTexture(_texture);
-    if (_damage_tex.id > 0) UnloadTexture(_damage_tex);
+    // Textures now handled by RAII wrappers
     if (_damage_image.data) UnloadImage(_damage_image);
     if (_base_alpha.data) UnloadImage(_base_alpha);
 }
@@ -33,10 +32,8 @@ void Base::reset(const Image& baseImage) noexcept {
     _damage = 0;
     _frame = 0;
     
-    // Unload current texture if it exists
-    if (_texture.id > 0) {
-        UnloadTexture(_texture);
-    }
+    // Unload current texture if it exists (handled by RAII wrapper)
+    _texture.unload();
     
     // Extract just the first frame from the spritesheet
     Rectangle sourceRec = { 0.0f, 0.0f, GlobalConstant::BASE_WIDTH, static_cast<float>(baseImage.height) };
@@ -62,7 +59,7 @@ void Base::reset(const Image& baseImage) noexcept {
     _base_alpha = ImageCopy(baseCopy);
 
     // Load texture from the cropped image and free the copy
-    _texture = LoadTextureFromImage(baseCopy);
+    _texture.load(baseCopy);
     UnloadImage(baseCopy);
     
     // Initialize CPU damage image (transparent black == intact). Size matches base texture.
@@ -71,10 +68,9 @@ void Base::reset(const Image& baseImage) noexcept {
     }
     // Create damage image: start fully transparent (alpha=0) so it doesn't affect the base initially
     // Damaged pixels will become opaque (alpha=255) to act as holes in multiplicative blending
-    _damage_image = GenImageColor(GlobalConstant::BASE_WIDTH, _texture.height, Color{255,255,255,0});
+    _damage_image = GenImageColor(GlobalConstant::BASE_WIDTH, _texture.height(), Color{255,255,255,0});
     // Create GPU texture for the damage mask
-    if (_damage_tex.id > 0) UnloadTexture(_damage_tex);
-    _damage_tex = LoadTextureFromImage(_damage_image);
+    _damage_tex.load(_damage_image);
     // No damage yet
     _has_damage = false;
 }
@@ -213,7 +209,7 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, H
 
     // If any damage pixels were changed this frame (either new impacts or fade), update GPU texture
     if (_damage_gpu_dirty && _damage_image.data) {
-        UpdateTexture(_damage_tex, _damage_image.data);
+        _damage_tex.update(_damage_image.data);
         _damage_gpu_dirty = false;
     }
 }
@@ -277,30 +273,30 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount) {
 
 void Base::draw(raylib::DrawSession& ds) const {
     // Apply damage by masking the base texture with the damage alpha channel
-    if (_has_damage && _damage_tex.id > 0) {
+    if (_has_damage && _damage_tex.id() > 0) {
         // Use a simple approach: tint the base texture using the damage texture as an alpha mask
         // We'll draw the base texture with a custom shader/approach that uses damage alpha
         
         // For now, let's try drawing with normal blending and see the effect
-        const Rectangle src = { 0.0f, 0.0f, static_cast<float>(_texture.width), static_cast<float>(_texture.height) };
+        const Rectangle src = { 0.0f, 0.0f, static_cast<float>(_texture.width()), static_cast<float>(_texture.height()) };
         const Vector2 pos = { _x, _y };
         
         // Draw the base texture normally first
-        ds.DrawTexture(_texture, src, pos, WHITE);
+        ds.DrawTexture(_texture.get(), src, pos, WHITE);
         
         // Now overlay damage by using alpha blending with inverted colors
         // High alpha damage areas = more transparent in final result
         BeginBlendMode(BLEND_ALPHA);
-        const Rectangle damage_src = { 0.0f, 0.0f, static_cast<float>(_damage_tex.width), static_cast<float>(_damage_tex.height) };
+        const Rectangle damage_src = { 0.0f, 0.0f, static_cast<float>(_damage_tex.width()), static_cast<float>(_damage_tex.height()) };
         
         // Draw damage texture with a color that creates holes - transparent black
         Color hole_color = {0, 0, 0, 128}; // Semi-transparent black to create visible holes
-        ds.DrawTexture(_damage_tex, damage_src, pos, hole_color);
+        ds.DrawTexture(_damage_tex.get(), damage_src, pos, hole_color);
         EndBlendMode();
     } else {
         // No damage - just draw base normally
         const Vector2 dest{ _x, _y };
-        ds.DrawTexture(_texture, dest.x, dest.y, WHITE);
+        ds.DrawTexture(_texture.get(), dest.x, dest.y, WHITE);
     }
 
     // Transient impact visuals for bases now come from the global HitManager.
@@ -310,7 +306,7 @@ Rectangle Base::get_hitbox() const noexcept {
     // Create hitbox that matches the texture dimensions exactly
     // This ensures proper collision detection with the visual representation
     // Use the actual texture height so the hitbox covers the visible area
-    const float height = (_texture.id > 0) ? static_cast<float>(_texture.height) : GlobalConstant::BASE_SIZE;
+    const float height = (_texture.id() > 0) ? static_cast<float>(_texture.height()) : GlobalConstant::BASE_SIZE;
     return Rectangle(_x, _y, GlobalConstant::BASE_WIDTH, height);
 }
 

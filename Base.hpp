@@ -10,6 +10,7 @@
 #include "Bullet.hpp"
 #include "Global.hpp"
 #include "RLDrawSession.h"
+#include "RLTexture2D.hpp"
 #include "Hit.hpp"
 #include "RLWaveSound.hpp"
 
@@ -40,11 +41,11 @@ public:
 private:
     // Transient impact visuals moved to HitManager; no local transient impact storage
     
-    Texture2D _texture{}; // Each base has its own texture
+    raylib::Texture2DFromImage _texture; // Each base has its own texture
     // CPU-side damage mask (1==intact white, 0==destroyed black) and GPU texture
     // This allows pixel-precise mutation and sampling for hit-testing.
     Image _damage_image{};
-    Texture2D _damage_tex{};
+    raylib::Texture2DFromImage _damage_tex;
     // Alpha mask of the base sprite so we only apply damage to visible pixels
     Image _base_alpha{};
     // Mark that damage texture needs GPU update (to avoid frequent uploads)
