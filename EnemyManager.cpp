@@ -19,11 +19,12 @@
 //There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same thing we did in the game "Frogger".
 // Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered for precise collision detection.
 EnemyManager::EnemyManager() noexcept :
-	_shoot_distribution(0, GlobalConstant::Int::ENEMY_SHOOT_CHANCE)
+	_shoot_distribution(0, GlobalConstant::Int::ENEMY_SHOOT_CHANCE),
+	_enemy_bullet_sprite("Resources/Images/EnemyBullet.png")
 {	//We have a function that sets everything to the initial state, so why not use it?
 	reset(0);
 
-	_enemy_bullet_sprite = ::LoadTexture("Resources/Images/EnemyBullet.png");	for (GameTypes::Count a = 0; a < GlobalConstant::Int::ENEMY_TYPES; a++)
+	for (GameTypes::Count a = 0; a < GlobalConstant::Int::ENEMY_TYPES; a++)
 	{
 		// Explicitly convert to match Animation constructor parameter
 		const int animSpeed = 1 + _move_pause;
@@ -63,14 +64,14 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 			// Array index 'a' will be small, implicit conversion is fine here
 			const float sourceX = GlobalConstant::BASE_SIZE * a;
 			const Rectangle source{ sourceX, 0.0f, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE };
-			ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
+			ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, WHITE);
 		}
 
 		//Drawing the bullet itself.
 		const Vector2 dest{ bullet.get_x(), bullet.get_y() };
 		const float sourceX = GlobalConstant::BASE_SIZE * tailSize; // tailSize is small, implicit conversion is fine
 		const Rectangle source{ sourceX, 0.0f, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE };
-		ds.DrawTexture(_enemy_bullet_sprite, source, dest, WHITE);
+		ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, WHITE);
 	}
 	for (const Enemy& enemy : _enemies)
 	{

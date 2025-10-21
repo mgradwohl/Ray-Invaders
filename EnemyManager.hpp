@@ -2,6 +2,7 @@
 #include <vector>
 #include <random>
 #include <raylib.h>
+#include "RLTexture2D.hpp"
 #include "Global.hpp"
 #include "Bullet.hpp"
 #include "Enemy.hpp"
@@ -32,7 +33,7 @@ public:
     std::vector<Bullet>                           _enemy_bullets;
     std::vector<Enemy>                            _enemies;
 
-    Texture2D _enemy_bullet_sprite{};
+    raylib::Texture2DFile _enemy_bullet_sprite;
 
 	Sound _enemymove{};
 	Sound _enemydestroy{};

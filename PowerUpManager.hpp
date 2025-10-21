@@ -1,5 +1,6 @@
 #pragma once
 #include "RLDrawSession.h"
+#include "RLTexture2D.hpp"
 #include "Player.hpp"
 
 class PowerUpManager
@@ -11,11 +12,11 @@ public:
 	void draw(raylib::DrawSession& ds, const Player& player, float bannerHeightLogical) const;
 
 	// Accessors for banner composition
-	[[nodiscard]] auto get_sprite() const noexcept -> const Texture2D& { return _powerup_bar_sprite; }
+	[[nodiscard]] auto get_sprite() const noexcept -> const Texture2D& { return _powerup_bar_sprite.get(); }
 	[[nodiscard]] auto get_color() const noexcept -> Color { return _color; }
 	[[nodiscard]] auto get_fill_fraction(const Player& player) const noexcept -> float;
 
-private:	Texture2D _powerup_bar_sprite{};
+private:	raylib::Texture2DFile _powerup_bar_sprite;
 	Color _color = WHITE;
 	const std::string _spritefile;
 };

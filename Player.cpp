@@ -18,12 +18,12 @@
 #include "Ufo.hpp"
 
 Player::Player() :
+	_bullet_sprite("Resources/Images/PlayerBullet.png"),
+	_player_sprite("Resources/Images/Player.png"),
 	_explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, GlobalConstant::Int::BASE_SIZE, "Resources/Images/Explosion.png")
 {
 	reset();
 
-	_bullet_sprite = ::LoadTexture("Resources/Images/PlayerBullet.png");
-	_player_sprite = ::LoadTexture("Resources/Images/Player.png");
 	_playerlasersound = LoadSound("Resources/Sounds/Player Laser.wav");
 	_powerupsound = LoadSound("Resources/Sounds/Power Up.wav");
 	_playerdestroysound = LoadSound("Resources/Sounds/Player Destroy.wav");
@@ -74,7 +74,7 @@ void Player::draw(raylib::DrawSession& ds)
 			GlobalConstant::BASE_SIZE,
 			GlobalConstant::BASE_SIZE
 		};
-		ds.DrawTexture(_player_sprite, source, dest, WHITE);
+		ds.DrawTexture(_player_sprite.get(), source, dest, WHITE);
 
 		for (const Bullet& bullet : _bullets)
 		{
@@ -83,7 +83,7 @@ void Player::draw(raylib::DrawSession& ds)
 
 			dest.x = bullet.get_x();
 			dest.y = bullet.get_y();
-			ds.DrawTexture(_bullet_sprite, source, dest, WHITE);
+			ds.DrawTexture(_bullet_sprite.get(), source, dest, WHITE);
 		}
 		//i_window.draw(sprite);
 

@@ -10,22 +10,17 @@
 // Project headers
 #include "Player.hpp"
 #include "RLDrawSession.h"
+#include "RLTexture2D.hpp"
 
-Background::Background(const std::string& spritefile)
+Background::Background(const std::string& spritefile) : _backgroundsprite(spritefile)
 {
-	_backgroundsprite = LoadTexture(spritefile.c_str());
 	reset();
-}
-
-Background::~Background()
-{
-	UnloadTexture(_backgroundsprite);
 }
 
 void Background::draw(raylib::DrawSession& ds) const
 {
 	const Vector2 pos{ 0,0 };
-	ds.DrawTexture(_backgroundsprite, _source, pos, WHITE);
+	ds.DrawTexture(_backgroundsprite.get(), _source, pos, WHITE);
 }
 
 void Background::update([[maybe_unused]] Player& player) noexcept
@@ -44,7 +39,7 @@ void Background::update([[maybe_unused]] Player& player) noexcept
 	}
 	
 	// Use a named constant for clarity and to avoid repeated casts
-	const float bgWidth = static_cast<float>(_backgroundsprite.width);
+	const float bgWidth = static_cast<float>(_backgroundsprite.get().width);
 	if (_source.x >= bgWidth)
 	{
 		_source.x = bgWidth;
@@ -69,8 +64,8 @@ void Background::reset() noexcept
 	// We need to keep these casts since Raylib texture dimensions are integers
 	// but Rectangle fields are floats
 	// Cache these values to avoid repeated casts throughout the code
-	const float bgWidth = static_cast<float>(_backgroundsprite.width);
-	const float bgHeight = static_cast<float>(_backgroundsprite.height);
+	const float bgWidth = static_cast<float>(_backgroundsprite.get().width);
+	const float bgHeight = static_cast<float>(_backgroundsprite.get().height);
 	
 	_source.x = (bgWidth - GlobalConstant::SCREEN_WIDTH) * 0.5f;
 	_source.y = bgHeight - GlobalConstant::SCREEN_HEIGHT;

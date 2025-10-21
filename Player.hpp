@@ -2,6 +2,7 @@
 #include <random>
 #include <raylib.h>
 #include "RLDrawSession.h"
+#include "RLTexture2D.hpp"
 #include "Global.hpp"
 #include "Animation.hpp"
 #include "Ufo.hpp"
@@ -46,8 +47,8 @@ public:
 
     std::vector<Bullet> _bullets;
 
-    Texture2D _bullet_sprite{};
-	Texture2D _player_sprite{};
+    raylib::Texture2DFile _bullet_sprite;
+	raylib::Texture2DFile _player_sprite;
 	Sound _playerlasersound{};
 	Sound _powerupsound{};
 	Sound _playerdestroysound{};

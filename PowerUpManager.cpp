@@ -8,14 +8,14 @@
 #include "Global.hpp"
 #include "RLDrawSession.h"
 
-PowerUpManager::PowerUpManager(const std::string& spritefile) : _spritefile(spritefile)
+PowerUpManager::PowerUpManager(const std::string& spritefile) 
+	: _powerup_bar_sprite(spritefile), _spritefile(spritefile)
 {
-	_powerup_bar_sprite = LoadTexture(_spritefile.c_str());
 }
 
 PowerUpManager::~PowerUpManager()
 {
-	UnloadTexture(_powerup_bar_sprite);
+	// RAII wrapper handles texture cleanup automatically
 }
 
 void PowerUpManager::update(const Player& player)
@@ -55,7 +55,7 @@ auto PowerUpManager::get_fill_fraction(const Player& player) const noexcept -> f
 	{
 		return 0.0f;
 	}
-	const float spriteWidth = static_cast<float>(_powerup_bar_sprite.width);
+	const float spriteWidth = static_cast<float>(_powerup_bar_sprite.get().width);
 	const float maxFillLogical = spriteWidth - 0.125f * GlobalConstant::BASE_SIZE - 0.25f * GlobalConstant::BASE_SIZE;
 	const float currentFillLogical = ceil(player.get_power_timer() * maxFillLogical / static_cast<float>(GlobalConstant::Int::POWERUP_DURATION));
 	return (maxFillLogical > 0.0f) ? (currentFillLogical / maxFillLogical) : 0.0f;
@@ -71,7 +71,7 @@ void PowerUpManager::draw(raylib::DrawSession& ds, const Player& player, float b
 	const float bannerHeightPixels = bannerHeightLogical * scale;
 	const float padding = GlobalConstant::BANNER_PADDING;
 
-	const float texW = static_cast<float>(_powerup_bar_sprite.width);
+	const float texW = static_cast<float>(_powerup_bar_sprite.get().width);
 	const float rowH = GlobalConstant::BASE_SIZE;
 	const float logicalH = GlobalConstant::BANNER_HEIGHT * 0.5f; // half banner height
 	const float scaleH = logicalH / rowH;
@@ -91,13 +91,13 @@ void PowerUpManager::draw(raylib::DrawSession& ds, const Player& player, float b
 
 	const Rectangle srcFrame{ 0.0f, 0.0f, frameWLogical, rowH };
 	const Rectangle dstFrame{ destX, destY, destFrameW, drawH };
-	ds.DrawTexturePro(_powerup_bar_sprite, srcFrame, dstFrame, Vector2{0.0f, 0.0f}, 1.0f, WHITE);
+	ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFrame, dstFrame, Vector2{0.0f, 0.0f}, 1.0f, WHITE);
 
 	const Rectangle srcFill{ fillLeftLogical, rowH, fillWLogical, rowH };
 	const float destFillX = destX + (fillLeftLogical * scaleH * scale);
 	const float destFillW = fillWLogical * scaleH * scale;
 	const Rectangle dstFill{ destFillX, destY, destFillW, drawH };
-	ds.DrawTexturePro(_powerup_bar_sprite, srcFill, dstFill, Vector2{0.0f, 0.0f}, 1.0f, _color);
+	ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFill, dstFill, Vector2{0.0f, 0.0f}, 1.0f, _color);
 }
 
 

@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include "RLWindow.h"
 #include "RLDrawSession.h"
+#include "RLTexture2D.hpp"
 #include "Global.hpp"
 
 class Animation
@@ -27,5 +28,5 @@ private:
     // We can find this by dividing the width of the image by the frame width.
     int _total_frames{0};
 
-	Texture2D _sprite{};
+	raylib::Texture2DFile _sprite;
 };
