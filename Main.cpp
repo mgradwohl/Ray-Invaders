@@ -16,6 +16,7 @@
 #include "HitManager.hpp"
 #include "Player.hpp"
 #include "PowerUpManager.hpp"
+#include "BannerUI.hpp"
 #include "RLDrawSession.h"
 #include "RLWindow.h"
 #include "Ufo.hpp"
@@ -44,15 +45,13 @@ auto main() -> int
 	PowerUpManager powerup("Resources/Images/PowerupBar.png");
 	Ufo ufo(random_engine);
 	Bases bases("Resources/Images/Base.png");
-	Texture2D banner = LoadTexture("Resources/Images/RayInvaders.png");
 
 	// AUTO_FIRE debug helper removed: spawning enemy bullets at startup was
 	// intrusive during regular testing and is no longer desirable.
 
 	// we draw everything to this, and then render this to the screen
 	Backbuffer backbuffer(GlobalConstant::Int::SCREEN_WIDTH, GlobalConstant::Int::SCREEN_HEIGHT, GlobalConstant::Int::SCREEN_RESIZE);
-	// Provide banner texture to backbuffer so it can compose UI strip at top
-	backbuffer.SetBanner(&banner);
+	BannerUI bannerUI(&powerup);
 
 	previous_time = std::chrono::steady_clock::now();
 	while (!window.ShouldClose())
@@ -129,43 +128,36 @@ auto main() -> int
 			if (GlobalConstant::Time::FRAME_DURATION > lag)
 			{
 				{
-					// everything is either reset (new game) or updated (continuing game) time to draw
-					raylib::DrawSession ds(backbuffer.GetRenderTexture(), BLACK);
-					
-					background.draw(ds);
-					// Update level indicator for the banner strip
-					backbuffer.SetLevel(static_cast<int>(level));
-					// When the player dies, we will only the player and the banner
-					player.draw(ds);
+					// Draw gameplay into gameplay render texture
+					raylib::DrawSession dsGameplay(backbuffer.GetGameplayRenderTexture(), BLACK);
+					background.draw(dsGameplay);
+					player.draw(dsGameplay);
 					if (!player.get_dead())
 					{
-						enemy_manager.draw(ds);
-						ufo.draw(ds);
-						bases.draw(ds);
-							// Global hit decals overlay world elements
-							hit_manager.draw(ds);
-						// Queue power-up bar for banner drawing
-						backbuffer.SetPowerBar(&powerup.get_sprite(), powerup.get_color(), powerup.get_fill_fraction(player));
-						// const std::string levelText = "Level: " + std::to_string(level);
-						// const int textY = static_cast<int>(GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE); // Using GlobalConstant::QUARTER constant
-						// ds.DrawText(levelText, 10, textY, textY, WHITE);
+						enemy_manager.draw(dsGameplay);
+						ufo.draw(dsGameplay);
+						bases.draw(dsGameplay);
+						hit_manager.draw(dsGameplay);
 					}
 					else
 					{
-						ds.DrawTextCentered("Game over!", GlobalConstant::Int::SCREEN_WIDTH / 2, GlobalConstant::Int::SCREEN_HEIGHT / 2, GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
+						dsGameplay.DrawTextCentered("Game over!", GlobalConstant::Int::SCREEN_WIDTH / 2, GlobalConstant::Int::SCREEN_HEIGHT / 2, GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
 					}
-
 					if (next_level)
 					{
-						ds.DrawTextCentered("Next level!", GlobalConstant::Int::SCREEN_WIDTH / 2, GlobalConstant::Int::SCREEN_HEIGHT / 2, GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
+						dsGameplay.DrawTextCentered("Next level!", GlobalConstant::Int::SCREEN_WIDTH / 2, GlobalConstant::Int::SCREEN_HEIGHT / 2, GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
 					}
-				}// DrawSession ds
+				} // dsGameplay
+				{
+					// Draw banner into banner render texture
+					raylib::DrawSession dsBanner(backbuffer.GetBannerRenderTexture(), BLACK);
+					bannerUI.setLevel(level);
+					bannerUI.draw(dsBanner, player);
+				} // dsBanner
 				backbuffer.flip();
 			}
 		}
 	}
-		// Clear banner reference and unload texture before exit
-		backbuffer.SetBanner(nullptr);
 	}
 
 

@@ -7,6 +7,8 @@ namespace raylib
 	class DrawSession
 	{
 	public:
+        // Screen session: BeginDrawing/EndDrawing
+        explicit DrawSession(Color clearColor) noexcept;
 		DrawSession(const RenderTexture2D& backbuffer) noexcept;
         DrawSession(const RenderTexture2D &backbuffer, Color clearColor) noexcept;
 
@@ -37,5 +39,7 @@ namespace raylib
     void DrawTextureEx(const Texture2D &texture, float x, float y, float scale,
                Color color) noexcept;
         void DrawCircle(float centerX, float centerY, float radius, Color color) noexcept;
+    private:
+        bool _textureMode{false};
     };
 } // namespace raylib

@@ -9,8 +9,15 @@
 #include <raylib.h>
 namespace raylib
 {
+    DrawSession::DrawSession(Color clearColor) noexcept
+    {
+        _textureMode = false;
+        BeginDrawing();
+        ClearBackground(clearColor);
+    }
     DrawSession::DrawSession(const RenderTexture2D& backbuffer, const Color clearColor) noexcept
     {
+        _textureMode = true;
         BeginTextureMode(backbuffer);
 
         ClearBackground(clearColor);
@@ -18,12 +25,20 @@ namespace raylib
 
     DrawSession::DrawSession(const RenderTexture2D& backbuffer) noexcept
     {
+        _textureMode = true;
         BeginTextureMode(backbuffer);
     }
 
     DrawSession::~DrawSession()
     {
-        EndTextureMode();
+        if (_textureMode)
+        {
+            EndTextureMode();
+        }
+        else
+        {
+            EndDrawing();
+        }
     }    void DrawSession::DrawRectangle(const int x, const int y, const int width, const int height, const Color color) noexcept
     {
         ::DrawRectangle(x, y, width, height, color);

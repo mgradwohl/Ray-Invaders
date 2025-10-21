@@ -8,7 +8,7 @@ public:
 	PowerUpManager(const std::string& spritefile);
 	~PowerUpManager();
 	void update(const Player& player);
-	void draw(raylib::DrawSession& ds, const Player& player) const;
+	void draw(raylib::DrawSession& ds, const Player& player, float bannerHeightLogical) const;
 
 	// Accessors for banner composition
 	[[nodiscard]] auto get_sprite() const noexcept -> const Texture2D& { return _powerup_bar_sprite; }
