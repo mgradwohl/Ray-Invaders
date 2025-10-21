@@ -173,7 +173,7 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 
 Rectangle Ufo::get_hitbox() const noexcept
 {
-	return Rectangle(_x, _y, 2 * GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE);
+	return Rectangle{_x, _y, 2 * GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
 }
 
 

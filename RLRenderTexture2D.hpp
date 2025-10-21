@@ -18,7 +18,7 @@ public:
     }
 
     void create(GameTypes::Coordinate w, GameTypes::Coordinate h) noexcept { destroy(); _rt = ::LoadRenderTexture(w, h); }
-    void destroy() noexcept { if (_rt.id > 0) ::UnloadRenderTexture(_rt); _rt = {}; }
+    void destroy() noexcept { if (_rt.id > 0) { ::UnloadRenderTexture(_rt); } _rt = {}; }
 
     [[nodiscard]] const ::RenderTexture2D& get() const noexcept { return _rt; }
     [[nodiscard]] ::RenderTexture2D& get() noexcept { return _rt; }

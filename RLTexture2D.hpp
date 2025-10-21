@@ -18,9 +18,9 @@ public:
     }
 
     void load(const std::string& filename) noexcept { unload(); _tex = ::LoadTexture(filename.c_str()); }
-    void unload() noexcept { if (_tex.id > 0) ::UnloadTexture(_tex); _tex = {}; }
+    void unload() noexcept { if (_tex.id > 0) { ::UnloadTexture(_tex); } _tex = {}; }
 
-    void setPointFiltering() noexcept { if (_tex.id > 0) ::SetTextureFilter(_tex, TEXTURE_FILTER_POINT); }
+    void setPointFiltering() noexcept { if (_tex.id > 0) { ::SetTextureFilter(_tex, TEXTURE_FILTER_POINT); } }
 
     [[nodiscard]] const Texture2D& get() const noexcept { return _tex; }
     [[nodiscard]] int id() const noexcept { return _tex.id; }

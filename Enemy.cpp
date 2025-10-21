@@ -132,7 +132,7 @@ Rectangle Enemy::get_hitbox() const noexcept
 	// The sprite width is 16 pixels but the hitbox should be 12 pixels wide, centered
 	constexpr float hitbox_width = 12.0f;
 	constexpr float x_offset = (GlobalConstant::BASE_SIZE - hitbox_width) * 0.5f; // Center the 12px hitbox within the 16px sprite
-	return Rectangle(_x + x_offset, _y + 0.25f * GlobalConstant::BASE_SIZE, hitbox_width, 0.5f * GlobalConstant::BASE_SIZE);
+	return Rectangle{_x + x_offset, _y + 0.25f * GlobalConstant::BASE_SIZE, hitbox_width, 0.5f * GlobalConstant::BASE_SIZE};
 }
 
 

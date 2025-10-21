@@ -151,6 +151,8 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, H
                 const int px = static_cast<int>(std::floor(rel_x));
                 const int py = static_cast<int>(std::floor(rel_y));
                 const int pr = static_cast<int>(std::ceil(radius)) + 1;
+                const int pr_squared = pr * pr; // Precompute squared radius
+                const float pr_float = static_cast<float>(pr); // Precompute for division
                 bool any_changed = false;
 
                 // Use compact base mask for opacity tests
@@ -169,10 +171,11 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, H
                     for (int x = std::max(0, px - pr); x <= std::min(_damage_image.width - 1, px + pr); ++x) {
                         const int dx = x - px;
                         const int dy = y - py;
-                        const float dist = std::sqrt(static_cast<float>(dx*dx + dy*dy));
-                        if (dist <= static_cast<float>(pr)) {
-                            // radial falloff [0..1]
-                            const float f = 1.0f - (dist / static_cast<float>(pr));
+                        const int dist_squared = dx*dx + dy*dy;
+                        if (dist_squared <= pr_squared) {
+                            // Only calculate sqrt for pixels within radius (much fewer calculations)
+                            const float dist = std::sqrt(static_cast<float>(dist_squared));
+                            const float f = 1.0f - (dist / pr_float);
                             const int incr = static_cast<int>(std::ceil(base_alpha_incr * f));
                             int idx = y * _damage_image.width + x;
                             if (!base_mask_ptr || base_mask_ptr[idx] == 0) {
@@ -309,7 +312,7 @@ Rectangle Base::get_hitbox() const noexcept {
     // This ensures proper collision detection with the visual representation
     // Use the actual texture height so the hitbox covers the visible area
     const float height = (_texture.id() > 0) ? _texture.heightF() : GlobalConstant::BASE_SIZE;
-    return Rectangle(_x, _y, GlobalConstant::BASE_WIDTH, height);
+    return Rectangle{_x, _y, GlobalConstant::BASE_WIDTH, height};
 }
 
 

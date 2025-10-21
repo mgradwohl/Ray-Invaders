@@ -66,7 +66,8 @@ void Background::reset() noexcept
 	const float bgWidth = _backgroundsprite.widthF();
 	const float bgHeight = _backgroundsprite.heightF();
 	
-	_source.x = (bgWidth - GlobalConstant::SCREEN_WIDTH) * 0.5f;
+	constexpr float CENTER_OFFSET = 0.5f;
+	_source.x = (bgWidth - GlobalConstant::SCREEN_WIDTH) * CENTER_OFFSET;
 	_source.y = bgHeight - GlobalConstant::SCREEN_HEIGHT;
 	_source.width = GlobalConstant::SCREEN_WIDTH;
 	_source.height = GlobalConstant::SCREEN_HEIGHT;

@@ -90,12 +90,14 @@ void Player::draw(raylib::DrawSession& ds) const
 		if (!_shield_animation_over)
 		{
 			//Once we get hit while having a shield, the shield will be destroyed. We'll show a blue explosion.
-			_explosion.draw(ds, _x, _y, Color(0, 109, 255, 255));
+			constexpr Color SHIELD_EXPLOSION_COLOR{0, 109, 255, 255};
+			_explosion.draw(ds, _x, _y, SHIELD_EXPLOSION_COLOR);
 		}
 	}
 	else if (!_dead_animation_over)
 	{
-		_explosion.draw(ds, _x, _y, Color(255, 36, 0, 255));
+		constexpr Color DEATH_EXPLOSION_COLOR{255, 36, 0, 255};
+		_explosion.draw(ds, _x, _y, DEATH_EXPLOSION_COLOR);
 	}
 }
 
@@ -312,12 +314,12 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 Rectangle Player::get_hitbox() const noexcept
 {
 	// Use the fraction constants from the F namespace
-	return Rectangle(
+	return Rectangle{
 		_x + 0.125f * GlobalConstant::BASE_SIZE, 
 		_y + 0.125f * GlobalConstant::BASE_SIZE, 
 		GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE, 
 		GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE
-	);
+	};
 }
 
 

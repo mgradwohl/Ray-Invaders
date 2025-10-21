@@ -20,7 +20,7 @@ namespace raylib {
             resource.sound = loadSoundSafe(filename);
             resource.isValid = IsSoundValid(resource.sound);
             if (!resource.isValid) {
-                std::cerr << "Warning: Failed to load sound: " << filename << std::endl;
+                std::cerr << "Warning: Failed to load sound: " << filename << '\n';
             }
         }
         
