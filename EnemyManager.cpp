@@ -50,7 +50,7 @@ bool EnemyManager::reached_player(float i_player_y) const
 	return false;
 }
 
-void EnemyManager::draw(raylib::DrawSession& ds)
+void EnemyManager::draw(raylib::DrawSession& ds) const
 {	for (const Bullet& bullet : _enemy_bullets)
 	{		//Drawing the tail of the bullet.
 		const auto& prev_x = bullet.get_previous_x();

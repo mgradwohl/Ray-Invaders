@@ -61,7 +61,7 @@ void Player::die() noexcept
 	_dead = true;
 }
 
-void Player::draw(raylib::DrawSession& ds)
+void Player::draw(raylib::DrawSession& ds) const
 {
 	if (!_dead)
 	{

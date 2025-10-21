@@ -31,7 +31,8 @@ namespace raylib {
         });
     }
     
-    void SoundManager::releaseSound(const std::string& filename) {
+    void SoundManager::releaseSound(const std::string& filename)
+    {
         auto it = _soundCache.find(filename);
         if (it != _soundCache.end()) {
             auto& resource = it->second;
@@ -53,7 +54,8 @@ namespace raylib {
         return (it != _soundCache.end()) ? it->second.refCount : 0;
     }
     
-    void SoundManager::cleanup() {
+    void SoundManager::cleanup()
+    {
         for (auto& [filename, resource] : _soundCache) {
             if (resource.isValid && IsSoundValid(resource.sound)) {
                 StopSound(resource.sound);
@@ -131,14 +133,16 @@ namespace raylib {
         return _sound && IsSoundValid(*_sound);
     }
     
-    void SharedSound::acquire(const std::string& filename) {
+    void SharedSound::acquire(const std::string& filename)
+    {
         if (!filename.empty()) {
             _filename = filename;
             _sound = SoundManager::getSound(filename);
         }
     }
     
-    void SharedSound::release() {
+    void SharedSound::release()
+    {
         if (!_filename.empty()) {
             // The shared_ptr destructor will automatically call SoundManager::releaseSound
             _sound.reset();

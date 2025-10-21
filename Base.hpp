@@ -11,7 +11,6 @@
 #include "Global.hpp"
 #include "RLDrawSession.h"
 #include "RLTexture2D.hpp"
-#include "Hit.hpp"
 #include "RLWaveSound.hpp"
 
 class Base {

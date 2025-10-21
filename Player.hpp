@@ -25,7 +25,7 @@ public:
     [[nodiscard]] auto get_y() const noexcept -> float;
 
     void die() noexcept;
-	void draw(raylib::DrawSession& ds);
+	void draw(raylib::DrawSession& ds) const;
 	void reset();
 	void update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_enemy_bullets, std::vector<Enemy>& i_enemies, Ufo& i_ufo, HitManager& i_hits);
 

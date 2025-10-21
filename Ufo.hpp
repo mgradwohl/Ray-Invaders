@@ -17,7 +17,7 @@ public:
         -> bool;
 
     auto check_powerup_collision(const Rectangle &i_player_hitbox) noexcept -> GameTypes::Count;
-    void draw(raylib::DrawSession& ds);
+    void draw(raylib::DrawSession& ds) const;
 	void reset(bool i_dead, std::mt19937_64& i_random_engine);
 	void update(std::mt19937_64& i_random_engine);
 

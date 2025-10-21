@@ -43,11 +43,11 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 			_dead = true;
 			_ufoappearsound.Stop();
 			_explosion_x = _x;
-			_ufodestroysound.Play();
+			[[maybe_unused]] bool played = _ufodestroysound.Play();
 
-			// Get the powerup type from the distribution and truncate to unsigned char range
-			// This avoids the need for a static_cast
-			GameTypes::Count powerupType = _powerup_distribution(i_random_engine) % GlobalConstant::Int::POWERUP_TYPES;
+			// Get the powerup type from the distribution and cast to enum
+			GameTypes::Count powerupIndex = _powerup_distribution(i_random_engine) % GlobalConstant::Int::POWERUP_TYPES;
+			auto powerupType = static_cast<PowerUpItem::Type>(powerupIndex);
 			_powerups.emplace_back(_x + 0.5F * GlobalConstant::BASE_SIZE, _y, powerupType);
 
 			return true;
@@ -66,14 +66,14 @@ GameTypes::Count Ufo::check_powerup_collision(const Rectangle& i_player_hitbox) 
 			powerup.isdead(true);
 
 			//Plus 1, because 0 means we didn't pick up any powerups.
-			return 1 + powerup.get_type();
+			return 1 + static_cast<GameTypes::Count>(powerup.get_type());
 		}
 	}
 	
 	return 0;
 }
 
-void Ufo::draw(raylib::DrawSession& ds)
+void Ufo::draw(raylib::DrawSession& ds) const
 {
 	if (!_dead)
 	{
@@ -89,7 +89,7 @@ void Ufo::draw(raylib::DrawSession& ds)
 
 	for (const PowerUpItem& powerup : _powerups)
 	{
-		_powerup_animations[powerup.get_type()].draw(ds, powerup.getx(), powerup.gety(), WHITE);
+		_powerup_animations[static_cast<int>(powerup.get_type())].draw(ds, powerup.get_x(), powerup.get_y(), WHITE);
 	}
 }
 
@@ -116,7 +116,7 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 	{
 		if (!_ufoappearsound.IsPlaying())
 		{
-			_ufoappearsound.Play();
+			[[maybe_unused]] bool played = _ufoappearsound.Play();
 		}
 
 		_x -= GlobalConstant::UFO_MOVE_SPEED;
@@ -155,7 +155,7 @@ void Ufo::update(std::mt19937_64& i_random_engine)
 		//
 		// powerup._y += GlobalConstant::POWERUP_SPEED;
 		powerup.bump_y(GlobalConstant::POWERUP_SPEED);
-		if (GlobalConstant::SCREEN_HEIGHT <= powerup.gety())
+		if (GlobalConstant::SCREEN_HEIGHT <= powerup.get_y())
 		{
 			powerup.isdead(true);
 		}

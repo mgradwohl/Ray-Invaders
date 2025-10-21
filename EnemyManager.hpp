@@ -15,7 +15,7 @@ public:
 
     [[nodiscard]] auto reached_player(float i_player_y) const -> bool;
 
-    void draw(raylib::DrawSession& ds);
+    void draw(raylib::DrawSession& ds) const;
 	void reset(GameTypes::Level i_level);
 	void update(std::mt19937_64& i_random_engine);
 

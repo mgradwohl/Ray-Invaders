@@ -75,7 +75,8 @@ void Base::reset(const Image& baseImage) noexcept {
     _has_damage = false;
 }
 
-void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, HitManager& hits) {
+void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, HitManager& hits)
+{
     if (_dead) return;
 
 
@@ -214,7 +215,8 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, H
     }
 }
 
-void Base::apply_impact(float rel_x, float rel_y, float damage_amount) {
+void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
+{
     // Clamp rel coords to the damage image / texture dimensions (avoid clamping to generic constants)
     // Clamp rel coords to the damage image / texture dimensions (avoid clamping to generic constants)
     if (_damage_image.data) {

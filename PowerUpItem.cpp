@@ -7,7 +7,7 @@
 // Project headers
 #include "Global.hpp"
 
-PowerUpItem::PowerUpItem(float i_x, float i_y, GameTypes::Count i_type) noexcept :
+PowerUpItem::PowerUpItem(float i_x, float i_y, Type i_type) noexcept :
 	_x(i_x),
 	_y(i_y),
 	_dead(false),
@@ -26,7 +26,7 @@ void PowerUpItem::bump_y(GameTypes::Distance ybump) noexcept
 	return Rectangle(_x + 0.25F * GlobalConstant::BASE_SIZE, _y + 0.25F * GlobalConstant::BASE_SIZE, 0.5F * GlobalConstant::BASE_SIZE, 0.5F * GlobalConstant::BASE_SIZE);
 }
 
-GameTypes::Count PowerUpItem::get_type() const noexcept
+PowerUpItem::Type PowerUpItem::get_type() const noexcept
 {
 	return _type;
 }
@@ -41,12 +41,12 @@ void PowerUpItem::isdead(bool dead) noexcept
 	_dead = dead; 
 }
 
-float PowerUpItem::getx() const noexcept 
+float PowerUpItem::get_x() const noexcept 
 { 
 	return _x; 
 }
 
-float PowerUpItem::gety() const noexcept 
+float PowerUpItem::get_y() const noexcept 
 { 
 	return _y; 
 }
