@@ -278,7 +278,7 @@ void Base::draw(raylib::DrawSession& ds) const {
         // We'll draw the base texture with a custom shader/approach that uses damage alpha
         
         // For now, let's try drawing with normal blending and see the effect
-        const Rectangle src = { 0.0f, 0.0f, static_cast<float>(_texture.width()), static_cast<float>(_texture.height()) };
+        const Rectangle src = { 0.0f, 0.0f, _texture.widthF(), _texture.heightF() };
         const Vector2 pos = { _x, _y };
         
         // Draw the base texture normally first
@@ -287,7 +287,7 @@ void Base::draw(raylib::DrawSession& ds) const {
         // Now overlay damage by using alpha blending with inverted colors
         // High alpha damage areas = more transparent in final result
         BeginBlendMode(BLEND_ALPHA);
-        const Rectangle damage_src = { 0.0f, 0.0f, static_cast<float>(_damage_tex.width()), static_cast<float>(_damage_tex.height()) };
+        const Rectangle damage_src = { 0.0f, 0.0f, _damage_tex.widthF(), _damage_tex.heightF() };
         
         // Draw damage texture with a color that creates holes - transparent black
         Color hole_color = {0, 0, 0, 128}; // Semi-transparent black to create visible holes
@@ -306,7 +306,7 @@ Rectangle Base::get_hitbox() const noexcept {
     // Create hitbox that matches the texture dimensions exactly
     // This ensures proper collision detection with the visual representation
     // Use the actual texture height so the hitbox covers the visible area
-    const float height = (_texture.id() > 0) ? static_cast<float>(_texture.height()) : GlobalConstant::BASE_SIZE;
+    const float height = (_texture.id() > 0) ? _texture.heightF() : GlobalConstant::BASE_SIZE;
     return Rectangle(_x, _y, GlobalConstant::BASE_WIDTH, height);
 }
 

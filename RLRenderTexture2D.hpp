@@ -24,7 +24,9 @@ public:
     [[nodiscard]] ::RenderTexture2D& get() noexcept { return _rt; }
     [[nodiscard]] const Texture2D& texture() const noexcept { return _rt.texture; }
     [[nodiscard]] int width() const noexcept { return _rt.texture.width; }
+    [[nodiscard]] float widthF() const noexcept { return static_cast<float>(_rt.texture.width); }
     [[nodiscard]] int height() const noexcept { return _rt.texture.height; }
+    [[nodiscard]] float heightF() const noexcept { return static_cast<float>(_rt.texture.height); }
 
 private:
     ::RenderTexture2D _rt{};

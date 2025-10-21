@@ -39,7 +39,7 @@ void Background::update([[maybe_unused]] Player& player) noexcept
 	}
 	
 	// Use a named constant for clarity and to avoid repeated casts
-	const float bgWidth = static_cast<float>(_backgroundsprite.get().width);
+	const float bgWidth = _backgroundsprite.widthF();
 	if (_source.x >= bgWidth)
 	{
 		_source.x = bgWidth;
@@ -61,11 +61,10 @@ void Background::update([[maybe_unused]] Player& player) noexcept
 void Background::reset() noexcept
 {
 	// Calculate center position using float arithmetic
-	// We need to keep these casts since Raylib texture dimensions are integers
-	// but Rectangle fields are floats
-	// Cache these values to avoid repeated casts throughout the code
-	const float bgWidth = static_cast<float>(_backgroundsprite.get().width);
-	const float bgHeight = static_cast<float>(_backgroundsprite.get().height);
+	// Texture dimensions as floats - no casts needed with widthF/heightF methods
+	// Cache these values to avoid repeated method calls throughout the code
+	const float bgWidth = _backgroundsprite.widthF();
+	const float bgHeight = _backgroundsprite.heightF();
 	
 	_source.x = (bgWidth - GlobalConstant::SCREEN_WIDTH) * 0.5f;
 	_source.y = bgHeight - GlobalConstant::SCREEN_HEIGHT;

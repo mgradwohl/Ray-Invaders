@@ -28,10 +28,10 @@ void Backbuffer::flip() const noexcept
 	const Vector2 pos{ 0.0f, 0.0f };
     
 	// Texture dimensions as floats for Rectangle construction
-	const float gameplayW = static_cast<float>(_rtGameplay.width());
-	const float gameplayH = static_cast<float>(_rtGameplay.height());
-	const float bannerW   = static_cast<float>(_rtBanner.width());
-	const float bannerH   = static_cast<float>(_rtBanner.height());
+	const float gameplayW = _rtGameplay.widthF();
+	const float gameplayH = _rtGameplay.heightF();
+	const float bannerW   = _rtBanner.widthF();
+	const float bannerH   = _rtBanner.heightF();
 	const Rectangle gameplaySrc{ 0.0f, 0.0f, gameplayW, -gameplayH };
 	const Rectangle bannerSrc{ 0.0f, 0.0f, bannerW, -bannerH };
 

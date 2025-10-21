@@ -18,7 +18,7 @@ Animation::Animation(GameTypes::Speed i_animation_speed, GameTypes::Size i_frame
 	_sprite(i_texture_location)
 {
 	// Calculate once and reuse
-	const float spriteWidthF = static_cast<float>(_sprite.get().width);
+	const float spriteWidthF = _sprite.widthF();
 	// No need for cast to unsigned short, _total_frames is now int
 	_total_frames = static_cast<int>(spriteWidthF / _frame_width);
 }
@@ -64,7 +64,7 @@ void Animation::draw(raylib::DrawSession& ds, float x, float y, const Color& i_c
 {
 	const Vector2 dest{ x, y };
 	// Cache the height conversion to avoid repeated casts
-	const float spriteHeight = static_cast<float>(_sprite.get().height);
+	const float spriteHeight = _sprite.heightF();
 	const Rectangle source{ _current_frame * _frame_width, 0.0f, _frame_width, spriteHeight };
 	// Use the alpha from the passed color to support transparency
 	const Color ani{ i_color.r, i_color.g, i_color.b, i_color.a };

@@ -25,7 +25,12 @@ public:
     [[nodiscard]] const Texture2D& get() const noexcept { return _tex; }
     [[nodiscard]] int id() const noexcept { return _tex.id; }
     [[nodiscard]] int width() const noexcept { return _tex.width; }
+    [[nodiscard]] float widthF() const noexcept { return static_cast<float>(_tex.width); }
+
+
     [[nodiscard]] int height() const noexcept { return _tex.height; }
+    [[nodiscard]] float heightF() const noexcept { return static_cast<float>(_tex.height); }
+   
 
 private:
     Texture2D _tex{};
@@ -54,7 +59,9 @@ public:
     [[nodiscard]] const Texture2D& get() const noexcept { return _tex; }
     [[nodiscard]] int id() const noexcept { return _tex.id; }
     [[nodiscard]] int width() const noexcept { return _tex.width; }
+    [[nodiscard]] float widthF() const noexcept { return static_cast<float>(_tex.width); }
     [[nodiscard]] int height() const noexcept { return _tex.height; }
+    [[nodiscard]] float heightF() const noexcept { return static_cast<float>(_tex.height); }
 
 private:
     Texture2D _tex{};

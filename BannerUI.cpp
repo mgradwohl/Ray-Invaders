@@ -14,9 +14,8 @@ void BannerUI::draw(raylib::DrawSession& ds, const Player& player) const noexcep
 
     // Draw centered banner image if available (scaled to banner height)
     if (_banner.id() > 0) {
-        const Texture2D& bannerTex = _banner.get();
-        const float bsrcW = static_cast<float>(bannerTex.width);
-        const float bsrcH = static_cast<float>(bannerTex.height);
+        const float bsrcW = _banner.widthF();
+        const float bsrcH = _banner.heightF();
         const Rectangle bsrc{ 0.0f, 0.0f, bsrcW, bsrcH };
         const float s = (bsrcH > 0.0f) ? (bannerHeightLogical / bsrcH) : 1.0f;
         // Pixel-perfect integral destination
@@ -26,7 +25,7 @@ void BannerUI::draw(raylib::DrawSession& ds, const Player& player) const noexcep
         const float bdX = std::floor((windowWidth - bdW) * 0.5f);
         const float bdY = 0.0f;
         const Rectangle bdst{ bdX, bdY, bdW, bdH };
-        ds.DrawTexturePro(bannerTex, bsrc, bdst, Vector2{0.0f, 0.0f}, 1.0f, WHITE);
+        ds.DrawTexturePro(_banner.get(), bsrc, bdst, Vector2{0.0f, 0.0f}, 1.0f, WHITE);
     }
 
     // Level text (left)
