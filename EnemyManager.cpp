@@ -14,13 +14,16 @@
 #include "Enemy.hpp"
 #include "Global.hpp"
 #include "RLDrawSession.h"
+#include "RLWaveSound.hpp"
 #include "RLWindow.h"
 
 //There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same thing we did in the game "Frogger".
 // Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered for precise collision detection.
 EnemyManager::EnemyManager() noexcept :
 	_shoot_distribution(0, GlobalConstant::Int::ENEMY_SHOOT_CHANCE),
-	_enemy_bullet_sprite("Resources/Images/EnemyBullet.png")
+	_enemy_bullet_sprite("Resources/Images/EnemyBullet.png"),
+	_enemymove("Resources/Sounds/Enemy Move.wav"),
+	_enemydestroy("Resources/Sounds/Enemy Destroy.wav")
 {	//We have a function that sets everything to the initial state, so why not use it?
 	reset(0);
 
@@ -31,8 +34,6 @@ EnemyManager::EnemyManager() noexcept :
 		const std::string filename = "Resources/Images/Enemy" + std::to_string(a) + ".png";
 		_enemy_animations.emplace_back(static_cast<unsigned short>(animSpeed), GlobalConstant::Int::BASE_SIZE, filename);
 	}
-	_enemymove = LoadSound("Resources/Sounds/Enemy Move.wav");
-	_enemydestroy = LoadSound("Resources/Sounds/Enemy Destroy.wav");
 }
 
 bool EnemyManager::reached_player(float i_player_y) const
@@ -103,7 +104,7 @@ void EnemyManager::draw(raylib::DrawSession& ds)
 			// Use semi-transparent white color to create a flash effect without disappearing
 			// This creates a flashing effect by blending with white
 			enemy_color = Color{ 255, 255, 255, 128 };
-			PlaySound(_enemydestroy);
+			[[maybe_unused]] bool played = _enemydestroy.Play();
 		}
 		
 		// Access the animation array directly using the enum's underlying value
@@ -256,7 +257,7 @@ void EnemyManager::update(std::mt19937_64& i_random_engine)
 			//The enemies change their frame after each move.
 			enemy_animation.change_current_frame();
 		}
-		PlaySound(_enemymove);
+		[[maybe_unused]] bool played = _enemymove.Play();
 	}
 	else
 	{

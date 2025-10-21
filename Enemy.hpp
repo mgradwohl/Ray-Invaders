@@ -31,10 +31,8 @@ public:
 	GameTypes::Health _health{1};
 	//The enemy will appear white for a few frames after being hit, so that the player knows about it.
 	GameTypes::Timer _hit_timer{0};
-	Type _type{Type::Cyan};
+    Type _type{Type::Cyan};
     float         _x{0.0F};
     float         _y{0.0F};
-    Sound _enemylaser{};
-
-    
+    Sound _enemylaser{};    
 };

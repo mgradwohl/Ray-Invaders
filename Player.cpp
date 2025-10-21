@@ -15,19 +15,19 @@
 #include "Global.hpp"
 #include "RLDrawSession.h"
 #include "RLWindow.h"
+#include "RLWaveSound.hpp"
 #include "Ufo.hpp"
 
 Player::Player() :
 	_bullet_sprite("Resources/Images/PlayerBullet.png"),
 	_player_sprite("Resources/Images/Player.png"),
+	_playerlasersound("Resources/Sounds/Player Laser.wav"),
+	_powerupsound("Resources/Sounds/Power Up.wav"),
+	_playerdestroysound("Resources/Sounds/Player Destroy.wav"),
+	_playershieldsound("Resources/Sounds/Player Hit Shield.wav"),
 	_explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, GlobalConstant::Int::BASE_SIZE, "Resources/Images/Explosion.png")
 {
 	reset();
-
-	_playerlasersound = LoadSound("Resources/Sounds/Player Laser.wav");
-	_powerupsound = LoadSound("Resources/Sounds/Power Up.wav");
-	_playerdestroysound = LoadSound("Resources/Sounds/Player Destroy.wav");
-	_playershieldsound = LoadSound("Resources/Sounds/Player Hit Shield.wav");
 }
 
 bool Player::get_dead() const noexcept
@@ -164,7 +164,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 		{
 			if (IsKeyPressed(KEY_Z))
 			{
-				PlaySound(_playerlasersound);
+				[[maybe_unused]] bool played = _playerlasersound.Play();
 
 				if (2 == _current_power)
 				{
@@ -210,13 +210,13 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 					_current_power = 0;
 					_shield_animation_over = false;
 					// Non-fatal player hit (shielded) - presets for radius and TTL
-					PlaySound(_playershieldsound);
+					[[maybe_unused]] bool played = _playershieldsound.Play();
 					i_hits.add_hit(HitSubject::Player, HitOutcome::NonFatal, impact_world_x, impact_world_y);
 				}
 				else
 				{
 					_dead = true;
-					PlaySound(_playerdestroysound);
+					[[maybe_unused]] bool played = _playerdestroysound.Play();
 					// Fatal player hit - presets for radius and TTL
 					i_hits.add_hit(HitSubject::Player, HitOutcome::Destroyed, impact_world_x, impact_world_y);
 				}
@@ -233,7 +233,7 @@ void Player::update(std::mt19937_64& i_random_engine, std::vector<Bullet>& i_ene
 			_current_power = powerup_type;
 
 			_power_timer = GlobalConstant::Int::POWERUP_DURATION;
-			PlaySound(_powerupsound);
+			[[maybe_unused]] bool played = _powerupsound.Play();
 		}
 
 		if (!_power_timer)

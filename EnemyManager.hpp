@@ -3,6 +3,7 @@
 #include <random>
 #include <raylib.h>
 #include "RLTexture2D.hpp"
+#include "RLWaveSound.hpp"
 #include "Global.hpp"
 #include "Bullet.hpp"
 #include "Enemy.hpp"
@@ -35,6 +36,6 @@ public:
 
     raylib::Texture2DFile _enemy_bullet_sprite;
 
-	Sound _enemymove{};
-	Sound _enemydestroy{};
+	raylib::WaveSound _enemymove;
+	raylib::WaveSound _enemydestroy;
 };

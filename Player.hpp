@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include "RLDrawSession.h"
 #include "RLTexture2D.hpp"
+#include "RLWaveSound.hpp"
 #include "Global.hpp"
 #include "Animation.hpp"
 #include "Ufo.hpp"
@@ -49,10 +50,10 @@ public:
 
     raylib::Texture2DFile _bullet_sprite;
 	raylib::Texture2DFile _player_sprite;
-	Sound _playerlasersound{};
-	Sound _powerupsound{};
-	Sound _playerdestroysound{};
-	Sound _playershieldsound{};
+	raylib::WaveSound _playerlasersound;
+	raylib::WaveSound _powerupsound;
+	raylib::WaveSound _playerdestroysound;
+	raylib::WaveSound _playershieldsound;
 
 	Animation _explosion;
 };
