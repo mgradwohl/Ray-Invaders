@@ -2,6 +2,7 @@
 #include <vector>
 #include "Bullet.hpp"
 #include "Global.hpp"
+#include "SoundManager.hpp"
 #include <raylib.h>
 
 
@@ -34,5 +35,5 @@ public:
     Type _type{Type::Cyan};
     float         _x{0.0F};
     float         _y{0.0F};
-    Sound _enemylaser{};    
+    raylib::SharedSound _enemylaser;    
 };

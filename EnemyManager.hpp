@@ -30,9 +30,9 @@ public:
 
 	//To use the randomness from the <random> library, we need to define the distribution.
 	std::uniform_int_distribution<GameTypes::Probability> _shoot_distribution;
-    std::vector<Animation>                        _enemy_animations;
-    std::vector<Bullet>                           _enemy_bullets;
-    std::vector<Enemy>                            _enemies;
+    std::vector<Animation> _enemy_animations;
+    std::vector<Bullet> _enemy_bullets;
+    std::vector<Enemy> _enemies;
 
     raylib::Texture2DFile _enemy_bullet_sprite;
 

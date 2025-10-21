@@ -12,6 +12,7 @@
 
 // Project headers
 #include "Global.hpp"
+#include "SoundManager.hpp"
 
 Enemy::Enemy(Type i_type, float i_x, float i_y, GameTypes::Health health) noexcept :
     _direction(Direction::Down),
@@ -19,9 +20,9 @@ Enemy::Enemy(Type i_type, float i_x, float i_y, GameTypes::Health health) noexce
     _hit_timer(0),
     _type(i_type),
     _x(i_x), // No cast needed with float parameters
-    _y(i_y) // No cast needed with float parameters
+    _y(i_y), // No cast needed with float parameters
+    _enemylaser("Resources/Sounds/Enemy Laser.wav")
 {
-    _enemylaser = LoadSound("Resources/Sounds/Enemy Laser.wav");
 }
 
 GameTypes::Health Enemy::get_health() const noexcept { return _health; }
@@ -105,7 +106,7 @@ void Enemy::shoot(std::vector<Bullet>& i_enemy_bullets)
             break;
         }
     }
-    PlaySound(_enemylaser);
+    [[maybe_unused]] bool played = _enemylaser.Play();
 }
 
 void Enemy::update() noexcept
