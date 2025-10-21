@@ -7,6 +7,9 @@
 
 // Third-party headers
 #include <raylib.h>
+
+// Project headers
+#include "RLRenderTexture2D.hpp"
 namespace raylib
 {
     DrawSession::DrawSession(Color clearColor) noexcept
@@ -15,18 +18,18 @@ namespace raylib
         BeginDrawing();
         ClearBackground(clearColor);
     }
-    DrawSession::DrawSession(const RenderTexture2D& backbuffer, const Color clearColor) noexcept
+    DrawSession::DrawSession(const raylib::RenderTexture2D& backbuffer, const Color clearColor) noexcept
     {
         _textureMode = true;
-        BeginTextureMode(backbuffer);
+        BeginTextureMode(backbuffer.get());
 
         ClearBackground(clearColor);
     }
 
-    DrawSession::DrawSession(const RenderTexture2D& backbuffer) noexcept
+    DrawSession::DrawSession(const raylib::RenderTexture2D& backbuffer) noexcept
     {
         _textureMode = true;
-        BeginTextureMode(backbuffer);
+        BeginTextureMode(backbuffer.get());
     }
 
     DrawSession::~DrawSession()

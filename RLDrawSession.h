@@ -2,6 +2,9 @@
 #include <raylib.h>
 #include <string>
 
+// Forward declaration
+namespace raylib { class RenderTexture2D; }
+
 namespace raylib
 {
 	class DrawSession
@@ -9,8 +12,8 @@ namespace raylib
 	public:
         // Screen session: BeginDrawing/EndDrawing
         explicit DrawSession(Color clearColor) noexcept;
-		DrawSession(const RenderTexture2D& backbuffer) noexcept;
-        DrawSession(const RenderTexture2D &backbuffer, Color clearColor) noexcept;
+		DrawSession(const raylib::RenderTexture2D& backbuffer) noexcept;
+        DrawSession(const raylib::RenderTexture2D &backbuffer, Color clearColor) noexcept;
 
         ~DrawSession();
 

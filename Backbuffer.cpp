@@ -11,16 +11,12 @@
 
 Backbuffer::Backbuffer(GameTypes::Coordinate width, GameTypes::Coordinate height, GameTypes::Size scale) noexcept
 {
-	_rtGameplay = ::LoadRenderTexture(width, height);
-	_rtBanner   = ::LoadRenderTexture(width, static_cast<GameTypes::Coordinate>(GlobalConstant::Int::BANNER_HEIGHT));
+	_rtGameplay.create(width, height);
+	_rtBanner.create(width, static_cast<GameTypes::Coordinate>(GlobalConstant::Int::BANNER_HEIGHT));
 	_scale = scale;
 }
 
-Backbuffer::~Backbuffer()
-{
-	UnloadRenderTexture(_rtGameplay);
-	UnloadRenderTexture(_rtBanner);
-}
+Backbuffer::~Backbuffer() = default;
 
 void Backbuffer::flip() const noexcept
 { 
@@ -32,10 +28,10 @@ void Backbuffer::flip() const noexcept
 	const Vector2 pos{ 0.0f, 0.0f };
     
 	// Texture dimensions as floats for Rectangle construction
-	const float gameplayW = static_cast<float>(_rtGameplay.texture.width);
-	const float gameplayH = static_cast<float>(_rtGameplay.texture.height);
-	const float bannerW   = static_cast<float>(_rtBanner.texture.width);
-	const float bannerH   = static_cast<float>(_rtBanner.texture.height);
+	const float gameplayW = static_cast<float>(_rtGameplay.width());
+	const float gameplayH = static_cast<float>(_rtGameplay.height());
+	const float bannerW   = static_cast<float>(_rtBanner.width());
+	const float bannerH   = static_cast<float>(_rtBanner.height());
 	const Rectangle gameplaySrc{ 0.0f, 0.0f, gameplayW, -gameplayH };
 	const Rectangle bannerSrc{ 0.0f, 0.0f, bannerW, -bannerH };
 
@@ -43,9 +39,9 @@ void Backbuffer::flip() const noexcept
 
 	// 1) Draw banner texture at top
 	const Rectangle bannerDst{ 0.0f, 0.0f, bannerW * scale, bannerH * scale };
-	screenDs.DrawTexturePro(_rtBanner.texture, bannerSrc, bannerDst, pos, 1.0F, WHITE);
+	screenDs.DrawTexturePro(_rtBanner.texture(), bannerSrc, bannerDst, pos, 1.0F, WHITE);
 
 	// 2) Draw gameplay below banner strip
 	const Rectangle gameplayDst{ 0.0f, bannerHeightPixels, gameplayW * scale, gameplayH * scale };
-	screenDs.DrawTexturePro(_rtGameplay.texture, gameplaySrc, gameplayDst, pos, 1.0F, WHITE);
+	screenDs.DrawTexturePro(_rtGameplay.texture(), gameplaySrc, gameplayDst, pos, 1.0F, WHITE);
 }

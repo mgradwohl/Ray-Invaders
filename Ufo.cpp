@@ -21,11 +21,11 @@ Ufo::Ufo(std::mt19937_64& i_random_engine) :
 	_powerup_distribution(0, GlobalConstant::Int::POWERUP_TYPES - 1),
 	_timer_distribution(GlobalConstant::Int::UFO_TIMER_MIN, GlobalConstant::Int::UFO_TIMER_MAX),
 	_animation(GlobalConstant::Int::UFO_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/Ufo.png"),
-	_explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/ExplosionBig.png")
+	_explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/ExplosionBig.png"),
+	_ufoappearsound("Resources/Sounds/UFO Enter.wav"),
+	_ufodestroysound("Resources/Sounds/UFO Destroy.wav")
 {
 	reset(true, i_random_engine);
-	_ufoappearsound = raylib::WaveSound("Resources/Sounds/UFO Enter.wav");
-	_ufodestroysound = raylib::WaveSound("Resources/Sounds/UFO Destroy.wav");
 	for (GameTypes::Count puType = 0; puType < GlobalConstant::Int::POWERUP_TYPES; puType++)
 	{
 		// Use implicit conversion to create the string

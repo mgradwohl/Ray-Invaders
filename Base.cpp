@@ -13,62 +13,12 @@
 #include "RLWaveSound.hpp"
 #include "HitManager.hpp"
 
-Base::Base(float x) noexcept : _x(x), _y(GlobalConstant::SCREEN_HEIGHT - 3.0f * GlobalConstant::BASE_SIZE)
+Base::Base(float x) noexcept
+    : _x(x)
+    , _y(GlobalConstant::SCREEN_HEIGHT - 3.0f * GlobalConstant::BASE_SIZE)
+    , _basehitsound("Resources/Sounds/Base Hit.wav")
 {
-	_basehitsound = raylib::WaveSound("Resources/Sounds/Base Hit.wav");
     // Texture is initialized in reset()
-}
-
-Base::Base(Base&& other) noexcept : 
-    _texture(other._texture),
-    _damage_image(other._damage_image),
-    _damage_tex(other._damage_tex),
-    _base_alpha(other._base_alpha),
-    _damage(other._damage),
-    _dead(other._dead),
-    _frame(other._frame),
-    _x(other._x),
-    _y(other._y)
-{
-    // Prevent double free by setting the moved-from texture ID to 0
-    other._texture.id = 0;
-    other._damage_tex.id = 0;
-    other._damage_image.data = nullptr;
-    other._base_alpha.data = nullptr;
-    other._base_mask.clear();
-	_basehitsound = raylib::WaveSound("Resources/Sounds/Base Hit.wav");
-}
-
-Base& Base::operator=(Base&& other) noexcept {
-    if (this != &other) {
-        // Free current resources
-        if (_texture.id > 0) {
-            UnloadTexture(_texture);
-        }
-        if (_damage_tex.id > 0) UnloadTexture(_damage_tex);
-        if (_damage_image.data) UnloadImage(_damage_image);
-        
-        // Move resources from other
-        _texture = other._texture;
-        _damage_image = other._damage_image;
-        _damage_tex = other._damage_tex;
-        _base_alpha = other._base_alpha;
-        _base_mask = std::move(other._base_mask);
-        _damage = other._damage;
-        _dead = other._dead;
-        _frame = other._frame;
-        _x = other._x;
-        _y = other._y;
-        _basehitsound = std::move(other._basehitsound);
-        
-        // Prevent double free
-        other._texture.id = 0;
-        other._damage_tex.id = 0;
-        other._damage_image.data = nullptr;
-        other._base_alpha.data = nullptr;
-    }
-
-    return *this;
 }
 
 Base::~Base() {

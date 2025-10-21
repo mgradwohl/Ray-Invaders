@@ -3,32 +3,30 @@
 #include "Player.hpp"
 
 BannerUI::BannerUI(const PowerUpManager* pum) noexcept : _pum(pum) {
-    _banner = LoadTexture("Resources/Images/RayInvaders.png");
+    _banner.load("Resources/Images/RayInvadersScaled.png");
+    _banner.setPointFiltering();
 }
 
-BannerUI::~BannerUI() {
-    if (_banner.id > 0) {
-        UnloadTexture(_banner);
-    }
-}
-
-void BannerUI::draw(raylib::DrawSession& ds, const Player& player) const noexcept {
-    const float scale = 1.0f; // Banner RT uses logical pixels (no scaling here)
+void BannerUI::draw(raylib::DrawSession& ds, const Player& player) const noexcept
+{
+//  const float scale = 1.0f; // Banner RT uses logical pixels (no scaling here)
     const float bannerHeightLogical = GlobalConstant::BANNER_HEIGHT;
 
     // Draw centered banner image if available (scaled to banner height)
-    if (_banner.id > 0) {
-        const float bsrcW = static_cast<float>(_banner.width);
-        const float bsrcH = static_cast<float>(_banner.height);
+    if (_banner.id() > 0) {
+        const Texture2D& bannerTex = _banner.get();
+        const float bsrcW = static_cast<float>(bannerTex.width);
+        const float bsrcH = static_cast<float>(bannerTex.height);
         const Rectangle bsrc{ 0.0f, 0.0f, bsrcW, bsrcH };
         const float s = (bsrcH > 0.0f) ? (bannerHeightLogical / bsrcH) : 1.0f;
-        const float bdW = bsrcW * s * scale;
-        const float bdH = bannerHeightLogical * scale;
-        const float windowWidth = GlobalConstant::SCREEN_WIDTH * scale;
-        const float bdX = (windowWidth - bdW) * 0.5f;
+        // Pixel-perfect integral destination
+        const float bdW = std::round(bsrcW * s);
+        const float bdH = std::round(bannerHeightLogical);
+        const float windowWidth = GlobalConstant::SCREEN_WIDTH;
+        const float bdX = std::floor((windowWidth - bdW) * 0.5f);
         const float bdY = 0.0f;
         const Rectangle bdst{ bdX, bdY, bdW, bdH };
-        ds.DrawTexturePro(_banner, bsrc, bdst, Vector2{0.0f, 0.0f}, 1.0f, WHITE);
+        ds.DrawTexturePro(bannerTex, bsrc, bdst, Vector2{0.0f, 0.0f}, 1.0f, WHITE);
     }
 
     // Level text (left)

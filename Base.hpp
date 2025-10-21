@@ -20,10 +20,10 @@ public:
     ~Base();
     // Disable copying since we have a texture resource
     Base(const Base&) = delete;
-    auto operator=(const Base&) -> Base& = delete;
-    // Move operations need to transfer ownership of resources
-    Base(Base&&) noexcept;
-    auto operator=(Base&&) noexcept -> Base&;
+    auto operator=(const Base&) = delete;
+    // Non-movable due to non-movable WaveSound member
+    Base(Base&&) noexcept = delete;
+    auto operator=(Base&&) noexcept -> Base& = delete;
 
     void reset(const Image& baseImage) noexcept;
     // Update base state and process bullet impacts. Emits global hit decals via HitManager.

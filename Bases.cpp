@@ -22,9 +22,10 @@ Bases::Bases(const std::string& filename)
     float x = offset;
     
     // Create empty bases at the correct positions first
+    _bases.reserve(GlobalConstant::Int::BASE_COUNT);
     for (int i = 0; i < GlobalConstant::Int::BASE_COUNT; i++)
     {
-        _bases.emplace_back(x);
+        _bases.emplace_back(std::make_unique<Base>(x));
         x += offset; // spacing
         x += GlobalConstant::BASE_WIDTH; // BASE WIDTH
     }
@@ -43,7 +44,7 @@ void Bases::reset()
 {
     for (std::size_t i = 0; i < _bases.size(); ++i)
     {
-        _bases[i].reset(_baseImage);
+        _bases[i]->reset(_baseImage);
     }
 }
 
@@ -54,17 +55,17 @@ void Bases::update(std::vector<Bullet>& i_bullets, HitManager& hits)
     const GameTypes::Count frameCount = (_framecount > UINT8_MAX) ? 
         UINT8_MAX : static_cast<GameTypes::Count>(_framecount);
         
-    for (Base& base : _bases)
+    for (auto& base : _bases)
     {
-        base.update(i_bullets, frameCount, hits);
+        base->update(i_bullets, frameCount, hits);
     }
 }
 
 void Bases::draw(raylib::DrawSession& ds) const
 {
-    for (const Base& base : _bases)
+    for (const auto& base : _bases)
     {
-        base.draw(ds);
+        base->draw(ds);
     }
 }
 

@@ -16,8 +16,10 @@ namespace raylib
 
     WaveSound::~WaveSound()
     {
-        StopSound(_sound);
-        //UnloadSound(sound);
+        if (::IsSoundValid(_sound)) {
+            StopSound(_sound);
+            UnloadSound(_sound);
+        }
     }
 
     bool WaveSound::Play() const noexcept
