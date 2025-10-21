@@ -49,24 +49,28 @@ void PowerUpManager::update(const Player& player)
 	}
 }
 
+auto PowerUpManager::get_fill_fraction(const Player& player) const noexcept -> float
+{
+	if (player.get_current_power() <= 0)
+	{
+		return 0.0f;
+	}
+	const float spriteWidth = static_cast<float>(_powerup_bar_sprite.width);
+	const float maxFillLogical = spriteWidth - 0.125f * GlobalConstant::BASE_SIZE - 0.25f * GlobalConstant::BASE_SIZE;
+	const float currentFillLogical = ceil(player.get_power_timer() * maxFillLogical / static_cast<float>(GlobalConstant::Int::POWERUP_DURATION));
+	return (maxFillLogical > 0.0f) ? (currentFillLogical / maxFillLogical) : 0.0f;
+}
+
 void PowerUpManager::draw(raylib::DrawSession& ds, const Player& player) const
 {
 	if (player.get_current_power() <= 0)
 	{
 		return;
-	}	// We need to keep this cast for type safety - Raylib uses int for texture dimensions
-	// but Rectangle and Vector2 expect floats
-	// Cache the value to avoid repeated conversions
-	const float spriteWidth = static_cast<float>(_powerup_bar_sprite.width);
-	Vector2 dest{ GlobalConstant::SCREEN_WIDTH - spriteWidth - 0.25F * GlobalConstant::BASE_SIZE, 0.25F * GlobalConstant::BASE_SIZE };
-	Rectangle source{ 0.0f, 0.0f, spriteWidth, GlobalConstant::BASE_SIZE };
-	ds.DrawTexture(_powerup_bar_sprite, source, dest, WHITE);
-
-	dest = Vector2(GlobalConstant::SCREEN_WIDTH - spriteWidth - 0.125F * GlobalConstant::BASE_SIZE, 0.25F * GlobalConstant::BASE_SIZE);
-	
-	const float barWidth = ceil(player.get_power_timer() * (spriteWidth - 0.25F * GlobalConstant::BASE_SIZE) / GlobalConstant::Int::POWERUP_DURATION);
-	source = Rectangle(0.125F * GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE, barWidth, GlobalConstant::BASE_SIZE);
-	ds.DrawTexture(_powerup_bar_sprite, source, dest, _color);
+	}
+	// Rendering of the power bar in the banner is performed by Backbuffer::flip().
+	// Main will forward sprite, color and fill fraction to Backbuffer each frame via SetPowerBar().
+	(void)ds;
+	(void)player;
 }
 
 

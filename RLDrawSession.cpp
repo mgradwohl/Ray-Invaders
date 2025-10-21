@@ -43,6 +43,26 @@ namespace raylib
     {
         ::DrawTextureRec(texture, source, pos, color);
     }
+
+    void DrawSession::DrawTexturePro(const Texture2D &texture, const Rectangle &source, const Rectangle &dest,
+                                     const Vector2 &origin, const float scale, const Color color) noexcept
+    {
+        // Build destination rectangle scaled by the provided factor
+        Rectangle scaledDest{ dest.x, dest.y, dest.width * scale, dest.height * scale };
+        ::DrawTexturePro(texture, source, scaledDest, origin, 0.0f, color);
+    }
+    
+    void DrawSession::DrawTextureEx(const Texture2D &texture, const Vector2 &pos, const float scale,
+                                    const Color color) noexcept
+    {
+        ::DrawTextureEx(texture, pos, 0.0f, scale, color);
+    }
+    
+    void DrawSession::DrawTextureEx(const Texture2D &texture, const float x, const float y, const float scale,
+                                    const Color color) noexcept
+    {
+        ::DrawTextureEx(texture, Vector2{ x, y }, 0.0f, scale, color);
+    }
     
     void DrawSession::DrawText(const std::string& text, const int x, const int y, const int fontSize, const Color color) noexcept
     {

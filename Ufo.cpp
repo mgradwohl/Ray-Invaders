@@ -39,9 +39,11 @@ bool Ufo::check_bullet_collision(std::mt19937_64& i_random_engine, const Rectang
 	if (!_dead)
 	{
 		if (CheckCollisionRecs(get_hitbox(), i_bullet_hitbox))
-		{			_dead = true;
-			_ufoappearsound.Stop();			_explosion_x = _x;
-				_ufodestroysound.Play();
+		{
+			_dead = true;
+			_ufoappearsound.Stop();
+			_explosion_x = _x;
+			_ufodestroysound.Play();
 
 			// Get the powerup type from the distribution and truncate to unsigned char range
 			// This avoids the need for a static_cast

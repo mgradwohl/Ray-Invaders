@@ -62,6 +62,10 @@ namespace GlobalConstant {
         constexpr GameTypes::Count BASE_COUNT = 4;
         constexpr GameTypes::Size BASE_WIDTH = 30;
         constexpr GameTypes::Size FONT_SIZE_BIG = 32;
+        // Reserved UI strip at top of window for banner (logical pixels)
+        constexpr GameTypes::Size BANNER_HEIGHT = 20;
+        // Padding for UI elements inside the banner (logical or screen pixels per usage)
+        constexpr GameTypes::Size BANNER_PADDING = 12;
         
         //There are 64 enemies. So the probability that at least one of them shoots is 1 - (1 - 1 / 4096)^64 = 1.55%
         //Keep in mind that we do this every frame.
@@ -70,6 +74,7 @@ namespace GlobalConstant {
         constexpr GameTypes::Probability ENEMY_SHOOT_CHANCE_MIN = 1024;
         constexpr GameTypes::Duration POWERUP_DURATION = 512;
         constexpr GameTypes::Coordinate SCREEN_HEIGHT = 180;
+        constexpr GameTypes::Coordinate WINDOW_HEIGHT = 200;
         constexpr GameTypes::Coordinate SCREEN_WIDTH = 320;
         //The UFO will appear after this number of frames.
         constexpr GameTypes::Duration UFO_TIMER_MAX = 1024;
@@ -95,9 +100,13 @@ namespace GlobalConstant {
     constexpr float UFO_MOVE_SPEED      = 1.0F; // Int::GlobalConstant::UFO_MOVE_SPEED
 
     // Screen dimensions
-    constexpr float SCREEN_HEIGHT = 180.0F; // Int::GlobalConstant::SCREEN_HEIGHT
-    constexpr float SCREEN_WIDTH  = 320.0F; // Int::GlobalConstant::SCREEN_WIDTH
-    constexpr float SCREEN_RESIZE = 5.0F;   // Int::SCREEN_RESIZE
+    constexpr float SCREEN_HEIGHT = static_cast<float>(Int::SCREEN_HEIGHT);
+    constexpr float WINDOW_HEIGHT = static_cast<float>(Int::WINDOW_HEIGHT);
+    constexpr float SCREEN_WIDTH  = static_cast<float>(Int::SCREEN_WIDTH);
+    constexpr float SCREEN_RESIZE = static_cast<float>(Int::SCREEN_RESIZE);
+    // Float mirrors for banner metrics
+    constexpr float BANNER_HEIGHT  = static_cast<float>(Int::BANNER_HEIGHT);
+    constexpr float BANNER_PADDING = static_cast<float>(Int::BANNER_PADDING);
 
     // Common position fractions (actually used in code)
     constexpr float QUARTER        = 0.25F;

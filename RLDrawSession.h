@@ -27,6 +27,15 @@ namespace raylib
                          const Vector2 &pos, Color color) noexcept;
         void DrawTexture(const Texture2D &texture, const Rectangle &source, const Vector2 &pos,
                          Color color) noexcept;
+    // Wrapper for raylib::DrawTexturePro without rotation; rotation forced to 0
+    void DrawTexturePro(const Texture2D &texture, const Rectangle &source, const Rectangle &dest,
+                const Vector2 &origin, float scale, Color color) noexcept;
+    // Wrapper for raylib::DrawTextureEx to allow scaling when drawing textures (no rotation)
+    void DrawTextureEx(const Texture2D &texture, const Vector2 &pos, float scale,
+               Color color) noexcept;
+    // Convenience overload using scalar position instead of Vector2 (no rotation)
+    void DrawTextureEx(const Texture2D &texture, float x, float y, float scale,
+               Color color) noexcept;
         void DrawCircle(float centerX, float centerY, float radius, Color color) noexcept;
     };
 } // namespace raylib

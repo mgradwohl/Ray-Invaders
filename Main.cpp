@@ -24,7 +24,7 @@ auto main() -> int
 {
 	bool game_over = false;
 	bool next_level = false;
-	GameTypes::Level level = 0;
+	GameTypes::Level level = 1;
 	GameTypes::Timer next_level_timer = GlobalConstant::Int::NEXT_LEVEL_TRANSITION;
 
 	//We'll use this to make the game frame rate independent.
@@ -34,22 +34,25 @@ auto main() -> int
 	//Setting a random seed to make sure the random engine will randomly generate random numbers.
 	std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
-    raylib::Window const window(GlobalConstant::Int::SCREEN_WIDTH * GlobalConstant::Int::SCREEN_RESIZE, GlobalConstant::Int::SCREEN_HEIGHT * GlobalConstant::Int::SCREEN_RESIZE, 60,
-                                "Space Invaders");
+    raylib::Window const window(GlobalConstant::Int::SCREEN_WIDTH * GlobalConstant::Int::SCREEN_RESIZE, GlobalConstant::Int::WINDOW_HEIGHT * GlobalConstant::Int::SCREEN_RESIZE, 60,
+                                "Ray Invaders");
 
-    Background background("Resources/Images/BigGalaxy.png");
+	Background background("Resources/Images/BigGalaxy.png");
 	EnemyManager enemy_manager;
-		HitManager hit_manager;
+	HitManager hit_manager;
 	Player player;
 	PowerUpManager powerup("Resources/Images/PowerupBar.png");
 	Ufo ufo(random_engine);
 	Bases bases("Resources/Images/Base.png");
+	Texture2D banner = LoadTexture("Resources/Images/RayInvaders.png");
 
 	// AUTO_FIRE debug helper removed: spawning enemy bullets at startup was
 	// intrusive during regular testing and is no longer desirable.
 
 	// we draw everything to this, and then render this to the screen
 	Backbuffer backbuffer(GlobalConstant::Int::SCREEN_WIDTH, GlobalConstant::Int::SCREEN_HEIGHT, GlobalConstant::Int::SCREEN_RESIZE);
+	// Provide banner texture to backbuffer so it can compose UI strip at top
+	backbuffer.SetBanner(&banner);
 
 	previous_time = std::chrono::steady_clock::now();
 	while (!window.ShouldClose())
@@ -128,8 +131,10 @@ auto main() -> int
 				{
 					// everything is either reset (new game) or updated (continuing game) time to draw
 					raylib::DrawSession ds(backbuffer.GetRenderTexture(), BLACK);
+					
 					background.draw(ds);
-
+					// Update level indicator for the banner strip
+					backbuffer.SetLevel(static_cast<int>(level));
 					// When the player dies, we will only the player and the banner
 					player.draw(ds);
 					if (!player.get_dead())
@@ -139,10 +144,13 @@ auto main() -> int
 						bases.draw(ds);
 							// Global hit decals overlay world elements
 							hit_manager.draw(ds);
-						powerup.draw(ds, player);						const std::string levelText = "Level: " + std::to_string(level);
-						const int textY = static_cast<int>(GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE); // Using GlobalConstant::QUARTER constant
-						ds.DrawText(levelText, 10, textY, textY, WHITE);
-					}					else
+						// Queue power-up bar for banner drawing
+						backbuffer.SetPowerBar(&powerup.get_sprite(), powerup.get_color(), powerup.get_fill_fraction(player));
+						// const std::string levelText = "Level: " + std::to_string(level);
+						// const int textY = static_cast<int>(GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE); // Using GlobalConstant::QUARTER constant
+						// ds.DrawText(levelText, 10, textY, textY, WHITE);
+					}
+					else
 					{
 						ds.DrawTextCentered("Game over!", GlobalConstant::Int::SCREEN_WIDTH / 2, GlobalConstant::Int::SCREEN_HEIGHT / 2, GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
 					}
@@ -156,7 +164,10 @@ auto main() -> int
 			}
 		}
 	}
-}
+		// Clear banner reference and unload texture before exit
+		backbuffer.SetBanner(nullptr);
+	}
+
 
 
 

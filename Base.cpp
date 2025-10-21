@@ -194,7 +194,7 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, H
 
             // Emit a global hit decal in world space at the impact point
             hits.add_hit(HitSubject::Base, HitOutcome::NonFatal, _x + rel_x, _y + rel_y, radius);
-            _basehitsound.Play();
+            [[maybe_unused]] bool played = _basehitsound.Play();
             // play the sound effect for the impact
 
             // Mutate the CPU damage image: increase alpha in a radial falloff so damage accumulates

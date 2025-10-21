@@ -10,6 +10,11 @@ public:
 	void update(const Player& player);
 	void draw(raylib::DrawSession& ds, const Player& player) const;
 
+	// Accessors for banner composition
+	[[nodiscard]] auto get_sprite() const noexcept -> const Texture2D& { return _powerup_bar_sprite; }
+	[[nodiscard]] auto get_color() const noexcept -> Color { return _color; }
+	[[nodiscard]] auto get_fill_fraction(const Player& player) const noexcept -> float;
+
 private:	Texture2D _powerup_bar_sprite{};
 	Color _color = WHITE;
 	const std::string _spritefile;
