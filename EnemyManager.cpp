@@ -291,7 +291,8 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
     // I'M A PROFESSIONAL C++ PROGRAMMER!!!!
     // Yeah, that's better.
     dead_enemies_start = remove_if(_enemies.begin(), _enemies.end(), [](const Enemy &i_enemy)
-                                   { return 0 == i_enemy.get_health(); }); // The more enemies we kill, the faster they become.
+                                   { return 0 == i_enemy.get_health(); });
+    // The more enemies we kill, the faster they become.
     // No need for casting with int type
     auto alive_count = std::distance(dead_enemies_start, _enemies.end());
     // Specify explicit template parameter to help the compiler
@@ -313,6 +314,12 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
 }
 
 // Yes, that's a reference return type.
-std::vector<Bullet> &EnemyManager::get_enemy_bullets() noexcept { return _enemy_bullets; }
+std::vector<Bullet> &EnemyManager::get_enemy_bullets() noexcept
+{
+    return _enemy_bullets;
+}
 
-std::vector<Enemy> &EnemyManager::get_enemies() noexcept { return _enemies; }
+std::vector<Enemy> &EnemyManager::get_enemies() noexcept
+{
+    return _enemies;
+}
