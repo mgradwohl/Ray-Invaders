@@ -1,6 +1,6 @@
 #pragma once
 #include "Player.hpp"
-#include "RLDrawSession.h"
+#include "RLDrawSession.hpp"
 #include "RLTexture2D.hpp"
 
 class PowerUpManager

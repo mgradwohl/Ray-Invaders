@@ -10,8 +10,8 @@
 
 // Project headers
 #include "Animation.hpp"
-#include "Global.hpp"
 #include "Collision.hpp"
+#include "Global.hpp"
 #include "RLWaveSound.hpp"
 
 constexpr float UFO_EXPLOSION_Y_OFFSET = 0.5F;
@@ -168,7 +168,8 @@ void Ufo::update(std::mt19937_64 &i_random_engine)
     {
         powerup_animation.update();
     }
-    _powerups.erase(remove_if(_powerups.begin(), _powerups.end(), [](const PowerUpItem &i_powerup) noexcept { return i_powerup.isdead(); }),
+    _powerups.erase(remove_if(_powerups.begin(), _powerups.end(), [](const PowerUpItem &i_powerup) noexcept
+                              { return i_powerup.isdead(); }),
                     _powerups.end());
 }
 

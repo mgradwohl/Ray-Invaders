@@ -17,8 +17,8 @@
 #include "HitManager.hpp"
 #include "Player.hpp"
 #include "PowerUpManager.hpp"
-#include "RLDrawSession.h"
-#include "RLWindow.h"
+#include "RLDrawSession.hpp"
+#include "RLWindow.hpp"
 #include "Ufo.hpp"
 
 auto main() -> int

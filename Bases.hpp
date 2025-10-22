@@ -9,7 +9,7 @@
 #include "Bullet.hpp"
 #include "Global.hpp"
 #include "HitManager.hpp"
-#include "RLDrawSession.h"
+#include "RLDrawSession.hpp"
 #include "RLWaveSound.hpp"
 
 class Bases

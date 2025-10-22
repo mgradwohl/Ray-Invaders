@@ -109,4 +109,4 @@ help:
 
 # Generate dependency files
 $(BUILD_DIR)/%.d: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
-	@$(CXX) $(CXXFLAGS) $(INCLUDES) -MM -MT $(@:.d=.o) $< > $@
+	@$(CXX) $(CXXFLAGS) $(INCLUDES) -MM -MP -MT $(@:.d=.o) $< > $@

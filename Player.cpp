@@ -10,13 +10,13 @@
 
 // Project headers
 #include "Animation.hpp"
+#include "Collision.hpp"
 #include "Enemy.hpp"
 #include "Global.hpp"
-#include "Collision.hpp"
 #include "HitManager.hpp"
-#include "RLDrawSession.h"
+#include "RLDrawSession.hpp"
 #include "RLWaveSound.hpp"
-#include "RLWindow.h"
+#include "RLWindow.hpp"
 #include "Ufo.hpp"
 
 Player::Player()
@@ -105,7 +105,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
     if (!_dead)
     {
         GameTypes::Count powerup_type;
-    if (IsKeyDown(KEY_LEFT))
+        if (IsKeyDown(KEY_LEFT))
         {
             if (4 == _current_power)
             {
@@ -280,7 +280,8 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
         }
     }
 
-    _bullets.erase(remove_if(_bullets.begin(), _bullets.end(), [](const Bullet &i_bullet) { return true == i_bullet.IsDead(); }),
+    _bullets.erase(remove_if(_bullets.begin(), _bullets.end(), [](const Bullet &i_bullet)
+                             { return true == i_bullet.IsDead(); }),
                    _bullets.end());
 }
 

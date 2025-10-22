@@ -4,7 +4,7 @@
 #include <raylib.h>
 
 #include "Global.hpp"
-#include "RLDrawSession.h"
+#include "RLDrawSession.hpp"
 #include "RLTexture2D.hpp"
 
 class PowerUpManager;

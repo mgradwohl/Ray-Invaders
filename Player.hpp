@@ -7,7 +7,7 @@
 #include "Bullet.hpp"
 #include "Enemy.hpp"
 #include "Global.hpp"
-#include "RLDrawSession.h"
+#include "RLDrawSession.hpp"
 #include "RLTexture2D.hpp"
 #include "RLWaveSound.hpp"
 #include "Ufo.hpp"

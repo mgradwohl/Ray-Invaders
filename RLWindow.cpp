@@ -1,5 +1,5 @@
 // Corresponding header
-#include "RLWindow.h"
+#include "RLWindow.hpp"
 
 // Standard library headers
 #include <string>

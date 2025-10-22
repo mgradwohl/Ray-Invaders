@@ -7,7 +7,7 @@
 #include "Animation.hpp"
 #include "Global.hpp"
 #include "PowerUpItem.hpp"
-#include "RLDrawSession.h"
+#include "RLDrawSession.hpp"
 #include "RLWaveSound.hpp"
 
 class Ufo

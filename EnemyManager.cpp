@@ -14,7 +14,7 @@
 #include "Bullet.hpp"
 #include "Enemy.hpp"
 #include "Global.hpp"
-#include "RLDrawSession.h"
+#include "RLDrawSession.hpp"
 #include "RLWaveSound.hpp"
 
 // There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same
@@ -313,7 +313,8 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
 
     // I used a lambda!
     // AGAIN!
-    _enemy_bullets.erase(remove_if(_enemy_bullets.begin(), _enemy_bullets.end(), [](const Bullet &i_bullet) { return i_bullet.IsDead(); }),
+    _enemy_bullets.erase(remove_if(_enemy_bullets.begin(), _enemy_bullets.end(), [](const Bullet &i_bullet)
+                                   { return i_bullet.IsDead(); }),
                          _enemy_bullets.end());
 }
 

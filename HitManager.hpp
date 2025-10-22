@@ -4,7 +4,7 @@
 #include <raylib.h>
 
 #include "Hit.hpp"
-#include "RLDrawSession.h"
+#include "RLDrawSession.hpp"
 
 class HitManager
 {

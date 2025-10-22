@@ -8,7 +8,7 @@
 #include <raylib.h>
 
 // Project headers
-#include "RLDrawSession.h"
+#include "RLDrawSession.hpp"
 // Banner height is fixed via GlobalConstant::Int::BANNER_HEIGHT
 
 Backbuffer::Backbuffer(GameTypes::Coordinate width, GameTypes::Coordinate height, GameTypes::Size scale) noexcept

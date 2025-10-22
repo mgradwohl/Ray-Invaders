@@ -6,7 +6,7 @@
 
 // Project headers
 #include "Global.hpp"
-#include "RLDrawSession.h"
+#include "RLDrawSession.hpp"
 
 PowerUpManager::PowerUpManager(const std::string &spritefile) : _powerup_bar_sprite(spritefile), _spritefile(spritefile) {}
 
