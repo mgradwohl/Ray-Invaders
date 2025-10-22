@@ -24,7 +24,7 @@ SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
 OBJECTS = $(SOURCES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 
 # Default target
-.PHONY: all clean debug release run install
+.PHONY: all clean debug release run install profile perf-report callgrind
 
 all: debug
 
@@ -59,6 +59,20 @@ clean:
 run: $(BUILD_DIR)/$(TARGET)
 	@echo "Running $(TARGET)..."
 	cd $(SRC_DIR) && ./$(BUILD_DIR)/$(TARGET)
+
+# Profile with Linux perf (records until you quit the game)
+profile: release
+	@echo "Profiling with perf (Ctrl+C to stop)..."
+	perf record -g --call-graph=dwarf -- $(BUILD_DIR)/$(TARGET)
+
+# View perf report from last profile run
+perf-report:
+	perf report
+
+# Optional: Callgrind profile (heavier, slower)
+callgrind: release
+	@echo "Running under callgrind (this will be slow)..."
+	valgrind --tool=callgrind -- $(BUILD_DIR)/$(TARGET)
 
 # Install dependencies (if needed)
 install:

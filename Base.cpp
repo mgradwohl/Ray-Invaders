@@ -10,6 +10,7 @@
 
 // Project headers
 #include "Bullet.hpp"
+#include "Collision.hpp"
 #include "HitManager.hpp"
 #include "RLWaveSound.hpp"
 
@@ -106,7 +107,7 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
     {
         const Rectangle baseHB = get_hitbox();
         const Rectangle bulletHB = bullet.get_hitbox();
-        bool collided = CheckCollisionRecs(baseHB, bulletHB);
+    bool collided = AabbIntersect(baseHB, bulletHB);
 
         if (!bullet.IsDead() && collided)
         {

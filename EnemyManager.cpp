@@ -28,6 +28,8 @@ EnemyManager::EnemyManager() noexcept
     // We have a function that sets everything to the initial state, so why not use it?
     reset(0);
 
+    // Pre-size enemy animations to avoid re-allocations
+    _enemy_animations.reserve(GlobalConstant::Int::ENEMY_TYPES);
     for (GameTypes::Count a = 0; a < GlobalConstant::Int::ENEMY_TYPES; a++)
     {
         // Explicitly convert to match Animation constructor parameter
@@ -142,8 +144,10 @@ void EnemyManager::reset(GameTypes::Level i_level)
     }
 
     _enemy_bullets.clear();
+    _enemy_bullets.reserve(128);
 
     _enemies.clear();
+    _enemies.reserve(64);
     // There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same
     // thing we did in the game "Frogger".
     //  Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis),

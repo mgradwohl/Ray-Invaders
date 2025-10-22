@@ -12,6 +12,7 @@
 #include "Animation.hpp"
 #include "Enemy.hpp"
 #include "Global.hpp"
+#include "Collision.hpp"
 #include "HitManager.hpp"
 #include "RLDrawSession.h"
 #include "RLWaveSound.hpp"
@@ -24,6 +25,8 @@ Player::Player()
       _playerdestroysound("Resources/Sounds/Player Destroy.wav"), _playershieldsound("Resources/Sounds/Player Hit Shield.wav"),
       _explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, GlobalConstant::Int::BASE_SIZE, "Resources/Images/Explosion.png")
 {
+    // Avoid frequent re-allocations during gameplay (typical max concurrent bullets is small)
+    _bullets.reserve(64);
     reset();
 }
 
@@ -102,7 +105,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
     if (!_dead)
     {
         GameTypes::Count powerup_type;
-        if (IsKeyDown(KEY_LEFT))
+    if (IsKeyDown(KEY_LEFT))
         {
             if (4 == _current_power)
             {
@@ -163,7 +166,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
 
         for (Bullet &enemy_bullet : i_enemy_bullets)
         {
-            if (CheckCollisionRecs(get_hitbox(), enemy_bullet.get_hitbox()))
+            if (AabbIntersect(get_hitbox(), enemy_bullet.get_hitbox()))
             {
                 // Compute intersection center for a precise impact point
                 const Rectangle pHB = get_hitbox();
@@ -250,7 +253,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
     {
         for (Bullet &bullet : _bullets)
         {
-            if (!bullet.IsDead() && 0 < enemy.get_health() && CheckCollisionRecs(enemy.get_hitbox(), bullet.get_hitbox()))
+            if (!bullet.IsDead() && 0 < enemy.get_health() && AabbIntersect(enemy.get_hitbox(), bullet.get_hitbox()))
             {
                 bullet.IsDead(true);
 

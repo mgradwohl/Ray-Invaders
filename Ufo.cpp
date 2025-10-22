@@ -11,6 +11,7 @@
 // Project headers
 #include "Animation.hpp"
 #include "Global.hpp"
+#include "Collision.hpp"
 #include "RLWaveSound.hpp"
 
 constexpr float UFO_EXPLOSION_Y_OFFSET = 0.5F;
@@ -23,6 +24,9 @@ Ufo::Ufo(std::mt19937_64 &i_random_engine)
       _explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/ExplosionBig.png"),
       _ufoappearsound("Resources/Sounds/UFO Enter.wav"), _ufodestroysound("Resources/Sounds/UFO Destroy.wav")
 {
+    // Avoid vector growth during powerup creation and updates
+    _powerup_animations.reserve(GlobalConstant::Int::POWERUP_TYPES);
+    _powerups.reserve(8);
     reset(true, i_random_engine);
     for (GameTypes::Count puType = 0; puType < GlobalConstant::Int::POWERUP_TYPES; puType++)
     {
@@ -37,7 +41,7 @@ bool Ufo::check_bullet_collision(std::mt19937_64 &i_random_engine, const Rectang
 {
     if (!_dead)
     {
-        if (CheckCollisionRecs(get_hitbox(), i_bullet_hitbox))
+        if (AabbIntersect(get_hitbox(), i_bullet_hitbox))
         {
             _dead = true;
             _ufoappearsound.Stop();
@@ -60,7 +64,7 @@ GameTypes::Count Ufo::check_powerup_collision(const Rectangle &i_player_hitbox) 
 {
     for (PowerUpItem &powerup : _powerups)
     {
-        if (!powerup.isdead() && CheckCollisionRecs(powerup.get_hitbox(), i_player_hitbox))
+        if (!powerup.isdead() && AabbIntersect(powerup.get_hitbox(), i_player_hitbox))
         {
             powerup.isdead(true);
 

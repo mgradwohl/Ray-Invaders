@@ -84,19 +84,25 @@ namespace
     }
 } // namespace
 
+HitManager::HitManager() noexcept
+{
+    // Reserve to avoid frequent reallocations during bursts (explosions, shields, etc.)
+    _hits.reserve(128);
+}
+
 void HitManager::add_hit(HitSubject subject, HitOutcome outcome, float x, float y, float radius, int ttl) noexcept
 {
-    _hits.push_back(Hit{x, y, radius, ttl, subject, outcome});
+    _hits.emplace_back(x, y, radius, ttl, subject, outcome);
 }
 
 void HitManager::add_hit(HitSubject subject, HitOutcome outcome, float x, float y, float radius) noexcept
 {
-    _hits.push_back(Hit{x, y, radius, default_ttl(subject, outcome), subject, outcome});
+    _hits.emplace_back(x, y, radius, default_ttl(subject, outcome), subject, outcome);
 }
 
 void HitManager::add_hit(HitSubject subject, HitOutcome outcome, float x, float y) noexcept
 {
-    _hits.push_back(Hit{x, y, default_radius(subject, outcome), default_ttl(subject, outcome), subject, outcome});
+    _hits.emplace_back(x, y, default_radius(subject, outcome), default_ttl(subject, outcome), subject, outcome);
 }
 
 void HitManager::update() noexcept
