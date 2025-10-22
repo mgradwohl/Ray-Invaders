@@ -46,9 +46,6 @@ auto main() -> int
     Ufo ufo(random_engine);
     Bases bases("Resources/Images/Base.png");
 
-    // AUTO_FIRE debug helper removed: spawning enemy bullets at startup was
-    // intrusive during regular testing and is no longer desirable.
-
     // we draw everything to this, and then render this to the screen
     Backbuffer backbuffer(GlobalConstant::Int::SCREEN_WIDTH, GlobalConstant::Int::SCREEN_HEIGHT, GlobalConstant::Int::SCREEN_RESIZE);
     BannerUI bannerUI(&powerup);
@@ -69,8 +66,9 @@ auto main() -> int
             // We're gonna show the "Game over!" text after the player's death animation.
             if (player.get_dead_animation_over())
             {
-                game_over = 1;
-            } // Player's Y position is already a float, so we can check directly
+                game_over = true;
+            }
+            // Player's Y position is already a float, so we can check directly
             if (enemy_manager.reached_player(player.get_y()))
             {
                 player.die();
@@ -83,18 +81,18 @@ auto main() -> int
                 {
                     if (!next_level_timer)
                     {
-                        next_level = 0;
+                        next_level = false;
                         level++;
                         next_level_timer = GlobalConstant::Int::NEXT_LEVEL_TRANSITION;
                         background.reset();
                         player.reset();
                         enemy_manager.reset(level);
-                        ufo.reset(1, random_engine);
+                        ufo.reset(true, random_engine);
                         bases.reset();
                     }
                     else // Here we're showing the next level transition.
                     {
-                        next_level = 1;
+                        next_level = true;
                         next_level_timer--;
                     }
                 }
@@ -118,7 +116,7 @@ auto main() -> int
                 background.reset();
                 player.reset();
                 enemy_manager.reset(level);
-                ufo.reset(1, random_engine);
+                ufo.reset(true, random_engine);
                 bases.reset();
             }
 
