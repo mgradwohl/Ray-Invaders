@@ -223,7 +223,6 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, H
     // No fade logic - damage is now permanent (transparent holes stay transparent)
 
     // If any damage pixels were changed this frame (either new impacts or fade), update GPU texture
-<<<<<<< HEAD
     if (_damage_gpu_dirty && _damage_image.data)
     {
         _damage_tex.update(_damage_image.data);
