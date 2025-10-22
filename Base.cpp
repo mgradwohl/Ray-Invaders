@@ -103,19 +103,21 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
     }
 
     // Check for new bullet impacts
+    const Rectangle baseHB = get_hitbox();
+    const float base_x2 = baseHB.x + baseHB.width;
+    const float base_y2 = baseHB.y + baseHB.height;
     for (Bullet &bullet : i_bullets)
     {
-        const Rectangle baseHB = get_hitbox();
         const Rectangle bulletHB = bullet.get_hitbox();
-    bool collided = AabbIntersect(baseHB, bulletHB);
+        bool collided = AabbIntersect(baseHB, bulletHB);
 
         if (!bullet.IsDead() && collided)
         {
             // Use intersection rectangle center as impact point (more robust than bullet center)
             const float inter_x1 = std::max(baseHB.x, bulletHB.x);
             const float inter_y1 = std::max(baseHB.y, bulletHB.y);
-            const float inter_x2 = std::min(baseHB.x + baseHB.width, bulletHB.x + bulletHB.width);
-            const float inter_y2 = std::min(baseHB.y + baseHB.height, bulletHB.y + bulletHB.height);
+            const float inter_x2 = std::min(base_x2, bulletHB.x + bulletHB.width);
+            const float inter_y2 = std::min(base_y2, bulletHB.y + bulletHB.height);
             const float inter_w = std::max(0.0f, inter_x2 - inter_x1);
             const float inter_h = std::max(0.0f, inter_y2 - inter_y1);
             const float impact_world_x = inter_x1 + 0.5f * inter_w;
@@ -323,37 +325,34 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
 
 void Base::draw(raylib::DrawSession &ds) const
 {
-    // Apply damage by masking the base texture with the damage alpha channel
-    if (_has_damage && _damage_tex.id() > 0)
+    // Default path keeps backward compatibility: draw base, then damage overlay with local blend
+    draw_base(ds);
+    if (has_damage())
     {
-        // Use a simple approach: tint the base texture using the damage texture as an alpha mask
-        // We'll draw the base texture with a custom shader/approach that uses damage alpha
-
-        // For now, let's try drawing with normal blending and see the effect
-        const Rectangle src = {0.0f, 0.0f, _texture.widthF(), _texture.heightF()};
-        const Vector2 pos = {_x, _y};
-
-        // Draw the base texture normally first
-        ds.DrawTexture(_texture.get(), src, pos, WHITE);
-
-        // Now overlay damage by using alpha blending with inverted colors
-        // High alpha damage areas = more transparent in final result
         BeginBlendMode(BLEND_ALPHA);
-        const Rectangle damage_src = {0.0f, 0.0f, _damage_tex.widthF(), _damage_tex.heightF()};
-
-        // Draw damage texture with a color that creates holes - transparent black
-        Color hole_color = {0, 0, 0, 128}; // Semi-transparent black to create visible holes
-        ds.DrawTexture(_damage_tex.get(), damage_src, pos, hole_color);
+        draw_damage(ds);
         EndBlendMode();
-    }
-    else
-    {
-        // No damage - just draw base normally
-        const Vector2 dest{_x, _y};
-        ds.DrawTexture(_texture.get(), dest.x, dest.y, WHITE);
     }
 
     // Transient impact visuals for bases now come from the global HitManager.
+}
+
+void Base::draw_base(raylib::DrawSession &ds) const
+{
+    const Rectangle src = {0.0f, 0.0f, _texture.widthF(), _texture.heightF()};
+    const Vector2 pos = {_x, _y};
+    ds.DrawTexture(_texture.get(), src, pos, WHITE);
+}
+
+void Base::draw_damage(raylib::DrawSession &ds) const
+{
+    if (!has_damage())
+        return;
+    const Rectangle damage_src = {0.0f, 0.0f, _damage_tex.widthF(), _damage_tex.heightF()};
+    const Vector2 pos = {_x, _y};
+    // Semi-transparent black overlay to create visible holes
+    static constexpr Color hole_color = {0, 0, 0, 128};
+    ds.DrawTexture(_damage_tex.get(), damage_src, pos, hole_color);
 }
 
 Rectangle Base::get_hitbox() const noexcept

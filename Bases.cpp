@@ -63,8 +63,28 @@ void Bases::update(std::vector<Bullet> &i_bullets, HitManager &hits)
 
 void Bases::draw(raylib::DrawSession &ds) const
 {
+    // First pass: draw all base textures
     for (const auto &base : _bases)
     {
-        base->draw(ds);
+        base->draw_base(ds);
+    }
+    // Second pass: batch damage overlays under a single blend mode for fewer state changes
+    bool any_damage = false;
+    for (const auto &base : _bases)
+    {
+        if (base->has_damage())
+        {
+            any_damage = true;
+            break;
+        }
+    }
+    if (any_damage)
+    {
+        BeginBlendMode(BLEND_ALPHA);
+        for (const auto &base : _bases)
+        {
+            base->draw_damage(ds);
+        }
+        EndBlendMode();
     }
 }
