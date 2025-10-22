@@ -1,6 +1,8 @@
 #pragma once
-#include <raylib.h>
 #include <string>
+
+#include <raylib.h>
+
 #include "Global.hpp"
 #include "RLDrawSession.h"
 #include "RLTexture2D.hpp"

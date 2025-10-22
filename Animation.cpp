@@ -3,6 +3,9 @@
 // Corresponding header
 #include "Animation.hpp"
 
+// Standard library headers
+#include <algorithm>
+
 // Third-party headers
 #include <raylib.h>
 

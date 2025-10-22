@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
+
 #include <raylib.h>
+
+#include "Global.hpp"
 #include "RLDrawSession.h"
 #include "RLTexture2D.hpp"
-#include "Global.hpp"
 
 class Animation
 {

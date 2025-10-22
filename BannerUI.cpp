@@ -1,6 +1,15 @@
 #include "BannerUI.hpp"
-#include "PowerUpManager.hpp"
+
+// Standard library headers
+#include <cmath>
+#include <string>
+
+// Third-party headers
+#include <raylib.h>
+
+// Project headers
 #include "Player.hpp"
+#include "PowerUpManager.hpp"
 
 BannerUI::BannerUI(const PowerUpManager* pum) noexcept : _pum(pum) {
     _banner.load("Resources/Images/RayInvadersScaled.png");

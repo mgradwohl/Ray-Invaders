@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
+
+#include <raylib.h>
+
 #include "Bullet.hpp"
 #include "Global.hpp"
 #include "SoundManager.hpp"
-#include <raylib.h>
 
 
 class Enemy

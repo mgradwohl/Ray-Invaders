@@ -1,14 +1,16 @@
 #pragma once
 #include <random>
+
 #include <raylib.h>
+
+#include "Animation.hpp"
+#include "Bullet.hpp"
+#include "Enemy.hpp"
+#include "Global.hpp"
 #include "RLDrawSession.h"
 #include "RLTexture2D.hpp"
 #include "RLWaveSound.hpp"
-#include "Global.hpp"
-#include "Animation.hpp"
 #include "Ufo.hpp"
-#include "Enemy.hpp"
-#include "Bullet.hpp"
 
 class HitManager; // forward declaration
 class Player

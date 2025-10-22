@@ -1,12 +1,14 @@
 // Corresponding header
 #include "Backbuffer.hpp"
-// Project headers
-#include "RLDrawSession.h"
+
+// Standard library
+#include <string>
 
 // Third-party headers
 #include <raylib.h>
-// Standard library
-#include <string>
+
+// Project headers
+#include "RLDrawSession.h"
 // Banner height is fixed via GlobalConstant::Int::BANNER_HEIGHT
 
 Backbuffer::Backbuffer(GameTypes::Coordinate width, GameTypes::Coordinate height, GameTypes::Size scale) noexcept

@@ -1,6 +1,7 @@
 #pragma once
-#include <raylib.h>
 #include <string>
+
+#include <raylib.h>
 
 // Forward declaration
 namespace raylib { class RenderTexture2D; }
