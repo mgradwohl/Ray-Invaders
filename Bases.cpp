@@ -18,8 +18,7 @@ Bases::Bases(const std::string &filename)
     _framecount = static_cast<int>(_baseImage.width / GlobalConstant::BASE_WIDTH - 1.0f);
 
     // Calculate positioning for bases
-    const float offset = (GlobalConstant::SCREEN_WIDTH -
-                          (GlobalConstant::Int::BASE_COUNT * GlobalConstant::BASE_WIDTH)) /
+    const float offset = (GlobalConstant::SCREEN_WIDTH - (GlobalConstant::Int::BASE_COUNT * GlobalConstant::BASE_WIDTH)) /
                          (GlobalConstant::Int::BASE_COUNT + 1);
     float x = offset;
 
@@ -54,8 +53,7 @@ void Bases::update(std::vector<Bullet> &i_bullets, HitManager &hits)
 {
     // Since _framecount is now an int, we can do a direct comparison
     // without needing intermediate casts
-    const GameTypes::Count frameCount =
-        (_framecount > UINT8_MAX) ? UINT8_MAX : static_cast<GameTypes::Count>(_framecount);
+    const GameTypes::Count frameCount = (_framecount > UINT8_MAX) ? UINT8_MAX : static_cast<GameTypes::Count>(_framecount);
 
     for (auto &base : _bases)
     {

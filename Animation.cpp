@@ -12,10 +12,8 @@
 // Project headers
 #include "RLDrawSession.h"
 
-Animation::Animation(GameTypes::Speed i_animation_speed, GameTypes::Size i_frame_width,
-                     const std::string &i_texture_location) noexcept
-    : _animation_iterator(0), _animation_speed(std::max(1, static_cast<int>(i_animation_speed))),
-      _current_frame(0),
+Animation::Animation(GameTypes::Speed i_animation_speed, GameTypes::Size i_frame_width, const std::string &i_texture_location) noexcept
+    : _animation_iterator(0), _animation_speed(std::max(1, static_cast<int>(i_animation_speed))), _current_frame(0),
       // Convert frame width to float during initialization
       _frame_width(static_cast<float>(i_frame_width)), _sprite(i_texture_location)
 {

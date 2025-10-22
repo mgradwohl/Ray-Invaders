@@ -15,9 +15,8 @@
 #include "SoundManager.hpp"
 
 Enemy::Enemy(Type i_type, float i_x, float i_y, GameTypes::Health health) noexcept
-    : _direction(Direction::Down), _health(health), _hit_timer(0), _type(i_type),
-      _x(i_x), // No cast needed with float parameters
-      _y(i_y), // No cast needed with float parameters
+    : _direction(Direction::Down), _health(health), _hit_timer(0), _type(i_type), _x(i_x), // No cast needed with float parameters
+      _y(i_y),                                                                             // No cast needed with float parameters
       _enemylaser("Resources/Sounds/Enemy Laser.wav")
 {
 }
@@ -37,8 +36,7 @@ void Enemy::move()
         const float rightBoundary = GlobalConstant::SCREEN_WIDTH - 2.0f * GlobalConstant::BASE_SIZE;
         const float leftBoundary = GlobalConstant::BASE_SIZE;
 
-        if ((_direction == Direction::Right && _x >= rightBoundary) ||
-            (_direction == Direction::Left && _x <= leftBoundary))
+        if ((_direction == Direction::Right && _x >= rightBoundary) || (_direction == Direction::Left && _x <= leftBoundary))
         {
             _direction = Direction::Down;
             _y += GlobalConstant::ENEMY_MOVE_SPEED;
@@ -67,11 +65,9 @@ void Enemy::move()
     }
     else
     {
-        _y = std::min<float>(_y + GlobalConstant::ENEMY_MOVE_SPEED,
-                             GlobalConstant::BASE_SIZE * ceil(_y / GlobalConstant::BASE_SIZE));
-        if (_y >= GlobalConstant::BASE_SIZE * ceil(_y / GlobalConstant::BASE_SIZE) -
-                      0.1f) // Using approximate comparison for float
-        {                   // Calculate row using floor division with floats
+        _y = std::min<float>(_y + GlobalConstant::ENEMY_MOVE_SPEED, GlobalConstant::BASE_SIZE * ceil(_y / GlobalConstant::BASE_SIZE));
+        if (_y >= GlobalConstant::BASE_SIZE * ceil(_y / GlobalConstant::BASE_SIZE) - 0.1f) // Using approximate comparison for float
+        {                                                                                  // Calculate row using floor division with floats
             const float rowFloat = _y / GlobalConstant::BASE_SIZE;
             // This cast is necessary for the modulo operation which requires an integer
             const int rowInt = static_cast<int>(rowFloat);
@@ -92,19 +88,15 @@ void Enemy::shoot(std::vector<Bullet> &i_enemy_bullets)
     }
     case Type::Purple:
     {
-        i_enemy_bullets.emplace_back(0.125F * GlobalConstant::ENEMY_BULLET_SPEED,
-                                     GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
-        i_enemy_bullets.emplace_back(-0.125F * GlobalConstant::ENEMY_BULLET_SPEED,
-                                     GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
+        i_enemy_bullets.emplace_back(0.125F * GlobalConstant::ENEMY_BULLET_SPEED, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
+        i_enemy_bullets.emplace_back(-0.125F * GlobalConstant::ENEMY_BULLET_SPEED, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
         break;
     }
     case Type::Green:
     {
         i_enemy_bullets.emplace_back(0.0f, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
-        i_enemy_bullets.emplace_back(0.25F * GlobalConstant::ENEMY_BULLET_SPEED,
-                                     GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
-        i_enemy_bullets.emplace_back(-0.25F * GlobalConstant::ENEMY_BULLET_SPEED,
-                                     GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
+        i_enemy_bullets.emplace_back(0.25F * GlobalConstant::ENEMY_BULLET_SPEED, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
+        i_enemy_bullets.emplace_back(-0.25F * GlobalConstant::ENEMY_BULLET_SPEED, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
         break;
     }
     }
@@ -134,8 +126,6 @@ Rectangle Enemy::get_hitbox() const noexcept
 {
     // The sprite width is 16 pixels but the hitbox should be 12 pixels wide, centered
     constexpr float hitbox_width = 12.0f;
-    constexpr float x_offset = (GlobalConstant::BASE_SIZE - hitbox_width) *
-                               0.5f; // Center the 12px hitbox within the 16px sprite
-    return Rectangle{_x + x_offset, _y + 0.25f * GlobalConstant::BASE_SIZE, hitbox_width,
-                     0.5f * GlobalConstant::BASE_SIZE};
+    constexpr float x_offset = (GlobalConstant::BASE_SIZE - hitbox_width) * 0.5f; // Center the 12px hitbox within the 16px sprite
+    return Rectangle{_x + x_offset, _y + 0.25f * GlobalConstant::BASE_SIZE, hitbox_width, 0.5f * GlobalConstant::BASE_SIZE};
 }

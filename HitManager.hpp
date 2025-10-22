@@ -10,8 +10,7 @@ class HitManager
 {
   public:
     // Add a hit with explicit ttl
-    void add_hit(HitSubject subject, HitOutcome outcome, float x, float y, float radius,
-                 int ttl) noexcept;
+    void add_hit(HitSubject subject, HitOutcome outcome, float x, float y, float radius, int ttl) noexcept;
     // Preset-ttl overload: uses internal defaults per subject/outcome
     void add_hit(HitSubject subject, HitOutcome outcome, float x, float y, float radius) noexcept;
     // Full preset overload: uses internal defaults for ttl and radius

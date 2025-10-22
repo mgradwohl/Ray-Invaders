@@ -8,8 +8,7 @@
 #include "Global.hpp"
 
 Bullet::Bullet(float i_step_x, float i_step_y, float i_x, float i_y) noexcept
-    : _x(i_x), _y(i_y), _dead(false), _real_x(i_x), _real_y(i_y), _step_x(i_step_x),
-      _step_y(i_step_y)
+    : _x(i_x), _y(i_y), _dead(false), _real_x(i_x), _real_y(i_y), _step_x(i_step_x), _step_y(i_step_y)
 {
     _previous_x.fill(_x);
     _previous_y.fill(_y);
@@ -38,8 +37,8 @@ void Bullet::update() noexcept
         _x = _real_x; // no need for cast, both are float now
         _y = _real_y; // no need for cast, both are float now
 
-        if (_x <= -GlobalConstant::BASE_SIZE || _y <= -GlobalConstant::BASE_SIZE ||
-            _y >= GlobalConstant::SCREEN_HEIGHT || _x >= GlobalConstant::SCREEN_WIDTH)
+        if (_x <= -GlobalConstant::BASE_SIZE || _y <= -GlobalConstant::BASE_SIZE || _y >= GlobalConstant::SCREEN_HEIGHT ||
+            _x >= GlobalConstant::SCREEN_WIDTH)
         {
             _dead = true;
         }
@@ -49,13 +48,14 @@ void Bullet::update() noexcept
 Rectangle Bullet::get_hitbox() const noexcept
 {
     // Smaller hitboxes make the game so much better!
-    constexpr float bullet_width =
-        4.0f; // Slightly wider bullet hitbox for better collision detection
-    constexpr float bullet_height =
-        GlobalConstant::BASE_SIZE / 2.0f; // Shorter height to match visual appearance
-    constexpr float x_offset =
-        (GlobalConstant::BASE_SIZE - bullet_width) * 0.5f; // Center the hitbox within the sprite
-    return Rectangle{_x + x_offset, _y, bullet_width, bullet_height};
+	// Slightly wider bullet hitbox for better collision detection
+	constexpr float bullet_width = 4.0f;
+	// Shorter height to match visual appearance
+	constexpr float bullet_height = GlobalConstant::BASE_SIZE / 2.0f;
+    // Center the hitbox within the sprite
+	constexpr float x_offset = (GlobalConstant::BASE_SIZE - bullet_width) * 0.5f;
+
+	return Rectangle{_x + x_offset, _y, bullet_width, bullet_height};
 }
 
 float Bullet::get_x() const noexcept { return _x; }

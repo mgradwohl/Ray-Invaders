@@ -28,8 +28,7 @@ class Base
 
     void reset(const Image &baseImage) noexcept;
     // Update base state and process bullet impacts. Emits global hit decals via HitManager.
-    void update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount,
-                class HitManager &hits);
+    void update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, class HitManager &hits);
     void draw(raylib::DrawSession &ds) const;
     [[nodiscard]] auto get_hitbox() const noexcept -> Rectangle;
     [[nodiscard]] auto is_dead() const noexcept -> bool { return _dead; }

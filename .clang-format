@@ -2,7 +2,7 @@ BasedOnStyle: LLVM
 IndentWidth: 4
 TabWidth: 4
 UseTab: Never
-ColumnLimit: 100
+ColumnLimit: 140
 AllowShortIfStatementsOnASingleLine: false
 BreakBeforeBraces: Allman
 SortIncludes: true
@@ -11,3 +11,16 @@ SpacesInParentheses: false
 SpaceAfterCStyleCast: true
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
+# Explicit Allman brace control for fine-grained consistency
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  AfterCaseLabel: true
+  IndentBraces: false

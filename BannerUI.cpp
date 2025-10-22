@@ -48,8 +48,7 @@ void BannerUI::draw(raylib::DrawSession &ds, const Player &player) const noexcep
         const std::string text = "Level: " + std::to_string(_level);
         const float drawX = GlobalConstant::BANNER_PADDING;
         const float drawY = (bannerHeightLogical - static_cast<float>(fontSize)) * 0.5f;
-        ds.DrawText(text.c_str(), static_cast<int>(drawX), static_cast<int>(drawY), fontSize,
-                    WHITE);
+        ds.DrawText(text.c_str(), static_cast<int>(drawX), static_cast<int>(drawY), fontSize, WHITE);
     }
 
     // Power bar (right) via manager

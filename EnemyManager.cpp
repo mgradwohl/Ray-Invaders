@@ -22,10 +22,8 @@
 //  Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered
 //  for precise collision detection.
 EnemyManager::EnemyManager() noexcept
-    : _shoot_distribution(0, GlobalConstant::Int::ENEMY_SHOOT_CHANCE),
-      _enemy_bullet_sprite("Resources/Images/EnemyBullet.png"),
-      _enemymove("Resources/Sounds/Enemy Move.wav"),
-      _enemydestroy("Resources/Sounds/Enemy Destroy.wav")
+    : _shoot_distribution(0, GlobalConstant::Int::ENEMY_SHOOT_CHANCE), _enemy_bullet_sprite("Resources/Images/EnemyBullet.png"),
+      _enemymove("Resources/Sounds/Enemy Move.wav"), _enemydestroy("Resources/Sounds/Enemy Destroy.wav")
 {
     // We have a function that sets everything to the initial state, so why not use it?
     reset(0);
@@ -35,8 +33,7 @@ EnemyManager::EnemyManager() noexcept
         // Explicitly convert to match Animation constructor parameter
         const int animSpeed = 1 + _move_pause;
         const std::string filename = "Resources/Images/Enemy" + std::to_string(a) + ".png";
-        _enemy_animations.emplace_back(static_cast<unsigned short>(animSpeed),
-                                       GlobalConstant::Int::BASE_SIZE, filename);
+        _enemy_animations.emplace_back(static_cast<unsigned short>(animSpeed), GlobalConstant::Int::BASE_SIZE, filename);
     }
 }
 
@@ -69,15 +66,13 @@ void EnemyManager::draw(raylib::DrawSession &ds) const
             const Vector2 dest{prev_x[a], prev_y[a]}; // prev_x and prev_y are already float
             // Array index 'a' will be small, implicit conversion is fine here
             const float sourceX = GlobalConstant::BASE_SIZE * a;
-            const Rectangle source{sourceX, 0.0f, GlobalConstant::BASE_SIZE,
-                                   GlobalConstant::BASE_SIZE};
+            const Rectangle source{sourceX, 0.0f, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
             ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, WHITE);
         }
 
         // Drawing the bullet itself.
         const Vector2 dest{bullet.get_x(), bullet.get_y()};
-        const float sourceX =
-            GlobalConstant::BASE_SIZE * tailSize; // tailSize is small, implicit conversion is fine
+        const float sourceX = GlobalConstant::BASE_SIZE * tailSize; // tailSize is small, implicit conversion is fine
         const Rectangle source{sourceX, 0.0f, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
         ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, WHITE);
     }
@@ -133,15 +128,13 @@ void EnemyManager::reset(GameTypes::Level i_level)
 
     std::string level_sketch = "";
     _move_pause = std::max<short>(GlobalConstant::Int::ENEMY_MOVE_PAUSE_START_MIN,
-                                  GlobalConstant::Int::ENEMY_MOVE_PAUSE_START -
-                                      GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * i_level);
+                                  GlobalConstant::Int::ENEMY_MOVE_PAUSE_START - GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * i_level);
     _move_timer = _move_pause;
 
     _shoot_distribution = std::uniform_int_distribution<GameTypes::Probability>(
         0, std::max<GameTypes::Probability>(GlobalConstant::Int::ENEMY_SHOOT_CHANCE_MIN,
                                             GlobalConstant::Int::ENEMY_SHOOT_CHANCE -
-                                                GlobalConstant::Int::ENEMY_SHOOT_CHANCE_INCREASE *
-                                                    i_level));
+                                                GlobalConstant::Int::ENEMY_SHOOT_CHANCE_INCREASE * i_level));
 
     for (Animation &enemy_animation : _enemy_animations)
     {
@@ -235,12 +228,8 @@ void EnemyManager::reset(GameTypes::Level i_level)
         }
         case '0':
         {
-            const float enemyXPos =
-                GlobalConstant::BASE_SIZE *
-                (1.0f + enemy_x); // enemy_x is unsigned char, implicit conversion to float
-            const float enemyYPos =
-                GlobalConstant::BASE_SIZE *
-                (2.0f + enemy_y); // enemy_y is unsigned char, implicit conversion to float
+            const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0f + enemy_x); // enemy_x is unsigned char, implicit conversion to float
+            const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0f + enemy_y); // enemy_y is unsigned char, implicit conversion to float
             _enemies.emplace_back(Enemy::Type::Cyan, enemyXPos, enemyYPos, enemy_health);
             break;
         }
@@ -301,15 +290,13 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
     // No, not like that.
     // I'M A PROFESSIONAL C++ PROGRAMMER!!!!
     // Yeah, that's better.
-    dead_enemies_start = remove_if(
-        _enemies.begin(), _enemies.end(), [](const Enemy &i_enemy)
-        { return 0 == i_enemy.get_health(); }); // The more enemies we kill, the faster they become.
+    dead_enemies_start = remove_if(_enemies.begin(), _enemies.end(), [](const Enemy &i_enemy)
+                                   { return 0 == i_enemy.get_health(); }); // The more enemies we kill, the faster they become.
     // No need for casting with int type
     auto alive_count = std::distance(dead_enemies_start, _enemies.end());
     // Specify explicit template parameter to help the compiler
     auto new_pause = std::max<int>(GlobalConstant::Int::ENEMY_MOVE_PAUSE_MIN,
-                                   _move_pause - GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE *
-                                                     static_cast<int>(alive_count));
+                                   _move_pause - GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * static_cast<int>(alive_count));
     _move_pause = std::max<int>(0, new_pause);
 
     _enemies.erase(dead_enemies_start, _enemies.end());
@@ -321,8 +308,7 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
 
     // I used a lambda!
     // AGAIN!
-    _enemy_bullets.erase(remove_if(_enemy_bullets.begin(), _enemy_bullets.end(),
-                                   [](const Bullet &i_bullet) { return i_bullet.IsDead(); }),
+    _enemy_bullets.erase(remove_if(_enemy_bullets.begin(), _enemy_bullets.end(), [](const Bullet &i_bullet) { return i_bullet.IsDead(); }),
                          _enemy_bullets.end());
 }
 

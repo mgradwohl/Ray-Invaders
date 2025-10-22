@@ -19,14 +19,10 @@
 #include "Ufo.hpp"
 
 Player::Player()
-    : _bullet_sprite("Resources/Images/PlayerBullet.png"),
-      _player_sprite("Resources/Images/Player.png"),
-      _playerlasersound("Resources/Sounds/Player Laser.wav"),
-      _powerupsound("Resources/Sounds/Power Up.wav"),
-      _playerdestroysound("Resources/Sounds/Player Destroy.wav"),
-      _playershieldsound("Resources/Sounds/Player Hit Shield.wav"),
-      _explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, GlobalConstant::Int::BASE_SIZE,
-                 "Resources/Images/Explosion.png")
+    : _bullet_sprite("Resources/Images/PlayerBullet.png"), _player_sprite("Resources/Images/Player.png"),
+      _playerlasersound("Resources/Sounds/Player Laser.wav"), _powerupsound("Resources/Sounds/Power Up.wav"),
+      _playerdestroysound("Resources/Sounds/Player Destroy.wav"), _playershieldsound("Resources/Sounds/Player Hit Shield.wav"),
+      _explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, GlobalConstant::Int::BASE_SIZE, "Resources/Images/Explosion.png")
 {
     reset();
 }
@@ -52,9 +48,8 @@ void Player::draw(raylib::DrawSession &ds) const
         // sprite.setTextureRect(sf::IntRect(BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE));
         Vector2 dest{_x, _y};
         // Using float constants to avoid static_cast
-        const Rectangle source{GlobalConstant::BASE_SIZE *
-                                   _current_power, // _current_power is unsigned char, safe implicit
-                                                   // conversion to float
+        const Rectangle source{GlobalConstant::BASE_SIZE * _current_power, // _current_power is unsigned char, safe implicit
+                                                                           // conversion to float
                                0.0f, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
         ds.DrawTexture(_player_sprite.get(), source, dest, WHITE);
 
@@ -101,8 +96,8 @@ void Player::reset()
     _explosion.reset();
 }
 
-void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_enemy_bullets,
-                    std::vector<Enemy> &i_enemies, Ufo &i_ufo, HitManager &i_hits)
+void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_enemy_bullets, std::vector<Enemy> &i_enemies, Ufo &i_ufo,
+                    HitManager &i_hits)
 {
     if (!_dead)
     {
@@ -112,8 +107,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
             if (4 == _current_power)
             {
                 // Mirrored controls power-DOWN!
-                _x = std::min(GlobalConstant::PLAYER_MOVE_SPEED + _x,
-                              GlobalConstant::SCREEN_WIDTH - 2.0f * GlobalConstant::BASE_SIZE);
+                _x = std::min(GlobalConstant::PLAYER_MOVE_SPEED + _x, GlobalConstant::SCREEN_WIDTH - 2.0f * GlobalConstant::BASE_SIZE);
             }
             else
             {
@@ -132,8 +126,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
             }
             else
             {
-                _x = std::min(GlobalConstant::PLAYER_MOVE_SPEED + _x,
-                              GlobalConstant::SCREEN_WIDTH - 2.0f * GlobalConstant::BASE_SIZE);
+                _x = std::min(GlobalConstant::PLAYER_MOVE_SPEED + _x, GlobalConstant::SCREEN_WIDTH - 2.0f * GlobalConstant::BASE_SIZE);
             }
         }
 
@@ -190,16 +183,14 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
                     _shield_animation_over = false;
                     // Non-fatal player hit (shielded) - presets for radius and TTL
                     [[maybe_unused]] bool played = _playershieldsound.Play();
-                    i_hits.add_hit(HitSubject::Player, HitOutcome::NonFatal, impact_world_x,
-                                   impact_world_y);
+                    i_hits.add_hit(HitSubject::Player, HitOutcome::NonFatal, impact_world_x, impact_world_y);
                 }
                 else
                 {
                     _dead = true;
                     [[maybe_unused]] bool played = _playerdestroysound.Play();
                     // Fatal player hit - presets for radius and TTL
-                    i_hits.add_hit(HitSubject::Player, HitOutcome::Destroyed, impact_world_x,
-                                   impact_world_y);
+                    i_hits.add_hit(HitSubject::Player, HitOutcome::Destroyed, impact_world_x, impact_world_y);
                 }
 
                 enemy_bullet.IsDead(true);
@@ -249,8 +240,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
                 const Rectangle uHB = i_ufo.get_hitbox();
                 const float impact_world_x = uHB.x + 0.5f * uHB.width;
                 const float impact_world_y = uHB.y + 0.5f * uHB.height;
-                i_hits.add_hit(HitSubject::Ufo, HitOutcome::Destroyed, impact_world_x,
-                               impact_world_y);
+                i_hits.add_hit(HitSubject::Ufo, HitOutcome::Destroyed, impact_world_x, impact_world_y);
                 bullet.IsDead(true);
             }
         }
@@ -260,8 +250,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
     {
         for (Bullet &bullet : _bullets)
         {
-            if (!bullet.IsDead() && 0 < enemy.get_health() &&
-                CheckCollisionRecs(enemy.get_hitbox(), bullet.get_hitbox()))
+            if (!bullet.IsDead() && 0 < enemy.get_health() && CheckCollisionRecs(enemy.get_hitbox(), bullet.get_hitbox()))
             {
                 bullet.IsDead(true);
 
@@ -279,8 +268,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
 
                 // Emit a global Enemy hit decal via HitManager (world-space). Presets for radius
                 // and TTL
-                i_hits.add_hit(HitSubject::Enemy, HitOutcome::NonFatal, impact_world_x,
-                               impact_world_y);
+                i_hits.add_hit(HitSubject::Enemy, HitOutcome::NonFatal, impact_world_x, impact_world_y);
 
                 enemy.hit();
 
@@ -289,16 +277,14 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
         }
     }
 
-    _bullets.erase(remove_if(_bullets.begin(), _bullets.end(),
-                             [](const Bullet &i_bullet) { return true == i_bullet.IsDead(); }),
+    _bullets.erase(remove_if(_bullets.begin(), _bullets.end(), [](const Bullet &i_bullet) { return true == i_bullet.IsDead(); }),
                    _bullets.end());
 }
 
 Rectangle Player::get_hitbox() const noexcept
 {
     // Use the fraction constants from the F namespace
-    return Rectangle{_x + 0.125f * GlobalConstant::BASE_SIZE,
-                     _y + 0.125f * GlobalConstant::BASE_SIZE,
+    return Rectangle{_x + 0.125f * GlobalConstant::BASE_SIZE, _y + 0.125f * GlobalConstant::BASE_SIZE,
                      GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE,
                      GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE};
 }

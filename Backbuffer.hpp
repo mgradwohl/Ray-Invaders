@@ -8,8 +8,7 @@ class BannerUI;
 class Backbuffer
 {
   public:
-    Backbuffer(GameTypes::Coordinate width, GameTypes::Coordinate height,
-               GameTypes::Size scale) noexcept;
+    Backbuffer(GameTypes::Coordinate width, GameTypes::Coordinate height, GameTypes::Size scale) noexcept;
     ~Backbuffer();
     Backbuffer(const Backbuffer &) = delete;
     Backbuffer &operator=(const Backbuffer &) = delete;
@@ -17,14 +16,8 @@ class Backbuffer
     Backbuffer &operator=(Backbuffer &&) = delete;
     void flip() const noexcept;
     // Access render targets for gameplay and banner drawing from Main
-    [[nodiscard]] auto GetGameplayRenderTexture() noexcept -> raylib::RenderTexture2D &
-    {
-        return _rtGameplay;
-    }
-    [[nodiscard]] auto GetBannerRenderTexture() noexcept -> raylib::RenderTexture2D &
-    {
-        return _rtBanner;
-    }
+    [[nodiscard]] auto GetGameplayRenderTexture() noexcept -> raylib::RenderTexture2D & { return _rtGameplay; }
+    [[nodiscard]] auto GetBannerRenderTexture() noexcept -> raylib::RenderTexture2D & { return _rtBanner; }
 
   private:
     raylib::RenderTexture2D _rtGameplay; // SCREEN_WIDTH x SCREEN_HEIGHT

@@ -17,23 +17,18 @@ constexpr float UFO_EXPLOSION_Y_OFFSET = 0.5F;
 constexpr float UFO_EXPLOSION_MAGIC_OFFSET = 0.5F;
 
 Ufo::Ufo(std::mt19937_64 &i_random_engine)
-    : _y(GlobalConstant::BASE_SIZE),
-      _powerup_distribution(0, GlobalConstant::Int::POWERUP_TYPES - 1),
+    : _y(GlobalConstant::BASE_SIZE), _powerup_distribution(0, GlobalConstant::Int::POWERUP_TYPES - 1),
       _timer_distribution(GlobalConstant::Int::UFO_TIMER_MIN, GlobalConstant::Int::UFO_TIMER_MAX),
-      _animation(GlobalConstant::Int::UFO_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE,
-                 "Resources/Images/Ufo.png"),
-      _explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE,
-                 "Resources/Images/ExplosionBig.png"),
-      _ufoappearsound("Resources/Sounds/UFO Enter.wav"),
-      _ufodestroysound("Resources/Sounds/UFO Destroy.wav")
+      _animation(GlobalConstant::Int::UFO_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/Ufo.png"),
+      _explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/ExplosionBig.png"),
+      _ufoappearsound("Resources/Sounds/UFO Enter.wav"), _ufodestroysound("Resources/Sounds/UFO Destroy.wav")
 {
     reset(true, i_random_engine);
     for (GameTypes::Count puType = 0; puType < GlobalConstant::Int::POWERUP_TYPES; puType++)
     {
         // Use implicit conversion to create the string
         std::string powerupIndex = std::to_string(puType);
-        _powerup_animations.emplace_back(GlobalConstant::Int::POWERUP_ANIMATION_SPEED,
-                                         GlobalConstant::BASE_SIZE,
+        _powerup_animations.emplace_back(GlobalConstant::Int::POWERUP_ANIMATION_SPEED, GlobalConstant::BASE_SIZE,
                                          "Resources/Images/Powerup" + powerupIndex + ".png");
     }
 }
@@ -50,8 +45,7 @@ bool Ufo::check_bullet_collision(std::mt19937_64 &i_random_engine, const Rectang
             [[maybe_unused]] bool played = _ufodestroysound.Play();
 
             // Get the powerup type from the distribution and cast to enum
-            GameTypes::Count powerupIndex =
-                _powerup_distribution(i_random_engine) % GlobalConstant::Int::POWERUP_TYPES;
+            GameTypes::Count powerupIndex = _powerup_distribution(i_random_engine) % GlobalConstant::Int::POWERUP_TYPES;
             auto powerupType = static_cast<PowerUpItem::Type>(powerupIndex);
             _powerups.emplace_back(_x + 0.5F * GlobalConstant::BASE_SIZE, _y, powerupType);
 
@@ -87,19 +81,14 @@ void Ufo::draw(raylib::DrawSession &ds) const
     else if (!_dead_animation_over)
     {
         // Only draw the explosion animation until it's finished
-        _explosion.draw(ds, _explosion_x, _y - (UFO_EXPLOSION_Y_OFFSET * GlobalConstant::BASE_SIZE),
-                        Color(255, 36, 0, 255));
-        _explosion.draw(ds, _explosion_x,
-                        (_y - (UFO_EXPLOSION_MAGIC_OFFSET * GlobalConstant::BASE_SIZE)),
-                        Color(255, 36, 0, 255));
-        _explosion.draw(ds, _explosion_x, _y - 0.5F * GlobalConstant::BASE_SIZE,
-                        Color(255, 36, 0, 255));
+        _explosion.draw(ds, _explosion_x, _y - (UFO_EXPLOSION_Y_OFFSET * GlobalConstant::BASE_SIZE), Color(255, 36, 0, 255));
+        _explosion.draw(ds, _explosion_x, (_y - (UFO_EXPLOSION_MAGIC_OFFSET * GlobalConstant::BASE_SIZE)), Color(255, 36, 0, 255));
+        _explosion.draw(ds, _explosion_x, _y - 0.5F * GlobalConstant::BASE_SIZE, Color(255, 36, 0, 255));
     }
 
     for (const PowerUpItem &powerup : _powerups)
     {
-        _powerup_animations[static_cast<int>(powerup.get_type())].draw(ds, powerup.get_x(),
-                                                                       powerup.get_y(), WHITE);
+        _powerup_animations[static_cast<int>(powerup.get_type())].draw(ds, powerup.get_x(), powerup.get_y(), WHITE);
     }
 }
 
@@ -175,13 +164,8 @@ void Ufo::update(std::mt19937_64 &i_random_engine)
     {
         powerup_animation.update();
     }
-    _powerups.erase(remove_if(_powerups.begin(), _powerups.end(),
-                              [](const PowerUpItem &i_powerup) noexcept
-                              { return i_powerup.isdead(); }),
+    _powerups.erase(remove_if(_powerups.begin(), _powerups.end(), [](const PowerUpItem &i_powerup) noexcept { return i_powerup.isdead(); }),
                     _powerups.end());
 }
 
-Rectangle Ufo::get_hitbox() const noexcept
-{
-    return Rectangle{_x, _y, 2 * GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
-}
+Rectangle Ufo::get_hitbox() const noexcept { return Rectangle{_x, _y, 2 * GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE}; }

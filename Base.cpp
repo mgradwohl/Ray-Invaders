@@ -14,8 +14,7 @@
 #include "RLWaveSound.hpp"
 
 Base::Base(float x) noexcept
-    : _x(x), _y(GlobalConstant::SCREEN_HEIGHT - 3.0f * GlobalConstant::BASE_SIZE),
-      _basehitsound("Resources/Sounds/Base Hit.wav")
+    : _x(x), _y(GlobalConstant::SCREEN_HEIGHT - 3.0f * GlobalConstant::BASE_SIZE), _basehitsound("Resources/Sounds/Base Hit.wav")
 {
     // Texture is initialized in reset()
 }
@@ -39,8 +38,7 @@ void Base::reset(const Image &baseImage) noexcept
     _texture.unload();
 
     // Extract just the first frame from the spritesheet
-    Rectangle sourceRec = {0.0f, 0.0f, GlobalConstant::BASE_WIDTH,
-                           static_cast<float>(baseImage.height)};
+    Rectangle sourceRec = {0.0f, 0.0f, GlobalConstant::BASE_WIDTH, static_cast<float>(baseImage.height)};
     Image baseCopy = ImageCopy(baseImage);
     ImageCrop(&baseCopy, sourceRec);
 
@@ -77,8 +75,7 @@ void Base::reset(const Image &baseImage) noexcept
     // Create damage image: start fully transparent (alpha=0) so it doesn't affect the base
     // initially Damaged pixels will become opaque (alpha=255) to act as holes in multiplicative
     // blending
-    _damage_image =
-        GenImageColor(GlobalConstant::BASE_WIDTH, _texture.height(), Color{255, 255, 255, 0});
+    _damage_image = GenImageColor(GlobalConstant::BASE_WIDTH, _texture.height(), Color{255, 255, 255, 0});
     // Create GPU texture for the damage mask
     _damage_tex.load(_damage_image);
     // No damage yet
@@ -140,10 +137,8 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
                 if (cx >= 0 && cx < _damage_image.width && cy >= 0 && cy < _damage_image.height)
                 {
                     int sidx = cy * _damage_image.width + cx;
-                    unsigned char *spix =
-                        reinterpret_cast<unsigned char *>(_damage_image.data) + sidx * 4;
-                    const unsigned char alpha =
-                        spix[3]; // check alpha transparency, lower = more damaged
+                    unsigned char *spix = reinterpret_cast<unsigned char *>(_damage_image.data) + sidx * 4;
+                    const unsigned char alpha = spix[3]; // check alpha transparency, lower = more damaged
                     // Also ensure the base sprite at this pixel is visible; if not, the bullet hit
                     // empty space
                     bool base_visible = (_base_mask.empty() ? true : (_base_mask[sidx] != 0));
@@ -168,8 +163,7 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
             if (_damage_image.data)
             {
                 // Prepare per-hit alpha increment (higher -> faster destruction)
-                const int base_alpha_incr = static_cast<int>(
-                    std::ceil(128.0f * 2.5f)); // increased damage per hit - was 1.0f
+                const int base_alpha_incr = static_cast<int>(std::ceil(128.0f * 2.5f)); // increased damage per hit - was 1.0f
                 const int px = static_cast<int>(std::floor(rel_x));
                 const int py = static_cast<int>(std::floor(rel_y));
                 const int pr = static_cast<int>(std::ceil(radius)) + 1;
@@ -192,11 +186,9 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
                     // Impact point is outside bounds, skip damage application
                 }
 
-                for (int y = std::max(0, py - pr); y <= std::min(_damage_image.height - 1, py + pr);
-                     ++y)
+                for (int y = std::max(0, py - pr); y <= std::min(_damage_image.height - 1, py + pr); ++y)
                 {
-                    for (int x = std::max(0, px - pr);
-                         x <= std::min(_damage_image.width - 1, px + pr); ++x)
+                    for (int x = std::max(0, px - pr); x <= std::min(_damage_image.width - 1, px + pr); ++x)
                     {
                         const int dx = x - px;
                         const int dy = y - py;
@@ -278,8 +270,7 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
     if (_damage_image.data)
     {
         // increase alpha like in update(): radial falloff per-impact
-        const int base_alpha_incr =
-            static_cast<int>(std::ceil(128.0f * damage_amount * 2.5f)); // increased damage per hit
+        const int base_alpha_incr = static_cast<int>(std::ceil(128.0f * damage_amount * 2.5f)); // increased damage per hit
         const int px = static_cast<int>(std::floor(rel_x));
         const int py = static_cast<int>(std::floor(rel_y));
         const int pr = static_cast<int>(std::ceil(2.0f + damage_amount * 0.5f)) + 1;
@@ -305,8 +296,7 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
                         continue; // skip transparent background
                     }
                     unsigned char *pix = dmg_ptr + idx * 4;
-                    int old_brightness =
-                        static_cast<int>(pix[0]); // RGB should be same for grayscale
+                    int old_brightness = static_cast<int>(pix[0]); // RGB should be same for grayscale
                     int new_brightness = std::max(0, old_brightness - incr);
                     if (new_brightness != old_brightness)
                     {

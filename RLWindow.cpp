@@ -8,8 +8,7 @@
 #include <raylib.h>
 namespace raylib
 {
-Window::Window(const uint16_t width, const uint16_t height, const uint16_t fps,
-               const std::string &title)
+Window::Window(const uint16_t width, const uint16_t height, const uint16_t fps, const std::string &title)
 {
     SetTraceLogLevel(LOG_NONE);
     InitWindow(width, height, title.c_str());

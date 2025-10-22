@@ -82,22 +82,19 @@ inline float default_radius(HitSubject subject, HitOutcome outcome) noexcept
 }
 } // namespace
 
-void HitManager::add_hit(HitSubject subject, HitOutcome outcome, float x, float y, float radius,
-                         int ttl) noexcept
+void HitManager::add_hit(HitSubject subject, HitOutcome outcome, float x, float y, float radius, int ttl) noexcept
 {
     _hits.push_back(Hit{x, y, radius, ttl, subject, outcome});
 }
 
-void HitManager::add_hit(HitSubject subject, HitOutcome outcome, float x, float y,
-                         float radius) noexcept
+void HitManager::add_hit(HitSubject subject, HitOutcome outcome, float x, float y, float radius) noexcept
 {
     _hits.push_back(Hit{x, y, radius, default_ttl(subject, outcome), subject, outcome});
 }
 
 void HitManager::add_hit(HitSubject subject, HitOutcome outcome, float x, float y) noexcept
 {
-    _hits.push_back(Hit{x, y, default_radius(subject, outcome), default_ttl(subject, outcome),
-                        subject, outcome});
+    _hits.push_back(Hit{x, y, default_radius(subject, outcome), default_ttl(subject, outcome), subject, outcome});
 }
 
 void HitManager::update() noexcept

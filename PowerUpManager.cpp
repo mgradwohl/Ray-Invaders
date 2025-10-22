@@ -8,10 +8,7 @@
 #include "Global.hpp"
 #include "RLDrawSession.h"
 
-PowerUpManager::PowerUpManager(const std::string &spritefile)
-    : _powerup_bar_sprite(spritefile), _spritefile(spritefile)
-{
-}
+PowerUpManager::PowerUpManager(const std::string &spritefile) : _powerup_bar_sprite(spritefile), _spritefile(spritefile) {}
 
 PowerUpManager::~PowerUpManager()
 {
@@ -56,16 +53,13 @@ auto PowerUpManager::get_fill_fraction(const Player &player) const noexcept -> f
         return 0.0f;
     }
     const float spriteWidth = _powerup_bar_sprite.widthF();
-    const float maxFillLogical =
-        spriteWidth - 0.125f * GlobalConstant::BASE_SIZE - 0.25f * GlobalConstant::BASE_SIZE;
+    const float maxFillLogical = spriteWidth - 0.125f * GlobalConstant::BASE_SIZE - 0.25f * GlobalConstant::BASE_SIZE;
     const float currentFillLogical =
-        ceil(player.get_power_timer() * maxFillLogical /
-             static_cast<float>(GlobalConstant::Int::POWERUP_DURATION));
+        ceil(player.get_power_timer() * maxFillLogical / static_cast<float>(GlobalConstant::Int::POWERUP_DURATION));
     return (maxFillLogical > 0.0f) ? (currentFillLogical / maxFillLogical) : 0.0f;
 }
 
-void PowerUpManager::draw(raylib::DrawSession &ds, const Player &player,
-                          float bannerHeightLogical) const
+void PowerUpManager::draw(raylib::DrawSession &ds, const Player &player, float bannerHeightLogical) const
 {
     if (player.get_current_power() <= 0)
     {
@@ -95,13 +89,11 @@ void PowerUpManager::draw(raylib::DrawSession &ds, const Player &player,
 
     const Rectangle srcFrame{0.0f, 0.0f, frameWLogical, rowH};
     const Rectangle dstFrame{destX, destY, destFrameW, drawH};
-    ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFrame, dstFrame, Vector2{0.0f, 0.0f}, 1.0f,
-                      WHITE);
+    ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFrame, dstFrame, Vector2{0.0f, 0.0f}, 1.0f, WHITE);
 
     const Rectangle srcFill{fillLeftLogical, rowH, fillWLogical, rowH};
     const float destFillX = destX + (fillLeftLogical * scaleH * scale);
     const float destFillW = fillWLogical * scaleH * scale;
     const Rectangle dstFill{destFillX, destY, destFillW, drawH};
-    ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFill, dstFill, Vector2{0.0f, 0.0f}, 1.0f,
-                      _color);
+    ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFill, dstFill, Vector2{0.0f, 0.0f}, 1.0f, _color);
 }

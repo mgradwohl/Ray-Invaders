@@ -17,10 +17,7 @@ class BannerUI
     ~BannerUI() = default;
 
     void setLevel(int level) noexcept { _level = level; }
-    [[nodiscard]] GameTypes::Coordinate getHeight() const noexcept
-    {
-        return static_cast<GameTypes::Coordinate>(_banner.height());
-    }
+    [[nodiscard]] GameTypes::Coordinate getHeight() const noexcept { return static_cast<GameTypes::Coordinate>(_banner.height()); }
 
     void draw(raylib::DrawSession &ds, const Player &player) const noexcept;
 

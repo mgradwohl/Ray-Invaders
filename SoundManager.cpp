@@ -100,8 +100,7 @@ SharedSound &SharedSound::operator=(const SharedSound &other)
     return *this;
 }
 
-SharedSound::SharedSound(SharedSound &&other) noexcept
-    : _filename(std::move(other._filename)), _sound(std::move(other._sound))
+SharedSound::SharedSound(SharedSound &&other) noexcept : _filename(std::move(other._filename)), _sound(std::move(other._sound))
 {
     other._filename.clear();
     other._sound.reset();

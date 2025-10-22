@@ -35,10 +35,8 @@ auto main() -> int
     // Setting a random seed to make sure the random engine will randomly generate random numbers.
     std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
-    raylib::Window const window(
-        GlobalConstant::Int::SCREEN_WIDTH * GlobalConstant::Int::SCREEN_RESIZE,
-        GlobalConstant::Int::WINDOW_HEIGHT * GlobalConstant::Int::SCREEN_RESIZE, 60,
-        "Ray Invaders");
+    raylib::Window const window(GlobalConstant::Int::SCREEN_WIDTH * GlobalConstant::Int::SCREEN_RESIZE,
+                                GlobalConstant::Int::WINDOW_HEIGHT * GlobalConstant::Int::SCREEN_RESIZE, 60, "Ray Invaders");
 
     Background background("Resources/Images/BigGalaxy.png");
     EnemyManager enemy_manager;
@@ -52,8 +50,7 @@ auto main() -> int
     // intrusive during regular testing and is no longer desirable.
 
     // we draw everything to this, and then render this to the screen
-    Backbuffer backbuffer(GlobalConstant::Int::SCREEN_WIDTH, GlobalConstant::Int::SCREEN_HEIGHT,
-                          GlobalConstant::Int::SCREEN_RESIZE);
+    Backbuffer backbuffer(GlobalConstant::Int::SCREEN_WIDTH, GlobalConstant::Int::SCREEN_HEIGHT, GlobalConstant::Int::SCREEN_RESIZE);
     BannerUI bannerUI(&powerup);
 
     previous_time = std::chrono::steady_clock::now();
@@ -61,8 +58,7 @@ auto main() -> int
     {
         // Making the game frame rate independent.
         const std::chrono::microseconds delta_time =
-            std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() -
-                                                                  previous_time);
+            std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - previous_time);
         lag += delta_time;
         previous_time += delta_time;
 
@@ -105,8 +101,7 @@ auto main() -> int
                 else
                 {
                     // enemies left, update everything
-                    player.update(random_engine, enemy_manager.get_enemy_bullets(),
-                                  enemy_manager.get_enemies(), ufo, hit_manager);
+                    player.update(random_engine, enemy_manager.get_enemy_bullets(), enemy_manager.get_enemies(), ufo, hit_manager);
                     powerup.update(player);
                     background.update(player);
                     enemy_manager.update(random_engine);
@@ -146,17 +141,13 @@ auto main() -> int
                     }
                     else
                     {
-                        dsGameplay.DrawTextCentered("Game over!",
-                                                    GlobalConstant::Int::SCREEN_WIDTH / 2,
-                                                    GlobalConstant::Int::SCREEN_HEIGHT / 2,
-                                                    GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
+                        dsGameplay.DrawTextCentered("Game over!", GlobalConstant::Int::SCREEN_WIDTH / 2,
+                                                    GlobalConstant::Int::SCREEN_HEIGHT / 2, GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
                     }
                     if (next_level)
                     {
-                        dsGameplay.DrawTextCentered("Next level!",
-                                                    GlobalConstant::Int::SCREEN_WIDTH / 2,
-                                                    GlobalConstant::Int::SCREEN_HEIGHT / 2,
-                                                    GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
+                        dsGameplay.DrawTextCentered("Next level!", GlobalConstant::Int::SCREEN_WIDTH / 2,
+                                                    GlobalConstant::Int::SCREEN_HEIGHT / 2, GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
                     }
                 } // dsGameplay
                 {

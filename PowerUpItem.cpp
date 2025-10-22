@@ -9,10 +9,7 @@
 // Project
 #include "Global.hpp"
 
-PowerUpItem::PowerUpItem(float i_x, float i_y, Type i_type) noexcept
-    : _x(i_x), _y(i_y), _type(i_type)
-{
-}
+PowerUpItem::PowerUpItem(float i_x, float i_y, Type i_type) noexcept : _x(i_x), _y(i_y), _type(i_type) {}
 
 void PowerUpItem::bump_y(GameTypes::Distance ybump) noexcept { _y += ybump; }
 
@@ -20,10 +17,8 @@ void PowerUpItem::bump_y(GameTypes::Distance ybump) noexcept { _y += ybump; }
 {
     constexpr float HITBOX_SCALE = 0.5f;
     constexpr float HITBOX_OFFSET = 0.25f;
-    return Rectangle{_x + HITBOX_OFFSET * GlobalConstant::BASE_SIZE,
-                     _y + HITBOX_OFFSET * GlobalConstant::BASE_SIZE,
-                     HITBOX_SCALE * GlobalConstant::BASE_SIZE,
-                     HITBOX_SCALE * GlobalConstant::BASE_SIZE};
+    return Rectangle{_x + HITBOX_OFFSET * GlobalConstant::BASE_SIZE, _y + HITBOX_OFFSET * GlobalConstant::BASE_SIZE,
+                     HITBOX_SCALE * GlobalConstant::BASE_SIZE, HITBOX_SCALE * GlobalConstant::BASE_SIZE};
 }
 
 PowerUpItem::Type PowerUpItem::get_type() const noexcept { return _type; }
