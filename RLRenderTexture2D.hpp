@@ -4,7 +4,8 @@
 #include "Global.hpp"
 
 namespace raylib {
-class RenderTexture2D {
+class RenderTexture2D
+{
 public:
     RenderTexture2D() = default;
     RenderTexture2D(GameTypes::Coordinate w, GameTypes::Coordinate h) noexcept { create(w, h); }

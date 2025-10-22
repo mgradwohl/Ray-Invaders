@@ -13,7 +13,8 @@
 #include "RLTexture2D.hpp"
 #include "RLWaveSound.hpp"
 
-class Base {
+class Base
+{
 public:
     Base() = default;
     explicit Base(float x) noexcept;
@@ -30,9 +31,15 @@ public:
     void update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, class HitManager& hits);
     void draw(raylib::DrawSession& ds) const;
     [[nodiscard]] auto get_hitbox() const noexcept -> Rectangle;
-    [[nodiscard]] auto is_dead() const noexcept -> bool { return _dead; }
+    [[nodiscard]] auto is_dead() const noexcept -> bool
+    {
+        return _dead;
+    }
     // Change return type to int to match _damage type and avoid casting
-    [[nodiscard]] auto get_damage() const noexcept -> int { return static_cast<int>(_damage); }
+    [[nodiscard]] auto get_damage() const noexcept -> int
+    {
+        return static_cast<int>(_damage);
+    }
     
     // Records a bullet impact at the specified position and modifies the texture (damage mask)
     void apply_impact(float rel_x, float rel_y, float damage_amount);

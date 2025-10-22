@@ -4,7 +4,8 @@
 #include <raylib.h>
 
 namespace raylib {
-class Texture2DFile {
+class Texture2DFile
+{
 public:
     Texture2DFile() = default;
     explicit Texture2DFile(const std::string& filename) noexcept { load(filename); }

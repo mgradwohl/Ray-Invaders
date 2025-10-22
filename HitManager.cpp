@@ -10,17 +10,21 @@
 // Project
 #include "Global.hpp"
 
-namespace {
+namespace
+{
     // Map ttl into alpha 255..50 over a 60-frame window
-    inline unsigned char alpha_from_ttl(int ttl) noexcept {
+    inline unsigned char alpha_from_ttl(int ttl) noexcept
+    {
         const int window = 60;
         const int t = std::clamp(ttl, 0, window);
         return static_cast<unsigned char>(50 + (205 * t) / window);
     }
     // TTL presets per subject/outcome
-    inline int default_ttl(HitSubject subject, HitOutcome outcome) noexcept {
+    inline int default_ttl(HitSubject subject, HitOutcome outcome) noexcept
+    {
         // Keep base fade window parity: 60 for most; UFO can be a touch longer if desired.
-        switch (subject) {
+    switch (subject)
+    {
             case HitSubject::Enemy: return 60;
             case HitSubject::Base:  return 60;
             case HitSubject::Player:
@@ -33,8 +37,10 @@ namespace {
 
     // Style presets: colors by subject/outcome
     struct Style { Color core; Color outline; };
-    inline Style style_for(HitSubject subject, HitOutcome outcome, unsigned char a) noexcept {
-        switch (subject) {
+    inline Style style_for(HitSubject subject, HitOutcome outcome, unsigned char a) noexcept
+    {
+        switch (subject)
+        {
             case HitSubject::Base:
                 return Style{ Color{200, 40, 40, a}, Color{255, 120, 120, a} };
             case HitSubject::Enemy:
@@ -51,8 +57,10 @@ namespace {
     }
 
     // Radius presets per subject/outcome
-    inline float default_radius(HitSubject subject, HitOutcome outcome) noexcept {
-        switch (subject) {
+    inline float default_radius(HitSubject subject, HitOutcome outcome) noexcept
+    {
+        switch (subject)
+        {
             case HitSubject::Enemy: return 2.5f;
             case HitSubject::Base:  return 2.5f; // actual base varies by damage; this is a reasonable visual default
             case HitSubject::Player:

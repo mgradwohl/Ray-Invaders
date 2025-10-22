@@ -6,7 +6,8 @@
 #include "Hit.hpp"
 #include "RLDrawSession.h"
 
-class HitManager {
+class HitManager
+{
 public:
     // Add a hit with explicit ttl
     void add_hit(HitSubject subject, HitOutcome outcome, float x, float y, float radius, int ttl) noexcept;

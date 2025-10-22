@@ -12,7 +12,8 @@
 #include "RLDrawSession.h"
 #include "RLWaveSound.hpp"
 
-class Bases {
+class Bases
+{
 public:
     explicit Bases(const std::string& filename);
     ~Bases();

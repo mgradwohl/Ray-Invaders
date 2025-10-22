@@ -10,7 +10,8 @@
 class PowerUpManager;
 class Player;
 
-class BannerUI {
+class BannerUI
+{
 public:
     explicit BannerUI(const PowerUpManager* pum) noexcept;
     ~BannerUI() = default;

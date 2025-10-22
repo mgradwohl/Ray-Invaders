@@ -21,13 +21,15 @@ Base::Base(float x) noexcept
     // Texture is initialized in reset()
 }
 
-Base::~Base() {
-    // Textures now handled by RAII wrappers
+Base::~Base()
+{
+    // RAII wrappers handle Texture unloading; explicitly free Image data if present
     if (_damage_image.data) UnloadImage(_damage_image);
     if (_base_alpha.data) UnloadImage(_base_alpha);
 }
 
-void Base::reset(const Image& baseImage) noexcept {
+void Base::reset(const Image& baseImage) noexcept
+{
     _dead = false;
     _damage = 0;
     _frame = 0;
@@ -161,31 +163,39 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, H
 
                 // Print a quick sanity report about local coords and image sizes
                 // Bounds check for the impact center point
-                if (px >= 0 && py >= 0 && px < _damage_image.width && py < _damage_image.height) {
+                if (px >= 0 && py >= 0 && px < _damage_image.width && py < _damage_image.height)
+                {
                     // Impact point is within bounds, proceed with damage application
-                } else {
+                }
+                else
+                {
                     // Impact point is outside bounds, skip damage application
                 }
 
-                for (int y = std::max(0, py - pr); y <= std::min(_damage_image.height - 1, py + pr); ++y) {
-                    for (int x = std::max(0, px - pr); x <= std::min(_damage_image.width - 1, px + pr); ++x) {
+                for (int y = std::max(0, py - pr); y <= std::min(_damage_image.height - 1, py + pr); ++y)
+                {
+                    for (int x = std::max(0, px - pr); x <= std::min(_damage_image.width - 1, px + pr); ++x)
+                    {
                         const int dx = x - px;
                         const int dy = y - py;
-                        const int dist_squared = dx*dx + dy*dy;
-                        if (dist_squared <= pr_squared) {
+                        const int dist_squared = dx * dx + dy * dy;
+                        if (dist_squared <= pr_squared)
+                        {
                             // Only calculate sqrt for pixels within radius (much fewer calculations)
                             const float dist = std::sqrt(static_cast<float>(dist_squared));
                             const float f = 1.0f - (dist / pr_float);
                             const int incr = static_cast<int>(std::ceil(base_alpha_incr * f));
                             int idx = y * _damage_image.width + x;
-                            if (!base_mask_ptr || base_mask_ptr[idx] == 0) {
+                            if (!base_mask_ptr || base_mask_ptr[idx] == 0)
+                            {
                                 continue; // skip transparent pixels
                             }
                             unsigned char* pix = dmg_ptr + idx * 4;
                             int old_alpha = static_cast<int>(pix[3]); // check current alpha
                             // Increase alpha to create opaque damage areas that will create holes via multiplicative blending
                             int new_alpha = std::min(255, old_alpha + incr);
-                            if (new_alpha != old_alpha) {
+                            if (new_alpha != old_alpha)
+                            {
                                 // Set RGB to black for multiplicative blending (black * base = transparent holes)
                                 // For alpha-based transparency: white RGB with alpha = transparency
                                 // High alpha = more transparent (holes), low alpha = more opaque (intact)
@@ -196,7 +206,8 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, H
                         }
                     }
                 }
-                if (any_changed) {
+                if (any_changed)
+                {
                     _damage_gpu_dirty = true;
                     _has_damage = true;
                 }
@@ -212,7 +223,9 @@ void Base::update(std::vector<Bullet>& i_bullets, GameTypes::Count framecount, H
     // No fade logic - damage is now permanent (transparent holes stay transparent)
 
     // If any damage pixels were changed this frame (either new impacts or fade), update GPU texture
-    if (_damage_gpu_dirty && _damage_image.data) {
+<<<<<<< HEAD
+    if (_damage_gpu_dirty && _damage_image.data)
+    {
         _damage_tex.update(_damage_image.data);
         _damage_gpu_dirty = false;
     }
@@ -245,20 +258,27 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
 
 
         
-        for (int y = std::max(0, py - pr); y <= std::min(_damage_image.height - 1, py + pr); ++y) {
-            for (int x = std::max(0, px - pr); x <= std::min(_damage_image.width - 1, px + pr); ++x) {
+        for (int y = std::max(0, py - pr); y <= std::min(_damage_image.height - 1, py + pr); ++y)
+        {
+            for (int x = std::max(0, px - pr); x <= std::min(_damage_image.width - 1, px + pr); ++x)
+            {
                 const int dx = x - px;
                 const int dy = y - py;
                 const float dist = std::sqrt(static_cast<float>(dx*dx + dy*dy));
-                if (dist <= static_cast<float>(pr)) {
+                if (dist <= static_cast<float>(pr))
+                {
                     const float f = 1.0f - (dist / static_cast<float>(pr));
                     const int incr = static_cast<int>(std::ceil(base_alpha_incr * f));
                     int idx = y * _damage_image.width + x;
-                    if (!base_mask_ptr || base_mask_ptr[idx] == 0) { continue; } // skip transparent background
+                    if (!base_mask_ptr || base_mask_ptr[idx] == 0)
+                    {
+                        continue; // skip transparent background
+                    }
                     unsigned char* pix = dmg_ptr + idx * 4;
                     int old_brightness = static_cast<int>(pix[0]); // RGB should be same for grayscale
                     int new_brightness = std::max(0, old_brightness - incr);
-                    if (new_brightness != old_brightness) {
+                    if (new_brightness != old_brightness)
+                    {
                         // Set RGB to the new brightness level (for multiplicative blending)
                         pix[0] = new_brightness; pix[1] = new_brightness; pix[2] = new_brightness;
                         pix[3] = 255; // keep alpha at 255 for multiplicative blending
@@ -276,7 +296,8 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
 
 // create_impact_on_texture removed - transient scorch visuals are rendered by HitManager
 
-void Base::draw(raylib::DrawSession& ds) const {
+void Base::draw(raylib::DrawSession& ds) const
+{
     // Apply damage by masking the base texture with the damage alpha channel
     if (_has_damage && _damage_tex.id() > 0) {
         // Use a simple approach: tint the base texture using the damage texture as an alpha mask
@@ -298,7 +319,9 @@ void Base::draw(raylib::DrawSession& ds) const {
         Color hole_color = {0, 0, 0, 128}; // Semi-transparent black to create visible holes
         ds.DrawTexture(_damage_tex.get(), damage_src, pos, hole_color);
         EndBlendMode();
-    } else {
+    }
+    else
+    {
         // No damage - just draw base normally
         const Vector2 dest{ _x, _y };
         ds.DrawTexture(_texture.get(), dest.x, dest.y, WHITE);

@@ -16,7 +16,8 @@ namespace raylib
 
     WaveSound::~WaveSound()
     {
-        if (::IsSoundValid(_sound)) {
+        if (::IsSoundValid(_sound))
+        {
             StopSound(_sound);
             UnloadSound(_sound);
         }
@@ -28,7 +29,7 @@ namespace raylib
         {
             return false;
         }
-        
+
         PlaySound(_sound);
         return true;
     }

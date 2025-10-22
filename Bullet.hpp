@@ -3,7 +3,8 @@
 
 #include <raylib.h>
 
-class Bullet {
+class Bullet
+{
 public:
     explicit Bullet(float i_step_x, float i_step_y, float i_x, float i_y) noexcept;
     Bullet(const Bullet&) = default;
