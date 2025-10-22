@@ -9,5 +9,5 @@ SortIncludes: true
 ReflowComments: true
 SpacesInParentheses: false
 SpaceAfterCStyleCast: true
-AlignConsecutiveAssignments: true
-AlignConsecutiveDeclarations: true
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false

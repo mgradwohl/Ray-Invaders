@@ -5,12 +5,18 @@
 
 class PowerUpItem
 {
-public:
-	enum class Type : GameTypes::Count { Shield = 0, FastReload = 1, ThreeBullets = 2, MirroredControls = 3 };
+  public:
+    enum class Type : GameTypes::Count
+    {
+        Shield = 0,
+        FastReload = 1,
+        ThreeBullets = 2,
+        MirroredControls = 3
+    };
 
-	PowerUpItem(float i_x, float i_y, Type i_type) noexcept;
+    PowerUpItem(float i_x, float i_y, Type i_type) noexcept;
 
-	void bump_y(GameTypes::Distance ybump) noexcept;
+    void bump_y(GameTypes::Distance ybump) noexcept;
     [[nodiscard]] auto get_hitbox() const noexcept -> Rectangle;
     [[nodiscard]] auto get_type() const noexcept -> Type;
 
@@ -20,8 +26,8 @@ public:
     [[nodiscard]] auto get_y() const noexcept -> float;
 
   private:
-    float         _x{0.0F};
-    float         _y{0.0F};
+    float _x{0.0F};
+    float _y{0.0F};
     bool _dead{false};
-	Type _type{Type::Shield};
+    Type _type{Type::Shield};
 };

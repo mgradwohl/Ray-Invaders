@@ -11,25 +11,27 @@
 #include "Bullet.hpp"
 #include "HitManager.hpp"
 
-Bases::Bases(const std::string& filename)
+Bases::Bases(const std::string &filename)
 {
     // Load the base image and calculate framecount
     _baseImage = LoadImage(filename.c_str());
     _framecount = static_cast<int>(_baseImage.width / GlobalConstant::BASE_WIDTH - 1.0f);
-    
+
     // Calculate positioning for bases
-    const float offset = (GlobalConstant::SCREEN_WIDTH - (GlobalConstant::Int::BASE_COUNT * GlobalConstant::BASE_WIDTH)) / (GlobalConstant::Int::BASE_COUNT + 1);
+    const float offset = (GlobalConstant::SCREEN_WIDTH -
+                          (GlobalConstant::Int::BASE_COUNT * GlobalConstant::BASE_WIDTH)) /
+                         (GlobalConstant::Int::BASE_COUNT + 1);
     float x = offset;
-    
+
     // Create empty bases at the correct positions first
     _bases.reserve(GlobalConstant::Int::BASE_COUNT);
     for (int i = 0; i < GlobalConstant::Int::BASE_COUNT; i++)
     {
         _bases.emplace_back(std::make_unique<Base>(x));
-        x += offset; // spacing
+        x += offset;                     // spacing
         x += GlobalConstant::BASE_WIDTH; // BASE WIDTH
     }
-    
+
     // Reset all bases with the base image
     reset();
 }
@@ -48,28 +50,23 @@ void Bases::reset()
     }
 }
 
-void Bases::update(std::vector<Bullet>& i_bullets, HitManager& hits)
+void Bases::update(std::vector<Bullet> &i_bullets, HitManager &hits)
 {
     // Since _framecount is now an int, we can do a direct comparison
     // without needing intermediate casts
-    const GameTypes::Count frameCount = (_framecount > UINT8_MAX) ? 
-        UINT8_MAX : static_cast<GameTypes::Count>(_framecount);
-        
-    for (auto& base : _bases)
+    const GameTypes::Count frameCount =
+        (_framecount > UINT8_MAX) ? UINT8_MAX : static_cast<GameTypes::Count>(_framecount);
+
+    for (auto &base : _bases)
     {
         base->update(i_bullets, frameCount, hits);
     }
 }
 
-void Bases::draw(raylib::DrawSession& ds) const
+void Bases::draw(raylib::DrawSession &ds) const
 {
-    for (const auto& base : _bases)
+    for (const auto &base : _bases)
     {
         base->draw(ds);
     }
 }
-
-
-
-
-

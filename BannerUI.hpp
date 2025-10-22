@@ -12,17 +12,20 @@ class Player;
 
 class BannerUI
 {
-public:
-    explicit BannerUI(const PowerUpManager* pum) noexcept;
+  public:
+    explicit BannerUI(const PowerUpManager *pum) noexcept;
     ~BannerUI() = default;
 
     void setLevel(int level) noexcept { _level = level; }
-    [[nodiscard]] GameTypes::Coordinate getHeight() const noexcept { return static_cast<GameTypes::Coordinate>(_banner.height()); }
+    [[nodiscard]] GameTypes::Coordinate getHeight() const noexcept
+    {
+        return static_cast<GameTypes::Coordinate>(_banner.height());
+    }
 
-    void draw(raylib::DrawSession& ds, const Player& player) const noexcept;
+    void draw(raylib::DrawSession &ds, const Player &player) const noexcept;
 
-private:
+  private:
     raylib::Texture2DFile _banner; // owned RAII
-    const PowerUpManager* _pum{nullptr};
+    const PowerUpManager *_pum{nullptr};
     int _level{-1};
 };

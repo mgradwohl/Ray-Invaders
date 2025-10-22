@@ -14,19 +14,19 @@
 
 class Bases
 {
-public:
-    explicit Bases(const std::string& filename);
+  public:
+    explicit Bases(const std::string &filename);
     ~Bases();
-    Bases(const Bases&) = delete;
-    auto operator=(const Bases &) -> Bases &     = delete;
-    Bases(Bases&&) noexcept = default;
+    Bases(const Bases &) = delete;
+    auto operator=(const Bases &) -> Bases & = delete;
+    Bases(Bases &&) noexcept = default;
     auto operator=(Bases &&) noexcept -> Bases & = default;
 
     void reset();
-    void update(std::vector<Bullet>& i_enemy_bullets, class HitManager& hits);
-    void draw(raylib::DrawSession& ds) const;
+    void update(std::vector<Bullet> &i_enemy_bullets, class HitManager &hits);
+    void draw(raylib::DrawSession &ds) const;
 
-private:
+  private:
     std::vector<std::unique_ptr<Base>> _bases;
     // Change to int to avoid casting between size_t and unsigned short
     int _framecount = 0;
