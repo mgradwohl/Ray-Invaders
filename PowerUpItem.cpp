@@ -2,9 +2,11 @@
 #include "PowerUpItem.hpp"
 
 // Third-party headers
+// Third-party
 #include <raylib.h>
 
 // Project headers
+// Project
 #include "Global.hpp"
 
 PowerUpItem::PowerUpItem(float i_x, float i_y, Type i_type) noexcept :

@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
+
 #include <raylib.h>
+
 #include "Hit.hpp"
 #include "RLDrawSession.h"
 

@@ -1,10 +1,12 @@
 #pragma once
 
 #include <string>
+
 #include <raylib.h>
+
+#include "Player.hpp"
 #include "RLDrawSession.h"
 #include "RLTexture2D.hpp"
-#include "Player.hpp"
 
 class Background
 {

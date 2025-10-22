@@ -118,6 +118,11 @@ ipch/
 *.vspx
 *.sap
 
+# Profiling and analysis outputs
+callgrind.out*
+perf.data*
+gmon.out
+
 # Visual Studio Trace Files
 *.e2e
 

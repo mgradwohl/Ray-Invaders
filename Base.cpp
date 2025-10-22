@@ -10,8 +10,8 @@
 
 // Project headers
 #include "Bullet.hpp"
-#include "RLWaveSound.hpp"
 #include "HitManager.hpp"
+#include "RLWaveSound.hpp"
 
 Base::Base(float x) noexcept
     : _x(x)

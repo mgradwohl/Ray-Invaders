@@ -11,11 +11,11 @@
 // Project headers
 #include "Animation.hpp"
 #include "Enemy.hpp"
-#include "HitManager.hpp"
 #include "Global.hpp"
+#include "HitManager.hpp"
 #include "RLDrawSession.h"
-#include "RLWindow.h"
 #include "RLWaveSound.hpp"
+#include "RLWindow.h"
 #include "Ufo.hpp"
 
 Player::Player() :

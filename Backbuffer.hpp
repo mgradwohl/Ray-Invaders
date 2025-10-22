@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib.h>
+
 #include "Global.hpp"
 #include "RLRenderTexture2D.hpp"
 class PowerUpManager;

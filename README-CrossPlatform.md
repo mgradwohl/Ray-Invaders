@@ -1,3 +1,16 @@
+### Include ordering
+
+For consistency across platforms and toolchains, follow this include order in source files:
+
+1) Corresponding header first in .cpp (e.g., `#include "Foo.hpp"`)
+2) Standard library headers (alphabetical)
+3) Third-party headers (alphabetical) — e.g., `<raylib.h>`
+4) Project headers (alphabetical)
+
+Add a blank line between groups. In headers, only include `<raylib.h>` if your public API exposes raylib types; otherwise, include it in the `.cpp`.
+
+See README.md for the canonical guideline.
+
 # Ray-Invaders - Cross-Platform Setup
 
 This project supports both **Windows (MSVC)** and **Linux (Clang 21)** with C++23 and raylib.

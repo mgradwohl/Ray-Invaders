@@ -1,12 +1,14 @@
 #pragma once
-#include <string>
 #include <random>
+#include <string>
+
 #include <raylib.h>
+
+#include "Animation.hpp"
+#include "Global.hpp"
+#include "PowerUpItem.hpp"
 #include "RLDrawSession.h"
 #include "RLWaveSound.hpp"
-#include "Global.hpp"
-#include "Animation.hpp"
-#include "PowerUpItem.hpp"
 
 class Ufo
 {
