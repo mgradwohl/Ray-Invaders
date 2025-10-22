@@ -2,20 +2,20 @@
 #include "EnemyManager.hpp"
 
 // Standard library headers
-#include <chrono>
-#include <random>
+#include <algorithm>
+#include <iterator>
+#include <string>
 
 // Third-party headers
 #include <raylib.h>
 
-// Project headers  
+// Project headers
 #include "Animation.hpp"
 #include "Bullet.hpp"
 #include "Enemy.hpp"
 #include "Global.hpp"
 #include "RLDrawSession.h"
 #include "RLWaveSound.hpp"
-#include "RLWindow.h"
 
 //There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same thing we did in the game "Frogger".
 // Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered for precise collision detection.
@@ -24,7 +24,8 @@ EnemyManager::EnemyManager() noexcept :
 	_enemy_bullet_sprite("Resources/Images/EnemyBullet.png"),
 	_enemymove("Resources/Sounds/Enemy Move.wav"),
 	_enemydestroy("Resources/Sounds/Enemy Destroy.wav")
-{	//We have a function that sets everything to the initial state, so why not use it?
+{
+	//We have a function that sets everything to the initial state, so why not use it?
 	reset(0);
 
 	for (GameTypes::Count a = 0; a < GlobalConstant::Int::ENEMY_TYPES; a++)
@@ -51,7 +52,8 @@ bool EnemyManager::reached_player(float i_player_y) const
 }
 
 void EnemyManager::draw(raylib::DrawSession& ds) const
-{	for (const Bullet& bullet : _enemy_bullets)
+{
+	for (const Bullet& bullet : _enemy_bullets)
 	{		//Drawing the tail of the bullet.
 		const auto& prev_x = bullet.get_previous_x();
 		const auto& prev_y = bullet.get_previous_y();
@@ -139,7 +141,6 @@ void EnemyManager::reset(GameTypes::Level i_level)
 	_enemies.clear();
 	//There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same thing we did in the game "Frogger".
 	// Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered for precise collision detection.
-	//Go watch that video, btw!
 	if (GlobalConstant::Int::TOTAL_LEVELS <= i_level)
 	{
 		// Since GlobalConstant::Int::TOTAL_LEVELS is 8 (a small number), we can avoid casts

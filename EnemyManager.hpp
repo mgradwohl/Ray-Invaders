@@ -1,13 +1,15 @@
 #pragma once
-#include <vector>
 #include <random>
-#include <raylib.h>
-#include "RLTexture2D.hpp"
-#include "RLWaveSound.hpp"
-#include "Global.hpp"
+#include <vector>
+
+// Project headers
+#include "Animation.hpp"
 #include "Bullet.hpp"
 #include "Enemy.hpp"
-#include "Animation.hpp"
+#include "Global.hpp"
+#include "RLTexture2D.hpp"
+#include "RLWaveSound.hpp"
+
 class EnemyManager
 {
 public:
