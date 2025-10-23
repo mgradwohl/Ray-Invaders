@@ -23,6 +23,20 @@
             "miDebuggerPath": "/usr/bin/gdb"
         },
         {
+            "name": "(Linux) Launch Release (Optimized)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/ray-invaders",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "preLaunchTask": "Build Release (Linux - Makefile - Optimized)",
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
             "name": "(Linux) Launch Release",
             "type": "cppdbg",
             "request": "launch",

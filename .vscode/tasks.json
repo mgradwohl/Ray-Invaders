@@ -2,6 +2,31 @@
 	"tasks": [
 		{
 			"type": "shell",
+			"label": "Build Release (Linux - Makefile - Optimized)",
+			"command": "make",
+			"args": [
+				"release",
+				"ENABLE_LTO=1",
+				"ENABLE_NATIVE=1"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "Build Ray-Invaders (Release) with ThinLTO and -march=native - Linux",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"dependsOn": "Clean Build (Linux)"
+		},
+		{
+			"type": "shell",
 			"label": "Build Debug (Linux - Makefile)",
 			"command": "make",
 			"args": [

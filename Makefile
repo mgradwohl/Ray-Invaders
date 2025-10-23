@@ -13,8 +13,12 @@ RESOURCES_DIR = Resources
 
 # C++ Standard and optimization flags
 CXXFLAGS = -std=c++23 -Wall -Wextra -Wpedantic -g -O0
-LDFLAGS = 
+LDFLAGS =
 LIBS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+
+# Optional Release optimizations (toggle via: make release ENABLE_LTO=1 ENABLE_NATIVE=1)
+ENABLE_LTO ?= 0
+ENABLE_NATIVE ?= 0
 
 # Include directories
 INCLUDES = -I$(SRC_DIR) -I/usr/local/include
@@ -33,6 +37,13 @@ debug: $(BUILD_DIR)/$(TARGET)
 
 # Release build
 release: CXXFLAGS = -std=c++23 -Wall -Wextra -Wpedantic -O3 -DNDEBUG
+ifeq ($(ENABLE_LTO),1)
+release: CXXFLAGS += -flto=thin
+release: LDFLAGS += -flto=thin
+endif
+ifeq ($(ENABLE_NATIVE),1)
+release: CXXFLAGS += -march=native -mtune=native
+endif
 release: $(BUILD_DIR)/$(TARGET)
 
 # Link the executable
@@ -103,6 +114,10 @@ help:
 	@echo "  fix      - Run clang-tidy with automatic fixes"
 	@echo "  install  - Install build dependencies"
 	@echo "  help     - Show this help message"
+	@echo ""
+	@echo "Toggles for release (pass as make variables):"
+	@echo "  ENABLE_LTO=1     Enable ThinLTO (-flto=thin)"
+	@echo "  ENABLE_NATIVE=1  Enable -march=native -mtune=native"
 
 # Dependencies
 -include $(OBJECTS:.o=.d)
