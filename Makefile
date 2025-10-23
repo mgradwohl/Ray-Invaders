@@ -8,12 +8,13 @@ LD = clang++-21
 # Project settings
 TARGET = ray-invaders
 SRC_DIR = .
-BUILD_DIR = build
-RESOURCES_DIR = Resources
+# Use separate build directories per configuration to avoid object mixing (e.g., LTO bitcode)
+BUILD_ROOT = build
 
 # C++ Standard and optimization flags
-CXXFLAGS = -std=c++23 -Wall -Wextra -Wpedantic -g -O0
-LDFLAGS =
+# We'll define per-config flags below
+LDFLAGS_DEBUG =
+LDFLAGS_RELEASE =
 LIBS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 # Optional Release optimizations (toggle via: make release ENABLE_LTO=1 ENABLE_NATIVE=1)
@@ -23,58 +24,85 @@ ENABLE_NATIVE ?= 0
 # Include directories
 INCLUDES = -I$(SRC_DIR) -I/usr/local/include
 
+# Per-config build directories and object lists
+BUILD_DIR_DEBUG = $(BUILD_ROOT)/Debug
+BUILD_DIR_RELEASE = $(BUILD_ROOT)/Release
+
+OBJECTS_DEBUG = $(SOURCES:$(SRC_DIR)/%.cpp=$(BUILD_DIR_DEBUG)/%.o)
+OBJECTS_RELEASE = $(SOURCES:$(SRC_DIR)/%.cpp=$(BUILD_DIR_RELEASE)/%.o)
+
+# Per-config compile flags
+CXXFLAGS_DEBUG = -std=c++23 -Wall -Wextra -Wpedantic -g -O0
+CXXFLAGS_RELEASE = -std=c++23 -Wall -Wextra -Wpedantic -O3 -DNDEBUG
+
 # Find all source files
 SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
-OBJECTS = $(SOURCES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 
 # Default target
-.PHONY: all clean debug release run install profile perf-report callgrind
+.PHONY: all clean debug release run run-release install analyze fix profile perf-report callgrind help
 
 all: debug
 
 # Debug build (default)
-debug: $(BUILD_DIR)/$(TARGET)
+debug: $(BUILD_DIR_DEBUG)/$(TARGET)
 
 # Release build
-release: CXXFLAGS = -std=c++23 -Wall -Wextra -Wpedantic -O3 -DNDEBUG
 ifeq ($(ENABLE_LTO),1)
-release: CXXFLAGS += -flto=thin
-release: LDFLAGS += -flto=thin
+CXXFLAGS_RELEASE += -flto=thin
+LDFLAGS_RELEASE += -flto=thin
 endif
 ifeq ($(ENABLE_NATIVE),1)
-release: CXXFLAGS += -march=native -mtune=native
+CXXFLAGS_RELEASE += -march=native -mtune=native
 endif
-release: $(BUILD_DIR)/$(TARGET)
+release: $(BUILD_DIR_RELEASE)/$(TARGET)
 
-# Link the executable
-$(BUILD_DIR)/$(TARGET): $(OBJECTS) | $(BUILD_DIR)
+# Link the executables (per config)
+$(BUILD_DIR_DEBUG)/$(TARGET): $(OBJECTS_DEBUG) | $(BUILD_DIR_DEBUG)
 	@echo "Linking $(TARGET)..."
-	$(LD) $(LDFLAGS) $^ -o $@ $(LIBS)
+	$(LD) $(LDFLAGS_DEBUG) $^ -o $@ $(LIBS)
 	@echo "Build complete: $@"
 
-# Compile source files
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
-	@echo "Compiling $<..."
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+$(BUILD_DIR_RELEASE)/$(TARGET): $(OBJECTS_RELEASE) | $(BUILD_DIR_RELEASE)
+	@echo "Linking $(TARGET)..."
+	$(LD) $(LDFLAGS_RELEASE) $^ -o $@ $(LIBS)
+	@echo "Build complete: $@"
 
-# Create build directory
-$(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
+# Compile source files (per config)
+$(BUILD_DIR_DEBUG)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR_DEBUG)
+	@echo "Compiling $<..."
+	$(CXX) $(CXXFLAGS_DEBUG) $(INCLUDES) -c $< -o $@
+
+$(BUILD_DIR_RELEASE)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR_RELEASE)
+	@echo "Compiling $<..."
+	$(CXX) $(CXXFLAGS_RELEASE) $(INCLUDES) -c $< -o $@
+
+# Create build directories
+$(BUILD_DIR_DEBUG):
+	mkdir -p $(BUILD_DIR_DEBUG)
+
+$(BUILD_DIR_RELEASE):
+	mkdir -p $(BUILD_DIR_RELEASE)
 
 # Clean build artifacts
 clean:
 	@echo "Cleaning build artifacts..."
-	rm -rf $(BUILD_DIR)
+	rm -rf $(BUILD_ROOT)
 
-# Run the game
-run: $(BUILD_DIR)/$(TARGET)
+# Run the game (defaults to Debug build)
+run: $(BUILD_DIR_DEBUG)/$(TARGET)
 	@echo "Running $(TARGET)..."
-	cd $(SRC_DIR) && ./$(BUILD_DIR)/$(TARGET)
+	cd $(SRC_DIR) && ./$(BUILD_DIR_DEBUG)/$(TARGET)
+
+# Run the Release build
+run-release: $(BUILD_DIR_RELEASE)/$(TARGET)
+	@echo "Running $(TARGET) [Release]..."
+	cd $(SRC_DIR) && ./$(BUILD_DIR_RELEASE)/$(TARGET)
 
 # Profile with Linux perf (records until you quit the game)
 profile: release
 	@echo "Profiling with perf (Ctrl+C to stop)..."
-	perf record -g --call-graph=dwarf -- $(BUILD_DIR)/$(TARGET)
+	@command -v perf >/dev/null 2>&1 || { echo "Error: 'perf' is not installed.\nTry: sudo apt install linux-tools-common linux-tools-generic"; exit 1; }
+	perf record -g --call-graph=dwarf -- $(BUILD_DIR_RELEASE)/$(TARGET)
 
 # View perf report from last profile run
 perf-report:
@@ -83,7 +111,8 @@ perf-report:
 # Optional: Callgrind profile (heavier, slower)
 callgrind: release
 	@echo "Running under callgrind (this will be slow)..."
-	valgrind --tool=callgrind -- $(BUILD_DIR)/$(TARGET)
+	@command -v valgrind >/dev/null 2>&1 || { echo "Error: 'valgrind' is not installed.\nTry: sudo apt install valgrind"; exit 1; }
+	valgrind --tool=callgrind -- $(BUILD_DIR_RELEASE)/$(TARGET)
 
 # Install dependencies (if needed)
 install:
@@ -120,8 +149,12 @@ help:
 	@echo "  ENABLE_NATIVE=1  Enable -march=native -mtune=native"
 
 # Dependencies
--include $(OBJECTS:.o=.d)
+-include $(OBJECTS_DEBUG:.o=.d)
+-include $(OBJECTS_RELEASE:.o=.d)
 
-# Generate dependency files
-$(BUILD_DIR)/%.d: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
-	@$(CXX) $(CXXFLAGS) $(INCLUDES) -MM -MP -MT $(@:.d=.o) $< > $@
+# Generate dependency files (per config)
+$(BUILD_DIR_DEBUG)/%.d: $(SRC_DIR)/%.cpp | $(BUILD_DIR_DEBUG)
+	@$(CXX) $(CXXFLAGS_DEBUG) $(INCLUDES) -MM -MP -MT $(@:.d=.o) $< > $@
+
+$(BUILD_DIR_RELEASE)/%.d: $(SRC_DIR)/%.cpp | $(BUILD_DIR_RELEASE)
+	@$(CXX) $(CXXFLAGS_RELEASE) $(INCLUDES) -MM -MP -MT $(@:.d=.o) $< > $@
