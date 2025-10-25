@@ -108,11 +108,11 @@ void EnemyManager::draw(raylib::DrawSession &ds) const
         }
 
         // If enemy is hit, apply transparency and play sound
-        if (enemy.get_hit_timer())
+        if (enemy.get_hit_timer() != 0)
         {
             // Use semi-transparent white color to create a flash effect without disappearing
             // This creates a flashing effect by blending with white
-            enemy_color = Color{255, 255, 255, 128};
+            enemy_color = GlobalColors::withAlpha(WHITE, 128);
             [[maybe_unused]] bool played = _enemydestroy.Play();
         }
 

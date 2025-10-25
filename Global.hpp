@@ -120,3 +120,30 @@ constexpr float THREE_EIGHTHS = 0.375F;
 constexpr float QUARTER = 0.25F;
 constexpr float THREE_QUARTERS = 0.75F;
 } // namespace GlobalConstant
+
+// Centralized color palette for custom colors used across modules
+namespace GlobalColors
+{
+// Helper: return the given color with a different alpha
+inline constexpr Color withAlpha(Color c, unsigned char a) { return Color{c.r, c.g, c.b, a}; }
+
+// Explosions and effects
+inline constexpr Color PLAYER_SHIELD_EXPLOSION{0, 109, 255, 255};
+inline constexpr Color EXPLOSION_ORANGE_RED{255, 36, 0, 255};
+
+// Hit markers (core/outline)
+inline constexpr Color HIT_BASE_CORE{200, 40, 40, 255};
+inline constexpr Color HIT_BASE_OUTLINE{255, 120, 120, 255};
+
+inline constexpr Color HIT_ENEMY_CORE{220, 60, 200, 255};
+inline constexpr Color HIT_ENEMY_OUTLINE{255, 150, 230, 255};
+
+inline constexpr Color HIT_PLAYER_DESTROYED_CORE{255, 140, 0, 255};
+inline constexpr Color HIT_PLAYER_DESTROYED_OUTLINE{255, 200, 80, 255};
+
+inline constexpr Color HIT_PLAYER_NONFATAL_CORE{40, 120, 255, 255};
+inline constexpr Color HIT_PLAYER_NONFATAL_OUTLINE{120, 180, 255, 255};
+
+inline constexpr Color HIT_UFO_CORE{60, 255, 180, 255};
+inline constexpr Color HIT_UFO_OUTLINE{140, 255, 220, 255};
+} // namespace GlobalColors

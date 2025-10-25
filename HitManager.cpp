@@ -57,24 +57,29 @@ struct Style
     Color outline;
 };
 
-inline Style style_for(HitSubject subject, HitOutcome outcome, unsigned char a) noexcept
+inline Style style_for(HitSubject subject, HitOutcome outcome, unsigned char alpha) noexcept
 {
     switch (subject)
     {
     case HitSubject::Base:
-        return Style{Color{200, 40, 40, a}, Color{255, 120, 120, a}};
+        return Style{GlobalColors::withAlpha(GlobalColors::HIT_BASE_CORE, alpha),
+                     GlobalColors::withAlpha(GlobalColors::HIT_BASE_OUTLINE, alpha)};
     case HitSubject::Enemy:
-        return Style{Color{220, 60, 200, a}, Color{255, 150, 230, a}};
+        return Style{GlobalColors::withAlpha(GlobalColors::HIT_ENEMY_CORE, alpha),
+                     GlobalColors::withAlpha(GlobalColors::HIT_ENEMY_OUTLINE, alpha)};
     case HitSubject::Player:
         if (outcome == HitOutcome::Destroyed)
         {
-            return Style{Color{255, 140, 0, a}, Color{255, 200, 80, a}};
+            return Style{GlobalColors::withAlpha(GlobalColors::HIT_PLAYER_DESTROYED_CORE, alpha),
+                         GlobalColors::withAlpha(GlobalColors::HIT_PLAYER_DESTROYED_OUTLINE, alpha)};
         }
-        return Style{Color{40, 120, 255, a}, Color{120, 180, 255, a}};
+        return Style{GlobalColors::withAlpha(GlobalColors::HIT_PLAYER_NONFATAL_CORE, alpha),
+                     GlobalColors::withAlpha(GlobalColors::HIT_PLAYER_NONFATAL_OUTLINE, alpha)};
     case HitSubject::Ufo:
-        return Style{Color{60, 255, 180, a}, Color{140, 255, 220, a}};
+        return Style{GlobalColors::withAlpha(GlobalColors::HIT_UFO_CORE, alpha),
+                     GlobalColors::withAlpha(GlobalColors::HIT_UFO_OUTLINE, alpha)};
     }
-    return Style{Color{255, 255, 255, a}, Color{255, 255, 255, a}};
+    return Style{GlobalColors::withAlpha(WHITE, alpha), GlobalColors::withAlpha(WHITE, alpha)};
 }
 
 // Radius presets per subject/outcome

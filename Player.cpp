@@ -71,14 +71,12 @@ void Player::draw(raylib::DrawSession &ds) const
         {
             // Once we get hit while having a shield, the shield will be destroyed. We'll show a
             // blue explosion.
-            constexpr Color SHIELD_EXPLOSION_COLOR{0, 109, 255, 255};
-            _explosion.draw(ds, _x, _y, SHIELD_EXPLOSION_COLOR);
+            _explosion.draw(ds, _x, _y, GlobalColors::PLAYER_SHIELD_EXPLOSION);
         }
     }
     else if (!_dead_animation_over)
     {
-        constexpr Color DEATH_EXPLOSION_COLOR{255, 36, 0, 255};
-        _explosion.draw(ds, _x, _y, DEATH_EXPLOSION_COLOR);
+        _explosion.draw(ds, _x, _y, GlobalColors::EXPLOSION_ORANGE_RED);
     }
 }
 

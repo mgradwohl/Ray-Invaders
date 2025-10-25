@@ -85,9 +85,9 @@ void Ufo::draw(raylib::DrawSession &ds) const
     else if (!_dead_animation_over)
     {
         // Only draw the explosion animation until it's finished
-        _explosion.draw(ds, _explosion_x, _y - (UFO_EXPLOSION_Y_OFFSET * GlobalConstant::BASE_SIZE), Color(255, 36, 0, 255));
-        _explosion.draw(ds, _explosion_x, (_y - (UFO_EXPLOSION_MAGIC_OFFSET * GlobalConstant::BASE_SIZE)), Color(255, 36, 0, 255));
-        _explosion.draw(ds, _explosion_x, _y - 0.5F * GlobalConstant::BASE_SIZE, Color(255, 36, 0, 255));
+        _explosion.draw(ds, _explosion_x, _y - (UFO_EXPLOSION_Y_OFFSET * GlobalConstant::BASE_SIZE), GlobalColors::EXPLOSION_ORANGE_RED);
+        _explosion.draw(ds, _explosion_x, (_y - (UFO_EXPLOSION_MAGIC_OFFSET * GlobalConstant::BASE_SIZE)), GlobalColors::EXPLOSION_ORANGE_RED);
+        _explosion.draw(ds, _explosion_x, _y - 0.5F * GlobalConstant::BASE_SIZE, GlobalColors::EXPLOSION_ORANGE_RED);
     }
 
     for (const PowerUpItem &powerup : _powerups)
