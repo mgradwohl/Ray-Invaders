@@ -37,7 +37,7 @@ void BannerUI::draw(raylib::DrawSession &ds, const Player &player) const noexcep
         const float bdX = std::floor((windowWidth - bdW) * 0.5F);
         const float bdY = 0.0F;
         const Rectangle bdst{bdX, bdY, bdW, bdH};
-        ds.DrawTexturePro(_banner.get(), bsrc, bdst, Vector2{0.0F, 0.0F}, 1.0F, WHITE);
+    ds.DrawTexturePro(_banner.get(), bsrc, bdst, Vector2{0.0F, 0.0F}, 1.0F, GlobalColors::COL_WHITE);
     }
 
     // Level text (left)
@@ -48,7 +48,7 @@ void BannerUI::draw(raylib::DrawSession &ds, const Player &player) const noexcep
         const std::string text = "Level: " + std::to_string(_level);
         const float drawX = GlobalConstant::BANNER_PADDING;
         const float drawY = (bannerHeightLogical - static_cast<float>(fontSize)) * 0.5F;
-        ds.DrawText(text.c_str(), static_cast<int>(drawX), static_cast<int>(drawY), fontSize, WHITE);
+    ds.DrawText(text.c_str(), static_cast<int>(drawX), static_cast<int>(drawY), fontSize, GlobalColors::COL_WHITE);
     }
 
     // Power bar (right) via manager

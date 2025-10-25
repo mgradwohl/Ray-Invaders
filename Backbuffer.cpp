@@ -29,13 +29,13 @@ void Backbuffer::flip() const noexcept
     const Rectangle gameplaySrc{0.0F, 0.0F, _rtGameplay.widthF(), -_rtGameplay.heightF()};
     const Rectangle bannerSrc{0.0F, 0.0F, _rtBanner.widthF(), -_rtBanner.heightF()};
 
-    raylib::DrawSession screenDs{BLACK};
+    raylib::DrawSession screenDs{GlobalColors::COL_BLACK};
 
     // 1) Draw banner texture at top
     const Rectangle bannerDst{0.0F, 0.0F, _rtBanner.widthF() * _scale, _rtBanner.heightF() * _scale};
-    screenDs.DrawTexturePro(_rtBanner.texture(), bannerSrc, bannerDst, pos, 1.0F, WHITE);
+    screenDs.DrawTexturePro(_rtBanner.texture(), bannerSrc, bannerDst, pos, 1.0F, GlobalColors::COL_WHITE);
 
     // 2) Draw gameplay below banner strip
     const Rectangle gameplayDst{0.0F, GlobalConstant::BANNER_HEIGHT * _scale, _rtGameplay.widthF() * _scale, _rtGameplay.heightF() * _scale};
-    screenDs.DrawTexturePro(_rtGameplay.texture(), gameplaySrc, gameplayDst, pos, 1.0F, WHITE);
+    screenDs.DrawTexturePro(_rtGameplay.texture(), gameplaySrc, gameplayDst, pos, 1.0F, GlobalColors::COL_WHITE);
 }

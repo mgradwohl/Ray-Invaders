@@ -17,7 +17,7 @@ Background::Background(const std::string &spritefile) : _backgroundsprite(sprite
 void Background::draw(raylib::DrawSession &ds) const
 {
     const Vector2 pos{0, 0};
-    ds.DrawTexture(_backgroundsprite.get(), _source, pos, WHITE);
+    ds.DrawTexture(_backgroundsprite.get(), _source, pos, GlobalColors::COL_WHITE);
 }
 
 namespace {

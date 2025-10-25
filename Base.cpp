@@ -341,7 +341,7 @@ void Base::draw_base(raylib::DrawSession &ds) const
 {
     const Rectangle src = {0.0F, 0.0F, _texture.widthF(), _texture.heightF()};
     const Vector2 pos = {_x, _y};
-    ds.DrawTexture(_texture.get(), src, pos, WHITE);
+    ds.DrawTexture(_texture.get(), src, pos, GlobalColors::COL_WHITE);
 }
 
 void Base::draw_damage(raylib::DrawSession &ds) const
@@ -351,7 +351,7 @@ void Base::draw_damage(raylib::DrawSession &ds) const
     const Rectangle damage_src = {0.0F, 0.0F, _damage_tex.widthF(), _damage_tex.heightF()};
     const Vector2 pos = {_x, _y};
     // Semi-transparent black overlay to create visible holes
-    static constexpr Color hole_color = {0, 0, 0, 128};
+    const Color hole_color = GlobalColors::withAlpha(GlobalColors::COL_BLACK, 128);
     ds.DrawTexture(_damage_tex.get(), damage_src, pos, hole_color);
 }
 

@@ -51,10 +51,10 @@ void Player::draw(raylib::DrawSession &ds) const
         // sprite.setTextureRect(sf::IntRect(BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE));
         Vector2 dest{_x, _y};
         // Using float constants to avoid static_cast
-        const Rectangle source{GlobalConstant::BASE_SIZE * _current_power, // _current_power is unsigned char, safe implicit
-                                                                           // conversion to float
-                               0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
-        ds.DrawTexture(_player_sprite.get(), source, dest, WHITE);
+    const Rectangle source{GlobalConstant::BASE_SIZE * _current_power, // _current_power is unsigned char, safe implicit
+                                       // conversion to float
+                   0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
+    ds.DrawTexture(_player_sprite.get(), source, dest, GlobalColors::COL_WHITE);
 
         for (const Bullet &bullet : _bullets)
         {
@@ -63,7 +63,7 @@ void Player::draw(raylib::DrawSession &ds) const
 
             dest.x = bullet.get_x();
             dest.y = bullet.get_y();
-            ds.DrawTexture(_bullet_sprite.get(), source, dest, WHITE);
+            ds.DrawTexture(_bullet_sprite.get(), source, dest, GlobalColors::COL_WHITE);
         }
         // i_window.draw(sprite);
 

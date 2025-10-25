@@ -80,7 +80,7 @@ void Ufo::draw(raylib::DrawSession &ds) const
 {
     if (!_dead)
     {
-        _animation.draw(ds, _x, _y, WHITE);
+        _animation.draw(ds, _x, _y, GlobalColors::COL_WHITE);
     }
     else if (!_dead_animation_over)
     {
@@ -92,7 +92,7 @@ void Ufo::draw(raylib::DrawSession &ds) const
 
     for (const PowerUpItem &powerup : _powerups)
     {
-        _powerup_animations[static_cast<int>(powerup.get_type())].draw(ds, powerup.get_x(), powerup.get_y(), WHITE);
+        _powerup_animations[static_cast<int>(powerup.get_type())].draw(ds, powerup.get_x(), powerup.get_y(), GlobalColors::COL_WHITE);
     }
 }
 

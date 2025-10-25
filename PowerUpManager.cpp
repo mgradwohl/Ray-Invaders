@@ -26,22 +26,22 @@ void PowerUpManager::update(const Player &player)
     {
     case 1:
     {
-        _color = Color{0, 219, 255, 255};
+        _color = GlobalColors::POWERUP_1;
         break;
     }
     case 2:
     {
-        _color = Color{255, 109, 0, 255};
+        _color = GlobalColors::POWERUP_2;
         break;
     }
     case 3:
     {
-        _color = Color{255, 219, 85, 255};
+        _color = GlobalColors::POWERUP_3;
         break;
     }
     case 4:
     {
-        _color = Color{182, 109, 255, 255};
+        _color = GlobalColors::POWERUP_4;
     }
     }
 }
@@ -89,7 +89,7 @@ void PowerUpManager::draw(raylib::DrawSession &ds, const Player &player, float b
 
     const Rectangle srcFrame{0.0F, 0.0F, frameWLogical, rowH};
     const Rectangle dstFrame{destX, destY, destFrameW, drawH};
-    ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFrame, dstFrame, Vector2{0.0F, 0.0F}, 1.0F, WHITE);
+    ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFrame, dstFrame, Vector2{0.0F, 0.0F}, 1.0F, GlobalColors::COL_WHITE);
 
     const Rectangle srcFill{fillLeftLogical, rowH, fillWLogical, rowH};
     const float destFillX = destX + (fillLeftLogical * scaleH * scale);

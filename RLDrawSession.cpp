@@ -97,16 +97,16 @@ void DrawSession::DrawTextCentered(const std::string &text, const int x, const i
 
 void DrawSession::DrawFPS(const int posX, const int posY, const int height)
 {
-    Color color = LIME;
+    Color color = GlobalColors::FPS_GOOD;
     const int fps = GetFPS();
 
     if ((fps < 60) && (fps >= 30))
     {
-        color = ORANGE;
+        color = GlobalColors::FPS_WARN;
     }
     else if (fps < 30)
     {
-        color = RED;
+        color = GlobalColors::FPS_BAD;
     }
 
     const std::string fpsStr = std::format("FPS: {}", fps); // Use local fps instead of calling GetFPS() again

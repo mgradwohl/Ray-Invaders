@@ -74,18 +74,18 @@ void EnemyManager::draw(raylib::DrawSession &ds) const
             // Array index 'a' will be small, implicit conversion is fine here
             const float sourceX = GlobalConstant::BASE_SIZE * a;
             const Rectangle source{sourceX, 0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
-            ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, WHITE);
+            ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, GlobalColors::COL_WHITE);
         }
 
         // Drawing the bullet itself.
         const Vector2 dest{bullet.get_x(), bullet.get_y()};
         const float sourceX = GlobalConstant::BASE_SIZE * tailSize; // tailSize is small, implicit conversion is fine
-        const Rectangle source{sourceX, 0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
-        ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, WHITE);
+    const Rectangle source{sourceX, 0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
+    ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, GlobalColors::COL_WHITE);
     }
     for (const Enemy &enemy : _enemies)
     {
-        Color enemy_color = WHITE;
+    Color enemy_color = GlobalColors::COL_WHITE;
 
         // Determine the base color of the enemy
         switch (enemy.get_type())
@@ -97,12 +97,12 @@ void EnemyManager::draw(raylib::DrawSession &ds) const
         }
         case Enemy::Type::Purple:
         {
-            enemy_color = PURPLE;
+            enemy_color = GlobalColors::ENEMY_PURPLE;
             break;
         }
         case Enemy::Type::Green:
         {
-            enemy_color = GREEN;
+            enemy_color = GlobalColors::ENEMY_GREEN;
             break;
         }
         }
@@ -112,7 +112,7 @@ void EnemyManager::draw(raylib::DrawSession &ds) const
         {
             // Use semi-transparent white color to create a flash effect without disappearing
             // This creates a flashing effect by blending with white
-            enemy_color = GlobalColors::withAlpha(WHITE, 128);
+            enemy_color = GlobalColors::withAlpha(GlobalColors::COL_WHITE, 128);
             [[maybe_unused]] bool played = _enemydestroy.Play();
         }
 

@@ -125,7 +125,10 @@ constexpr float THREE_QUARTERS = 0.75F;
 namespace GlobalColors
 {
 // Helper: return the given color with a different alpha
-inline constexpr Color withAlpha(Color c, unsigned char a) { return Color{c.r, c.g, c.b, a}; }
+inline constexpr Color withAlpha(Color base, unsigned char alpha)
+{
+	return Color{base.r, base.g, base.b, alpha};
+}
 
 // Explosions and effects
 inline constexpr Color PLAYER_SHIELD_EXPLOSION{0, 109, 255, 255};
@@ -149,4 +152,28 @@ inline constexpr Color HIT_UFO_OUTLINE{140, 255, 220, 255};
 
 // Enemy base sprite colors
 inline constexpr Color ENEMY_CYAN{0, 255, 255, 255};
+
+// Aliases for raylib built-ins (centralized access) - prefixed to avoid macro name clashes
+inline const Color COL_WHITE = ::WHITE;
+inline const Color COL_BLACK = ::BLACK;
+inline const Color COL_RED = ::RED;
+inline const Color COL_ORANGE = ::ORANGE;
+inline const Color COL_LIME = ::LIME;
+inline const Color COL_GREEN = ::GREEN;
+inline const Color COL_PURPLE = ::PURPLE;
+
+// FPS meter colors
+inline const Color FPS_GOOD = COL_LIME;
+inline const Color FPS_WARN = COL_ORANGE;
+inline const Color FPS_BAD = COL_RED;
+
+// Enemy palette aliases for clarity
+inline const Color ENEMY_PURPLE = COL_PURPLE;
+inline const Color ENEMY_GREEN = COL_GREEN;
+
+// Power-up UI bar colors
+inline constexpr Color POWERUP_1{0, 219, 255, 255};
+inline constexpr Color POWERUP_2{255, 109, 0, 255};
+inline constexpr Color POWERUP_3{255, 219, 85, 255};
+inline constexpr Color POWERUP_4{182, 109, 255, 255};
 } // namespace GlobalColors
