@@ -15,8 +15,8 @@ void PowerUpItem::bump_y(GameTypes::Distance ybump) noexcept { _y += ybump; }
 
 [[nodiscard]] auto PowerUpItem::get_hitbox() const noexcept -> Rectangle
 {
-    constexpr float HITBOX_SCALE = 0.5f;
-    constexpr float HITBOX_OFFSET = 0.25f;
+    constexpr float HITBOX_SCALE = 0.5F;
+    constexpr float HITBOX_OFFSET = 0.25F;
     return Rectangle{_x + HITBOX_OFFSET * GlobalConstant::BASE_SIZE, _y + HITBOX_OFFSET * GlobalConstant::BASE_SIZE,
                      HITBOX_SCALE * GlobalConstant::BASE_SIZE, HITBOX_SCALE * GlobalConstant::BASE_SIZE};
 }

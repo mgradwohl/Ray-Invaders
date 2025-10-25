@@ -43,7 +43,7 @@ bool EnemyManager::reached_player(float i_player_y) const
 {
     for (const Enemy &enemy : _enemies)
     {
-        if (enemy.get_y() > i_player_y - 0.5f * GlobalConstant::BASE_SIZE)
+        if (enemy.get_y() > i_player_y - 0.5F * GlobalConstant::BASE_SIZE)
         {
             // As soon as the enemies reach the player, the game is over!
             return true;
@@ -68,14 +68,14 @@ void EnemyManager::draw(raylib::DrawSession &ds) const
             const Vector2 dest{prev_x[a], prev_y[a]}; // prev_x and prev_y are already float
             // Array index 'a' will be small, implicit conversion is fine here
             const float sourceX = GlobalConstant::BASE_SIZE * a;
-            const Rectangle source{sourceX, 0.0f, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
+            const Rectangle source{sourceX, 0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
             ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, WHITE);
         }
 
         // Drawing the bullet itself.
         const Vector2 dest{bullet.get_x(), bullet.get_y()};
         const float sourceX = GlobalConstant::BASE_SIZE * tailSize; // tailSize is small, implicit conversion is fine
-        const Rectangle source{sourceX, 0.0f, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
+        const Rectangle source{sourceX, 0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
         ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, WHITE);
     }
     for (const Enemy &enemy : _enemies)
@@ -232,22 +232,22 @@ void EnemyManager::reset(GameTypes::Level i_level)
         }
         case '0':
         {
-            const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0f + enemy_x); // enemy_x is unsigned char, implicit conversion to float
-            const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0f + enemy_y); // enemy_y is unsigned char, implicit conversion to float
+            const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0F + enemy_x); // enemy_x is unsigned char, implicit conversion to float
+            const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0F + enemy_y); // enemy_y is unsigned char, implicit conversion to float
             _enemies.emplace_back(Enemy::Type::Cyan, enemyXPos, enemyYPos, enemy_health);
             break;
         }
         case '1':
         {
-            const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0f + enemy_x);
-            const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0f + enemy_y);
+            const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0F + enemy_x);
+            const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0F + enemy_y);
             _enemies.emplace_back(Enemy::Type::Purple, enemyXPos, enemyYPos, enemy_health);
             break;
         }
         case '2':
         {
-            const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0f + enemy_x);
-            const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0f + enemy_y);
+            const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0F + enemy_x);
+            const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0F + enemy_y);
             _enemies.emplace_back(Enemy::Type::Green, enemyXPos, enemyYPos, enemy_health);
         }
         }

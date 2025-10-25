@@ -49,11 +49,11 @@ Rectangle Bullet::get_hitbox() const noexcept
 {
     // Smaller hitboxes make the game so much better!
     // Slightly wider bullet hitbox for better collision detection
-    constexpr float bullet_width = 4.0f;
+    constexpr float bullet_width = 4.0F;
     // Shorter height to match visual appearance
-    constexpr float bullet_height = GlobalConstant::BASE_SIZE / 2.0f;
+    constexpr float bullet_height = GlobalConstant::BASE_SIZE / 2.0F;
     // Center the hitbox within the sprite
-    constexpr float x_offset = (GlobalConstant::BASE_SIZE - bullet_width) * 0.5f;
+    constexpr float x_offset = (GlobalConstant::BASE_SIZE - bullet_width) * 0.5F;
 
     return Rectangle{_x + x_offset, _y, bullet_width, bullet_height};
 }

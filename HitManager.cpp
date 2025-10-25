@@ -72,15 +72,15 @@ inline float default_radius(HitSubject subject, HitOutcome outcome) noexcept
     switch (subject)
     {
     case HitSubject::Enemy:
-        return 2.5f;
+        return 2.5F;
     case HitSubject::Base:
-        return 2.5f; // actual base varies by damage; this is a reasonable visual default
+        return 2.5F; // actual base varies by damage; this is a reasonable visual default
     case HitSubject::Player:
-        return (outcome == HitOutcome::Destroyed) ? 4.0f : 3.0f;
+        return (outcome == HitOutcome::Destroyed) ? 4.0F : 3.0F;
     case HitSubject::Ufo:
-        return 5.0f;
+        return 5.0F;
     }
-    return 3.0f;
+    return 3.0F;
 }
 } // namespace
 
@@ -124,6 +124,6 @@ void HitManager::draw(raylib::DrawSession &ds) const
         const unsigned char a = alpha_from_ttl(h.ttl);
         const Style s = style_for(h.subject, h.outcome, a);
         ds.DrawCircle(h.x, h.y, h.radius, s.core);
-        ds.DrawCircle(h.x, h.y, h.radius + 1.0f, s.outline);
+        ds.DrawCircle(h.x, h.y, h.radius + 1.0F, s.outline);
     }
 }

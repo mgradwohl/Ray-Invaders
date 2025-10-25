@@ -17,11 +17,11 @@ enum class HitOutcome
 
 struct Hit
 {
-    static constexpr float DEFAULT_RADIUS = 2.5f;
+    static constexpr float DEFAULT_RADIUS = 2.5F;
     static constexpr int DEFAULT_TTL = 60;
 
-    float x{0.0f};
-    float y{0.0f};
+    float x{0.0F};
+    float y{0.0F};
     float radius{DEFAULT_RADIUS};
     int ttl{DEFAULT_TTL};
     HitSubject subject{HitSubject::Enemy};

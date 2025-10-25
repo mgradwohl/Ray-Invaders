@@ -26,13 +26,13 @@ void Background::update([[maybe_unused]] Player &player) noexcept
     if (IsKeyDown(KEY_RIGHT))
     {
         // player moving right, move background from right to left
-        _source.x += 1.0f;
+        _source.x += 1.0F;
     }
 
     if (IsKeyDown(KEY_LEFT))
     {
         // player moving left, move background from left to right
-        _source.x -= 1.0f;
+        _source.x -= 1.0F;
     }
 
     // Use a named constant for clarity and to avoid repeated casts
@@ -42,16 +42,16 @@ void Background::update([[maybe_unused]] Player &player) noexcept
         _source.x = bgWidth;
     }
 
-    if (_source.x <= 0.0f)
+    if (_source.x <= 0.0F)
     {
-        _source.x = 0.0f;
+        _source.x = 0.0F;
     }
 
-    // Decrease Y position by 1.0f rather than integer decrement
-    _source.y -= 1.0f;
-    if (_source.y <= 0.0f)
+    // Decrease Y position by 1.0F rather than integer decrement
+    _source.y -= 1.0F;
+    if (_source.y <= 0.0F)
     {
-        _source.y = 0.0f;
+        _source.y = 0.0F;
     }
 }
 
@@ -63,7 +63,7 @@ void Background::reset() noexcept
     const float bgWidth = _backgroundsprite.widthF();
     const float bgHeight = _backgroundsprite.heightF();
 
-    constexpr float CENTER_OFFSET = 0.5f;
+    constexpr float CENTER_OFFSET = 0.5F;
     _source.x = (bgWidth - GlobalConstant::SCREEN_WIDTH) * CENTER_OFFSET;
     _source.y = bgHeight - GlobalConstant::SCREEN_HEIGHT;
     _source.width = GlobalConstant::SCREEN_WIDTH;

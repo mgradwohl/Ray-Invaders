@@ -69,17 +69,17 @@ void DrawSession::DrawTexturePro(const Texture2D &texture, const Rectangle &sour
 {
     // Build destination rectangle scaled by the provided factor
     Rectangle scaledDest{dest.x, dest.y, dest.width * scale, dest.height * scale};
-    ::DrawTexturePro(texture, source, scaledDest, origin, 0.0f, color);
+    ::DrawTexturePro(texture, source, scaledDest, origin, 0.0F, color);
 }
 
 void DrawSession::DrawTextureEx(const Texture2D &texture, const Vector2 &pos, const float scale, const Color color) noexcept
 {
-    ::DrawTextureEx(texture, pos, 0.0f, scale, color);
+    ::DrawTextureEx(texture, pos, 0.0F, scale, color);
 }
 
 void DrawSession::DrawTextureEx(const Texture2D &texture, const float x, const float y, const float scale, const Color color) noexcept
 {
-    ::DrawTextureEx(texture, Vector2{x, y}, 0.0f, scale, color);
+    ::DrawTextureEx(texture, Vector2{x, y}, 0.0F, scale, color);
 }
 
 void DrawSession::DrawText(const std::string &text, const int x, const int y, const int fontSize, const Color color) noexcept

@@ -59,7 +59,7 @@ bool Animation::update() noexcept
 void Animation::draw(raylib::DrawSession &ds, float x, float y, const Color &i_color) const
 {
     const Vector2 dest{x, y};
-    const Rectangle source{_current_frame * _frame_width, 0.0f, _frame_width, _sprite.heightF()};
+    const Rectangle source{_current_frame * _frame_width, 0.0F, _frame_width, _sprite.heightF()};
     // Use the alpha from the passed color to support transparency
     const Color ani{i_color.r, i_color.g, i_color.b, i_color.a};
     ds.DrawTexture(_sprite.get(), source, dest, ani);

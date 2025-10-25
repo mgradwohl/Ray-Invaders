@@ -21,7 +21,7 @@ Window::Window(const uint16_t width, const uint16_t height, const uint16_t fps, 
         // Minimal diagnostic to help trace audio init issues at runtime
         fprintf(stderr, "Warning: Audio device not ready after InitAudioDevice()\n");
     }
-    SetMasterVolume(1.0f);
+    SetMasterVolume(1.0F);
     if (!IsAudioDeviceReady())
     {
         // Helpful runtime hint when audio backend initialization fails

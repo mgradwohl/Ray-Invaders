@@ -37,7 +37,7 @@ Ufo::Ufo(std::mt19937_64 &i_random_engine)
     }
 }
 
-bool Ufo::check_bullet_collision(std::mt19937_64 &i_random_engine, const Rectangle &i_bullet_hitbox)
+auto Ufo::check_bullet_collision(std::mt19937_64 &i_random_engine, const Rectangle &i_bullet_hitbox) -> bool
 {
     if (!_dead)
     {

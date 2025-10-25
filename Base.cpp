@@ -15,7 +15,7 @@
 #include "RLWaveSound.hpp"
 
 Base::Base(float x) noexcept
-    : _x(x), _y(GlobalConstant::SCREEN_HEIGHT - 3.0f * GlobalConstant::BASE_SIZE), _basehitsound("Resources/Sounds/Base Hit.wav")
+    : _x(x), _y(GlobalConstant::SCREEN_HEIGHT - 3.0F * GlobalConstant::BASE_SIZE), _basehitsound("Resources/Sounds/Base Hit.wav")
 {
     // Texture is initialized in reset()
 }
@@ -39,7 +39,7 @@ void Base::reset(const Image &baseImage) noexcept
     _texture.unload();
 
     // Extract just the first frame from the spritesheet
-    Rectangle sourceRec = {0.0f, 0.0f, GlobalConstant::BASE_WIDTH, static_cast<float>(baseImage.height)};
+    Rectangle sourceRec = {0.0F, 0.0F, GlobalConstant::BASE_WIDTH, static_cast<float>(baseImage.height)};
     Image baseCopy = ImageCopy(baseImage);
     ImageCrop(&baseCopy, sourceRec);
 
@@ -118,17 +118,17 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
             const float inter_y1 = std::max(baseHB.y, bulletHB.y);
             const float inter_x2 = std::min(base_x2, bulletHB.x + bulletHB.width);
             const float inter_y2 = std::min(base_y2, bulletHB.y + bulletHB.height);
-            const float inter_w = std::max(0.0f, inter_x2 - inter_x1);
-            const float inter_h = std::max(0.0f, inter_y2 - inter_y1);
-            const float impact_world_x = inter_x1 + 0.5f * inter_w;
-            const float impact_world_y = inter_y1 + 0.5f * inter_h;
+            const float inter_w = std::max(0.0F, inter_x2 - inter_x1);
+            const float inter_h = std::max(0.0F, inter_y2 - inter_y1);
+            const float impact_world_x = inter_x1 + 0.5F * inter_w;
+            const float impact_world_y = inter_y1 + 0.5F * inter_h;
 
             // Convert to base-local coordinates
             const float rel_x = impact_world_x - _x;
             const float rel_y = impact_world_y - _y;
 
             // Record an impact (do not mutate texture immediately for visuals)
-            const float radius = 2.0f + 0.5f * 1.0f; // damage_amount=1.0f
+            const float radius = 2.0F + 0.5F * 1.0F; // damage_amount=1.0F
 
             // Use the center pixel alpha as the collision test. A pixel alpha >= threshold
             // is treated as destroyed; bullets pass through destroyed pixels.
@@ -166,7 +166,7 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
             if (_damage_image.data)
             {
                 // Prepare per-hit alpha increment (higher -> faster destruction)
-                const int base_alpha_incr = static_cast<int>(std::ceil(128.0f * 2.5f)); // increased damage per hit - was 1.0f
+                const int base_alpha_incr = static_cast<int>(std::ceil(128.0F * 2.5F)); // increased damage per hit - was 1.0F
                 const int px = static_cast<int>(std::floor(rel_x));
                 const int py = static_cast<int>(std::floor(rel_y));
                 const int pr = static_cast<int>(std::ceil(radius)) + 1;
@@ -201,7 +201,7 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
                             // Only calculate sqrt for pixels within radius (much fewer
                             // calculations)
                             const float dist = std::sqrt(static_cast<float>(dist_squared));
-                            const float f = 1.0f - (dist / pr_float);
+                            const float f = 1.0F - (dist / pr_float);
                             const int incr = static_cast<int>(std::ceil(base_alpha_incr * f));
                             int idx = y * _damage_image.width + x;
                             if (!base_mask_ptr || base_mask_ptr[idx] == 0)
@@ -236,7 +236,7 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
             }
 
             // Update total damage and mark bullet as dead
-            _damage += 1.0f;
+            _damage += 1.0F;
             bullet.IsDead(true);
             break;
         }
@@ -261,22 +261,22 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
     {
         const float maxx = static_cast<float>(std::max(1, _damage_image.width) - 1);
         const float maxy = static_cast<float>(std::max(1, _damage_image.height) - 1);
-        rel_x = std::max(0.0f, std::min(rel_x, maxx));
-        rel_y = std::max(0.0f, std::min(rel_y, maxy));
+        rel_x = std::max(0.0F, std::min(rel_x, maxx));
+        rel_y = std::max(0.0F, std::min(rel_y, maxy));
     }
     else
     {
-        rel_x = std::max(0.0f, std::min(rel_x, GlobalConstant::BASE_WIDTH));
-        rel_y = std::max(0.0f, std::min(rel_y, GlobalConstant::BASE_SIZE));
+        rel_x = std::max(0.0F, std::min(rel_x, GlobalConstant::BASE_WIDTH));
+        rel_y = std::max(0.0F, std::min(rel_y, GlobalConstant::BASE_SIZE));
     }
     // Mutate the CPU damage image similarly to update()
     if (_damage_image.data)
     {
         // increase alpha like in update(): radial falloff per-impact
-        const int base_alpha_incr = static_cast<int>(std::ceil(128.0f * damage_amount * 2.5f)); // increased damage per hit
+    const int base_alpha_incr = static_cast<int>(std::ceil(128.0F * damage_amount * 2.5F)); // increased damage per hit
         const int px = static_cast<int>(std::floor(rel_x));
         const int py = static_cast<int>(std::floor(rel_y));
-        const int pr = static_cast<int>(std::ceil(2.0f + damage_amount * 0.5f)) + 1;
+    const int pr = static_cast<int>(std::ceil(2.0F + damage_amount * 0.5F)) + 1;
         bool any_changed = false;
 
         unsigned char *base_mask_ptr = _base_mask.empty() ? nullptr : _base_mask.data();
@@ -291,7 +291,7 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
                 const float dist = std::sqrt(static_cast<float>(dx * dx + dy * dy));
                 if (dist <= static_cast<float>(pr))
                 {
-                    const float f = 1.0f - (dist / static_cast<float>(pr));
+                    const float f = 1.0F - (dist / static_cast<float>(pr));
                     const int incr = static_cast<int>(std::ceil(base_alpha_incr * f));
                     int idx = y * _damage_image.width + x;
                     if (!base_mask_ptr || base_mask_ptr[idx] == 0)
@@ -339,7 +339,7 @@ void Base::draw(raylib::DrawSession &ds) const
 
 void Base::draw_base(raylib::DrawSession &ds) const
 {
-    const Rectangle src = {0.0f, 0.0f, _texture.widthF(), _texture.heightF()};
+    const Rectangle src = {0.0F, 0.0F, _texture.widthF(), _texture.heightF()};
     const Vector2 pos = {_x, _y};
     ds.DrawTexture(_texture.get(), src, pos, WHITE);
 }
@@ -348,7 +348,7 @@ void Base::draw_damage(raylib::DrawSession &ds) const
 {
     if (!has_damage())
         return;
-    const Rectangle damage_src = {0.0f, 0.0f, _damage_tex.widthF(), _damage_tex.heightF()};
+    const Rectangle damage_src = {0.0F, 0.0F, _damage_tex.widthF(), _damage_tex.heightF()};
     const Vector2 pos = {_x, _y};
     // Semi-transparent black overlay to create visible holes
     static constexpr Color hole_color = {0, 0, 0, 128};

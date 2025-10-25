@@ -50,13 +50,13 @@ auto PowerUpManager::get_fill_fraction(const Player &player) const noexcept -> f
 {
     if (player.get_current_power() <= 0)
     {
-        return 0.0f;
+        return 0.0F;
     }
     const float spriteWidth = _powerup_bar_sprite.widthF();
-    const float maxFillLogical = spriteWidth - 0.125f * GlobalConstant::BASE_SIZE - 0.25f * GlobalConstant::BASE_SIZE;
+    const float maxFillLogical = spriteWidth - 0.125F * GlobalConstant::BASE_SIZE - 0.25F * GlobalConstant::BASE_SIZE;
     const float currentFillLogical =
         ceil(player.get_power_timer() * maxFillLogical / static_cast<float>(GlobalConstant::Int::POWERUP_DURATION));
-    return (maxFillLogical > 0.0f) ? (currentFillLogical / maxFillLogical) : 0.0f;
+    return (maxFillLogical > 0.0F) ? (currentFillLogical / maxFillLogical) : 0.0F;
 }
 
 void PowerUpManager::draw(raylib::DrawSession &ds, const Player &player, float bannerHeightLogical) const
@@ -65,35 +65,35 @@ void PowerUpManager::draw(raylib::DrawSession &ds, const Player &player, float b
     {
         return;
     }
-    const float scale = 1.0f; // drawing into banner render texture (logical)
+    const float scale = 1.0F; // drawing into banner render texture (logical)
     const float bannerHeightPixels = bannerHeightLogical * scale;
     const float padding = GlobalConstant::BANNER_PADDING;
 
     const float texW = _powerup_bar_sprite.widthF();
     const float rowH = GlobalConstant::BASE_SIZE;
-    const float logicalH = GlobalConstant::BANNER_HEIGHT * 0.5f; // half banner height
+    const float logicalH = GlobalConstant::BANNER_HEIGHT * 0.5F; // half banner height
     const float scaleH = logicalH / rowH;
     const float drawH = logicalH * scale;
     const float frameWLogical = texW;
-    const float fillLeftLogical = 0.125f * GlobalConstant::BASE_SIZE;
-    const float fillRightPadding = 0.25f * GlobalConstant::BASE_SIZE;
+    const float fillLeftLogical = 0.125F * GlobalConstant::BASE_SIZE;
+    const float fillRightPadding = 0.25F * GlobalConstant::BASE_SIZE;
 
     const float maxFillLogical = frameWLogical - fillLeftLogical - fillRightPadding;
     const float fillFrac = get_fill_fraction(player);
-    const float fillWLogical = std::max(0.0f, std::min(maxFillLogical, maxFillLogical * fillFrac));
+    const float fillWLogical = std::max(0.0F, std::min(maxFillLogical, maxFillLogical * fillFrac));
 
     const float destFrameW = frameWLogical * scaleH * scale;
     const float windowWidth = GlobalConstant::SCREEN_WIDTH * scale;
     const float destX = windowWidth - padding - destFrameW;
-    const float destY = (bannerHeightPixels - drawH) * 0.5f;
+    const float destY = (bannerHeightPixels - drawH) * 0.5F;
 
-    const Rectangle srcFrame{0.0f, 0.0f, frameWLogical, rowH};
+    const Rectangle srcFrame{0.0F, 0.0F, frameWLogical, rowH};
     const Rectangle dstFrame{destX, destY, destFrameW, drawH};
-    ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFrame, dstFrame, Vector2{0.0f, 0.0f}, 1.0f, WHITE);
+    ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFrame, dstFrame, Vector2{0.0F, 0.0F}, 1.0F, WHITE);
 
     const Rectangle srcFill{fillLeftLogical, rowH, fillWLogical, rowH};
     const float destFillX = destX + (fillLeftLogical * scaleH * scale);
     const float destFillW = fillWLogical * scaleH * scale;
     const Rectangle dstFill{destFillX, destY, destFillW, drawH};
-    ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFill, dstFill, Vector2{0.0f, 0.0f}, 1.0f, _color);
+    ds.DrawTexturePro(_powerup_bar_sprite.get(), srcFill, dstFill, Vector2{0.0F, 0.0F}, 1.0F, _color);
 }
