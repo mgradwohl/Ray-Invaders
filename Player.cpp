@@ -91,7 +91,7 @@ void Player::reset()
     _current_power = 0;
     _reload_timer = 0;
     _power_timer = 0;
-    _x = 0.5F * (GlobalConstant::SCREEN_WIDTH - GlobalConstant::BASE_SIZE);
+    _x = GlobalConstant::HALF * (GlobalConstant::SCREEN_WIDTH - GlobalConstant::BASE_SIZE);
     _y = GlobalConstant::SCREEN_HEIGHT - 2.0F * GlobalConstant::BASE_SIZE;
 
     _bullets.clear();
@@ -152,8 +152,8 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
 
                 if (3 == _current_power)
                 {
-                    const float leftX = _x - 0.375F * GlobalConstant::BASE_SIZE;
-                    const float rightX = _x + 0.375F * GlobalConstant::BASE_SIZE;
+                    const float leftX = _x - GlobalConstant::THREE_EIGHTHS * GlobalConstant::BASE_SIZE;
+                    const float rightX = _x + GlobalConstant::THREE_EIGHTHS * GlobalConstant::BASE_SIZE;
                     _bullets.emplace_back(0.0F, -GlobalConstant::PLAYER_BULLET_SPEED, leftX, _y);
                     _bullets.emplace_back(0.0F, -GlobalConstant::PLAYER_BULLET_SPEED, rightX, _y);
                 }
@@ -177,8 +177,8 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
                 const float inter_y2 = std::min(pHB.y + pHB.height, bHB.y + bHB.height);
                 const float inter_w = std::max(0.0F, inter_x2 - inter_x1);
                 const float inter_h = std::max(0.0F, inter_y2 - inter_y1);
-                const float impact_world_x = inter_x1 + 0.5F * inter_w;
-                const float impact_world_y = inter_y1 + 0.5F * inter_h;
+                const float impact_world_x = inter_x1 + GlobalConstant::HALF * inter_w;
+                const float impact_world_y = inter_y1 + GlobalConstant::HALF * inter_h;
 
                 if (1 == _current_power)
                 {
@@ -241,8 +241,8 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
                 // Use UFO hitbox center as the impact point (explosion draws around
                 // _explosion_x/_y)
                 const Rectangle uHB = i_ufo.get_hitbox();
-                const float impact_world_x = uHB.x + 0.5F * uHB.width;
-                const float impact_world_y = uHB.y + 0.5F * uHB.height;
+                const float impact_world_x = uHB.x + GlobalConstant::HALF * uHB.width;
+                const float impact_world_y = uHB.y + GlobalConstant::HALF * uHB.height;
                 i_hits.add_hit(HitSubject::Ufo, HitOutcome::Destroyed, impact_world_x, impact_world_y);
                 bullet.IsDead(true);
             }
@@ -266,8 +266,8 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
                 const float inter_y2 = std::min(eHB.y + eHB.height, bHB.y + bHB.height);
                 const float inter_w = std::max(0.0F, inter_x2 - inter_x1);
                 const float inter_h = std::max(0.0F, inter_y2 - inter_y1);
-                const float impact_world_x = inter_x1 + 0.5F * inter_w;
-                const float impact_world_y = inter_y1 + 0.5F * inter_h;
+                const float impact_world_x = inter_x1 + GlobalConstant::HALF * inter_w;
+                const float impact_world_y = inter_y1 + GlobalConstant::HALF * inter_h;
 
                 // Emit a global Enemy hit decal via HitManager (world-space). Presets for radius
                 // and TTL
@@ -288,7 +288,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
 Rectangle Player::get_hitbox() const noexcept
 {
     // Use the fraction constants from the F namespace
-    return Rectangle{_x + 0.125F * GlobalConstant::BASE_SIZE, _y + 0.125F * GlobalConstant::BASE_SIZE,
+    return Rectangle{_x + GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE, _y + GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE,
                      GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE,
                      GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE};
 }

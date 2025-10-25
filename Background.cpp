@@ -20,19 +20,23 @@ void Background::draw(raylib::DrawSession &ds) const
     ds.DrawTexture(_backgroundsprite.get(), _source, pos, WHITE);
 }
 
+namespace {
+static constexpr float SCROLL_STEP = 1.0F;
+}
+
 void Background::update([[maybe_unused]] Player &player) noexcept
 {
     (void) player; // unused
     if (IsKeyDown(KEY_RIGHT))
     {
         // player moving right, move background from right to left
-        _source.x += 1.0F;
+        _source.x += SCROLL_STEP;
     }
 
     if (IsKeyDown(KEY_LEFT))
     {
         // player moving left, move background from left to right
-        _source.x -= 1.0F;
+        _source.x -= SCROLL_STEP;
     }
 
     // Use a named constant for clarity and to avoid repeated casts
@@ -47,8 +51,8 @@ void Background::update([[maybe_unused]] Player &player) noexcept
         _source.x = 0.0F;
     }
 
-    // Decrease Y position by 1.0F rather than integer decrement
-    _source.y -= 1.0F;
+    // Decrease Y position by a fixed scroll step rather than integer decrement
+    _source.y -= SCROLL_STEP;
     if (_source.y <= 0.0F)
     {
         _source.y = 0.0F;

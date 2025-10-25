@@ -12,12 +12,23 @@
 
 namespace
 {
-// Map ttl into alpha 255..50 over a 60-frame window
+// Module-local tuning constants
+constexpr int TTL_WINDOW_DEFAULT = 60;
+constexpr int TTL_WINDOW_UFO = 75;
+constexpr int TTL_PLAYER_NONFATAL = 30;
+
+constexpr float RADIUS_ENEMY = 2.5F;
+constexpr float RADIUS_BASE = 2.5F;
+constexpr float RADIUS_PLAYER_NONFATAL = 3.0F;
+constexpr float RADIUS_PLAYER_DESTROYED = 4.0F;
+constexpr float RADIUS_UFO = 5.0F;
+constexpr float OUTLINE_DELTA = 1.0F;
+
+// Map ttl into alpha 255..50 over a TTL_WINDOW_DEFAULT-frame window
 inline unsigned char alpha_from_ttl(int ttl) noexcept
 {
-    const int window = 60;
-    const int t = std::clamp(ttl, 0, window);
-    return static_cast<unsigned char>(50 + (205 * t) / window);
+    const int t = std::clamp(ttl, 0, TTL_WINDOW_DEFAULT);
+    return static_cast<unsigned char>(50 + (205 * t) / TTL_WINDOW_DEFAULT);
 }
 
 // TTL presets per subject/outcome
@@ -27,16 +38,16 @@ inline int default_ttl(HitSubject subject, HitOutcome outcome) noexcept
     switch (subject)
     {
     case HitSubject::Enemy:
-        return 60;
+        return TTL_WINDOW_DEFAULT;
     case HitSubject::Base:
-        return 60;
+        return TTL_WINDOW_DEFAULT;
     case HitSubject::Player:
         // Non-fatal (shield) is snappier; destroyed lingers a bit longer
-        return (outcome == HitOutcome::NonFatal) ? 30 : 60;
+        return (outcome == HitOutcome::NonFatal) ? TTL_PLAYER_NONFATAL : TTL_WINDOW_DEFAULT;
     case HitSubject::Ufo:
-        return 75; // pops a bit longer
+        return TTL_WINDOW_UFO; // pops a bit longer
     }
-    return 60;
+    return TTL_WINDOW_DEFAULT;
 }
 
 // Style presets: colors by subject/outcome
@@ -72,15 +83,15 @@ inline float default_radius(HitSubject subject, HitOutcome outcome) noexcept
     switch (subject)
     {
     case HitSubject::Enemy:
-        return 2.5F;
+        return RADIUS_ENEMY;
     case HitSubject::Base:
-        return 2.5F; // actual base varies by damage; this is a reasonable visual default
+        return RADIUS_BASE; // actual base varies by damage; this is a reasonable visual default
     case HitSubject::Player:
-        return (outcome == HitOutcome::Destroyed) ? 4.0F : 3.0F;
+        return (outcome == HitOutcome::Destroyed) ? RADIUS_PLAYER_DESTROYED : RADIUS_PLAYER_NONFATAL;
     case HitSubject::Ufo:
-        return 5.0F;
+        return RADIUS_UFO;
     }
-    return 3.0F;
+    return RADIUS_PLAYER_NONFATAL;
 }
 } // namespace
 
@@ -124,6 +135,6 @@ void HitManager::draw(raylib::DrawSession &ds) const
         const unsigned char a = alpha_from_ttl(h.ttl);
         const Style s = style_for(h.subject, h.outcome, a);
         ds.DrawCircle(h.x, h.y, h.radius, s.core);
-        ds.DrawCircle(h.x, h.y, h.radius + 1.0F, s.outline);
+        ds.DrawCircle(h.x, h.y, h.radius + OUTLINE_DELTA, s.outline);
     }
 }

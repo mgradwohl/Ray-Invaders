@@ -114,6 +114,9 @@ constexpr float BANNER_HEIGHT = static_cast<float>(Int::BANNER_HEIGHT);
 constexpr float BANNER_PADDING = static_cast<float>(Int::BANNER_PADDING);
 
 // Common position fractions (actually used in code)
+constexpr float HALF = 0.5F;
+constexpr float EIGHTH = 0.125F;
+constexpr float THREE_EIGHTHS = 0.375F;
 constexpr float QUARTER = 0.25F;
 constexpr float THREE_QUARTERS = 0.75F;
 } // namespace GlobalConstant

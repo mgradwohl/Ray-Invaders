@@ -17,6 +17,11 @@
 #include "RLDrawSession.hpp"
 #include "RLWaveSound.hpp"
 
+namespace {
+constexpr float GRID_X_OFFSET_TILES = 1.0F;
+constexpr float GRID_Y_OFFSET_TILES = 2.0F;
+}
+
 // There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same
 // thing we did in the game "Frogger".
 //  Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered
@@ -43,7 +48,7 @@ bool EnemyManager::reached_player(float i_player_y) const
 {
     for (const Enemy &enemy : _enemies)
     {
-        if (enemy.get_y() > i_player_y - 0.5F * GlobalConstant::BASE_SIZE)
+        if (enemy.get_y() > i_player_y - GlobalConstant::HALF * GlobalConstant::BASE_SIZE)
         {
             // As soon as the enemies reach the player, the game is over!
             return true;
@@ -232,22 +237,22 @@ void EnemyManager::reset(GameTypes::Level i_level)
         }
         case '0':
         {
-            const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0F + enemy_x); // enemy_x is unsigned char, implicit conversion to float
-            const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0F + enemy_y); // enemy_y is unsigned char, implicit conversion to float
+            const float enemyXPos = GlobalConstant::BASE_SIZE * (GRID_X_OFFSET_TILES + enemy_x); // enemy_x is unsigned char, implicit conversion to float
+            const float enemyYPos = GlobalConstant::BASE_SIZE * (GRID_Y_OFFSET_TILES + enemy_y); // enemy_y is unsigned char, implicit conversion to float
             _enemies.emplace_back(Enemy::Type::Cyan, enemyXPos, enemyYPos, enemy_health);
             break;
         }
         case '1':
         {
-            const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0F + enemy_x);
-            const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0F + enemy_y);
+            const float enemyXPos = GlobalConstant::BASE_SIZE * (GRID_X_OFFSET_TILES + enemy_x);
+            const float enemyYPos = GlobalConstant::BASE_SIZE * (GRID_Y_OFFSET_TILES + enemy_y);
             _enemies.emplace_back(Enemy::Type::Purple, enemyXPos, enemyYPos, enemy_health);
             break;
         }
         case '2':
         {
-            const float enemyXPos = GlobalConstant::BASE_SIZE * (1.0F + enemy_x);
-            const float enemyYPos = GlobalConstant::BASE_SIZE * (2.0F + enemy_y);
+            const float enemyXPos = GlobalConstant::BASE_SIZE * (GRID_X_OFFSET_TILES + enemy_x);
+            const float enemyYPos = GlobalConstant::BASE_SIZE * (GRID_Y_OFFSET_TILES + enemy_y);
             _enemies.emplace_back(Enemy::Type::Green, enemyXPos, enemyYPos, enemy_health);
         }
         }

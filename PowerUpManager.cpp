@@ -53,7 +53,7 @@ auto PowerUpManager::get_fill_fraction(const Player &player) const noexcept -> f
         return 0.0F;
     }
     const float spriteWidth = _powerup_bar_sprite.widthF();
-    const float maxFillLogical = spriteWidth - 0.125F * GlobalConstant::BASE_SIZE - 0.25F * GlobalConstant::BASE_SIZE;
+    const float maxFillLogical = spriteWidth - GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE - GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE;
     const float currentFillLogical =
         ceil(player.get_power_timer() * maxFillLogical / static_cast<float>(GlobalConstant::Int::POWERUP_DURATION));
     return (maxFillLogical > 0.0F) ? (currentFillLogical / maxFillLogical) : 0.0F;
@@ -71,12 +71,12 @@ void PowerUpManager::draw(raylib::DrawSession &ds, const Player &player, float b
 
     const float texW = _powerup_bar_sprite.widthF();
     const float rowH = GlobalConstant::BASE_SIZE;
-    const float logicalH = GlobalConstant::BANNER_HEIGHT * 0.5F; // half banner height
+    const float logicalH = GlobalConstant::BANNER_HEIGHT * GlobalConstant::HALF; // half banner height
     const float scaleH = logicalH / rowH;
     const float drawH = logicalH * scale;
     const float frameWLogical = texW;
-    const float fillLeftLogical = 0.125F * GlobalConstant::BASE_SIZE;
-    const float fillRightPadding = 0.25F * GlobalConstant::BASE_SIZE;
+    const float fillLeftLogical = GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE;
+    const float fillRightPadding = GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE;
 
     const float maxFillLogical = frameWLogical - fillLeftLogical - fillRightPadding;
     const float fillFrac = get_fill_fraction(player);
