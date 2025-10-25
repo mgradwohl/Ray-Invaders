@@ -79,7 +79,7 @@ auto main() -> int
                 // no more enemies left
                 if (enemy_manager.get_enemies().empty())
                 {
-                    if (!next_level_timer)
+                    if (next_level_timer == 0U)
                     {
                         next_level = false;
                         level++;

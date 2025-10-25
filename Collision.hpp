@@ -8,5 +8,5 @@
 // mirroring CheckCollisionRecs semantics.
 static constexpr inline bool AabbIntersect(const Rectangle &a, const Rectangle &b) noexcept
 {
-    return !(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y);
+    return a.x + a.width > b.x && b.x + b.width > a.x && a.y + a.height > b.y && b.y + b.height > a.y;
 }
