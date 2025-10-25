@@ -92,7 +92,7 @@ void EnemyManager::draw(raylib::DrawSession &ds) const
         {
         case Enemy::Type::Cyan:
         {
-            enemy_color = Color{0, 255, 255, 255}; // CYAN
+            enemy_color = GlobalColors::ENEMY_CYAN; // centralized cyan
             break;
         }
         case Enemy::Type::Purple:

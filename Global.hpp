@@ -146,4 +146,7 @@ inline constexpr Color HIT_PLAYER_NONFATAL_OUTLINE{120, 180, 255, 255};
 
 inline constexpr Color HIT_UFO_CORE{60, 255, 180, 255};
 inline constexpr Color HIT_UFO_OUTLINE{140, 255, 220, 255};
+
+// Enemy base sprite colors
+inline constexpr Color ENEMY_CYAN{0, 255, 255, 255};
 } // namespace GlobalColors
