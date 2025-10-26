@@ -17,10 +17,11 @@
 #include "RLDrawSession.hpp"
 #include "RLWaveSound.hpp"
 
-namespace {
+namespace
+{
 constexpr float GRID_X_OFFSET_TILES = 1.0F;
 constexpr float GRID_Y_OFFSET_TILES = 2.0F;
-}
+} // namespace
 
 // There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same
 // thing we did in the game "Frogger".
@@ -80,12 +81,12 @@ void EnemyManager::draw(raylib::DrawSession &ds) const
         // Drawing the bullet itself.
         const Vector2 dest{bullet.get_x(), bullet.get_y()};
         const float sourceX = GlobalConstant::BASE_SIZE * tailSize; // tailSize is small, implicit conversion is fine
-    const Rectangle source{sourceX, 0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
-    ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, GlobalColors::COL_WHITE);
+        const Rectangle source{sourceX, 0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
+        ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, GlobalColors::COL_WHITE);
     }
     for (const Enemy &enemy : _enemies)
     {
-    Color enemy_color = GlobalColors::COL_WHITE;
+        Color enemy_color = GlobalColors::COL_WHITE;
 
         // Determine the base color of the enemy
         switch (enemy.get_type())
@@ -237,8 +238,10 @@ void EnemyManager::reset(GameTypes::Level i_level)
         }
         case '0':
         {
-            const float enemyXPos = GlobalConstant::BASE_SIZE * (GRID_X_OFFSET_TILES + enemy_x); // enemy_x is unsigned char, implicit conversion to float
-            const float enemyYPos = GlobalConstant::BASE_SIZE * (GRID_Y_OFFSET_TILES + enemy_y); // enemy_y is unsigned char, implicit conversion to float
+            const float enemyXPos =
+                GlobalConstant::BASE_SIZE * (GRID_X_OFFSET_TILES + enemy_x); // enemy_x is unsigned char, implicit conversion to float
+            const float enemyYPos =
+                GlobalConstant::BASE_SIZE * (GRID_Y_OFFSET_TILES + enemy_y); // enemy_y is unsigned char, implicit conversion to float
             _enemies.emplace_back(Enemy::Type::Cyan, enemyXPos, enemyYPos, enemy_health);
             break;
         }
@@ -299,8 +302,11 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
     // No, not like that.
     // I'M A PROFESSIONAL C++ PROGRAMMER!!!!
     // Yeah, that's better.
-    dead_enemies_start = remove_if(_enemies.begin(), _enemies.end(), [](const Enemy &i_enemy)
-                                   { return 0 == i_enemy.get_health(); });
+    dead_enemies_start = remove_if(_enemies.begin(), _enemies.end(),
+                                   [](const Enemy &i_enemy)
+                                   {
+                                       return 0 == i_enemy.get_health();
+                                   });
     // The more enemies we kill, the faster they become.
     // No need for casting with int type
     auto alive_count = std::distance(dead_enemies_start, _enemies.end());
@@ -318,8 +324,11 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
 
     // I used a lambda!
     // AGAIN!
-    _enemy_bullets.erase(remove_if(_enemy_bullets.begin(), _enemy_bullets.end(), [](const Bullet &i_bullet)
-                                   { return i_bullet.IsDead(); }),
+    _enemy_bullets.erase(remove_if(_enemy_bullets.begin(), _enemy_bullets.end(),
+                                   [](const Bullet &i_bullet)
+                                   {
+                                       return i_bullet.IsDead();
+                                   }),
                          _enemy_bullets.end());
 }
 

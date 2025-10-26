@@ -14,8 +14,14 @@ Bullet::Bullet(float i_step_x, float i_step_y, float i_x, float i_y) noexcept
     _previous_y.fill(_y);
 }
 
-bool Bullet::IsDead() const noexcept { return _dead; }
-void Bullet::IsDead(bool dead) noexcept { _dead = dead; }
+bool Bullet::IsDead() const noexcept
+{
+    return _dead;
+}
+void Bullet::IsDead(bool dead) noexcept
+{
+    _dead = dead;
+}
 
 void Bullet::update() noexcept
 {
@@ -45,11 +51,12 @@ void Bullet::update() noexcept
     }
 }
 
-namespace {
+namespace
+{
 constexpr float BULLET_HITBOX_WIDTH = 4.0F;
 constexpr float BULLET_HITBOX_HEIGHT = GlobalConstant::BASE_SIZE / 2.0F;
 constexpr float BULLET_HITBOX_X_OFFSET = (GlobalConstant::BASE_SIZE - BULLET_HITBOX_WIDTH) * GlobalConstant::HALF;
-}
+} // namespace
 
 Rectangle Bullet::get_hitbox() const noexcept
 {
@@ -57,7 +64,19 @@ Rectangle Bullet::get_hitbox() const noexcept
     return Rectangle{_x + BULLET_HITBOX_X_OFFSET, _y, BULLET_HITBOX_WIDTH, BULLET_HITBOX_HEIGHT};
 }
 
-float Bullet::get_x() const noexcept { return _x; }
-float Bullet::get_y() const noexcept { return _y; }
-const std::array<float, 3> &Bullet::get_previous_x() const noexcept { return _previous_x; }
-const std::array<float, 3> &Bullet::get_previous_y() const noexcept { return _previous_y; }
+float Bullet::get_x() const noexcept
+{
+    return _x;
+}
+float Bullet::get_y() const noexcept
+{
+    return _y;
+}
+const std::array<float, 3> &Bullet::get_previous_x() const noexcept
+{
+    return _previous_x;
+}
+const std::array<float, 3> &Bullet::get_previous_y() const noexcept
+{
+    return _previous_y;
+}

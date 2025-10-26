@@ -127,7 +127,7 @@ namespace GlobalColors
 // Helper: return the given color with a different alpha
 inline constexpr Color withAlpha(Color base, unsigned char alpha)
 {
-	return Color{base.r, base.g, base.b, alpha};
+    return Color{base.r, base.g, base.b, alpha};
 }
 
 // Explosions and effects

@@ -9,8 +9,14 @@ class RenderTexture2D
 {
   public:
     RenderTexture2D() = default;
-    RenderTexture2D(GameTypes::Coordinate w, GameTypes::Coordinate h) noexcept { create(w, h); }
-    ~RenderTexture2D() { destroy(); }
+    RenderTexture2D(GameTypes::Coordinate w, GameTypes::Coordinate h) noexcept
+    {
+        create(w, h);
+    }
+    ~RenderTexture2D()
+    {
+        destroy();
+    }
 
     RenderTexture2D(const RenderTexture2D &) = delete;
     RenderTexture2D &operator=(const RenderTexture2D &) = delete;
@@ -44,13 +50,34 @@ class RenderTexture2D
         _rt = {};
     }
 
-    [[nodiscard]] const ::RenderTexture2D &get() const noexcept { return _rt; }
-    [[nodiscard]] ::RenderTexture2D &get() noexcept { return _rt; }
-    [[nodiscard]] const Texture2D &texture() const noexcept { return _rt.texture; }
-    [[nodiscard]] int width() const noexcept { return _rt.texture.width; }
-    [[nodiscard]] float widthF() const noexcept { return static_cast<float>(_rt.texture.width); }
-    [[nodiscard]] int height() const noexcept { return _rt.texture.height; }
-    [[nodiscard]] float heightF() const noexcept { return static_cast<float>(_rt.texture.height); }
+    [[nodiscard]] const ::RenderTexture2D &get() const noexcept
+    {
+        return _rt;
+    }
+    [[nodiscard]] ::RenderTexture2D &get() noexcept
+    {
+        return _rt;
+    }
+    [[nodiscard]] const Texture2D &texture() const noexcept
+    {
+        return _rt.texture;
+    }
+    [[nodiscard]] int width() const noexcept
+    {
+        return _rt.texture.width;
+    }
+    [[nodiscard]] float widthF() const noexcept
+    {
+        return static_cast<float>(_rt.texture.width);
+    }
+    [[nodiscard]] int height() const noexcept
+    {
+        return _rt.texture.height;
+    }
+    [[nodiscard]] float heightF() const noexcept
+    {
+        return static_cast<float>(_rt.texture.height);
+    }
 
   private:
     ::RenderTexture2D _rt{};

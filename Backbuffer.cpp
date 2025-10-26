@@ -36,6 +36,7 @@ void Backbuffer::flip() const noexcept
     screenDs.DrawTexturePro(_rtBanner.texture(), bannerSrc, bannerDst, pos, 1.0F, GlobalColors::COL_WHITE);
 
     // 2) Draw gameplay below banner strip
-    const Rectangle gameplayDst{0.0F, GlobalConstant::BANNER_HEIGHT * _scale, _rtGameplay.widthF() * _scale, _rtGameplay.heightF() * _scale};
+    const Rectangle gameplayDst{0.0F, GlobalConstant::BANNER_HEIGHT * _scale, _rtGameplay.widthF() * _scale,
+                                _rtGameplay.heightF() * _scale};
     screenDs.DrawTexturePro(_rtGameplay.texture(), gameplaySrc, gameplayDst, pos, 1.0F, GlobalColors::COL_WHITE);
 }

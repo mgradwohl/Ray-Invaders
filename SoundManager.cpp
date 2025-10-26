@@ -84,11 +84,20 @@ Sound SoundManager::loadSoundSafe(const std::string &filename)
 }
 
 // SharedSound implementation
-SharedSound::SharedSound(const std::string &filename) { acquire(filename); }
+SharedSound::SharedSound(const std::string &filename)
+{
+    acquire(filename);
+}
 
-SharedSound::~SharedSound() { release(); }
+SharedSound::~SharedSound()
+{
+    release();
+}
 
-SharedSound::SharedSound(const SharedSound &other) { acquire(other._filename); }
+SharedSound::SharedSound(const SharedSound &other)
+{
+    acquire(other._filename);
+}
 
 SharedSound &SharedSound::operator=(const SharedSound &other)
 {
@@ -146,7 +155,10 @@ bool SharedSound::IsPlaying() const noexcept
     return false;
 }
 
-bool SharedSound::IsValid() const noexcept { return _sound && IsSoundValid(*_sound); }
+bool SharedSound::IsValid() const noexcept
+{
+    return _sound && IsSoundValid(*_sound);
+}
 
 void SharedSound::acquire(const std::string &filename)
 {

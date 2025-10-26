@@ -9,8 +9,14 @@ class Texture2DFile
 {
   public:
     Texture2DFile() = default;
-    explicit Texture2DFile(const std::string &filename) noexcept { load(filename); }
-    ~Texture2DFile() { unload(); }
+    explicit Texture2DFile(const std::string &filename) noexcept
+    {
+        load(filename);
+    }
+    ~Texture2DFile()
+    {
+        unload();
+    }
 
     Texture2DFile(const Texture2DFile &) = delete;
     Texture2DFile &operator=(const Texture2DFile &) = delete;
@@ -52,13 +58,31 @@ class Texture2DFile
         }
     }
 
-    [[nodiscard]] const Texture2D &get() const noexcept { return _tex; }
-    [[nodiscard]] int id() const noexcept { return _tex.id; }
-    [[nodiscard]] int width() const noexcept { return _tex.width; }
-    [[nodiscard]] float widthF() const noexcept { return static_cast<float>(_tex.width); }
+    [[nodiscard]] const Texture2D &get() const noexcept
+    {
+        return _tex;
+    }
+    [[nodiscard]] int id() const noexcept
+    {
+        return _tex.id;
+    }
+    [[nodiscard]] int width() const noexcept
+    {
+        return _tex.width;
+    }
+    [[nodiscard]] float widthF() const noexcept
+    {
+        return static_cast<float>(_tex.width);
+    }
 
-    [[nodiscard]] int height() const noexcept { return _tex.height; }
-    [[nodiscard]] float heightF() const noexcept { return static_cast<float>(_tex.height); }
+    [[nodiscard]] int height() const noexcept
+    {
+        return _tex.height;
+    }
+    [[nodiscard]] float heightF() const noexcept
+    {
+        return static_cast<float>(_tex.height);
+    }
 
   private:
     Texture2D _tex{};
@@ -68,8 +92,14 @@ class Texture2DFromImage
 {
   public:
     Texture2DFromImage() = default;
-    explicit Texture2DFromImage(const Image &image) noexcept { load(image); }
-    ~Texture2DFromImage() { unload(); }
+    explicit Texture2DFromImage(const Image &image) noexcept
+    {
+        load(image);
+    }
+    ~Texture2DFromImage()
+    {
+        unload();
+    }
 
     Texture2DFromImage(const Texture2DFromImage &) = delete;
     Texture2DFromImage &operator=(const Texture2DFromImage &) = delete;
@@ -112,12 +142,30 @@ class Texture2DFromImage
             ::SetTextureFilter(_tex, TEXTURE_FILTER_POINT);
     }
 
-    [[nodiscard]] const Texture2D &get() const noexcept { return _tex; }
-    [[nodiscard]] int id() const noexcept { return _tex.id; }
-    [[nodiscard]] int width() const noexcept { return _tex.width; }
-    [[nodiscard]] float widthF() const noexcept { return static_cast<float>(_tex.width); }
-    [[nodiscard]] int height() const noexcept { return _tex.height; }
-    [[nodiscard]] float heightF() const noexcept { return static_cast<float>(_tex.height); }
+    [[nodiscard]] const Texture2D &get() const noexcept
+    {
+        return _tex;
+    }
+    [[nodiscard]] int id() const noexcept
+    {
+        return _tex.id;
+    }
+    [[nodiscard]] int width() const noexcept
+    {
+        return _tex.width;
+    }
+    [[nodiscard]] float widthF() const noexcept
+    {
+        return static_cast<float>(_tex.width);
+    }
+    [[nodiscard]] int height() const noexcept
+    {
+        return _tex.height;
+    }
+    [[nodiscard]] float heightF() const noexcept
+    {
+        return static_cast<float>(_tex.height);
+    }
 
   private:
     Texture2D _tex{};

@@ -16,8 +16,14 @@ class Backbuffer
     Backbuffer &operator=(Backbuffer &&) = delete;
     void flip() const noexcept;
     // Access render targets for gameplay and banner drawing from Main
-    [[nodiscard]] auto GetGameplayRenderTexture() noexcept -> raylib::RenderTexture2D & { return _rtGameplay; }
-    [[nodiscard]] auto GetBannerRenderTexture() noexcept -> raylib::RenderTexture2D & { return _rtBanner; }
+    [[nodiscard]] auto GetGameplayRenderTexture() noexcept -> raylib::RenderTexture2D &
+    {
+        return _rtGameplay;
+    }
+    [[nodiscard]] auto GetBannerRenderTexture() noexcept -> raylib::RenderTexture2D &
+    {
+        return _rtBanner;
+    }
 
   private:
     raylib::RenderTexture2D _rtGameplay; // SCREEN_WIDTH x SCREEN_HEIGHT

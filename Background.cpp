@@ -12,7 +12,10 @@
 #include "RLDrawSession.hpp"
 #include "RLTexture2D.hpp"
 
-Background::Background(const std::string &spritefile) : _backgroundsprite(spritefile) { reset(); }
+Background::Background(const std::string &spritefile) : _backgroundsprite(spritefile)
+{
+    reset();
+}
 
 void Background::draw(raylib::DrawSession &ds) const
 {
@@ -20,7 +23,8 @@ void Background::draw(raylib::DrawSession &ds) const
     ds.DrawTexture(_backgroundsprite.get(), _source, pos, GlobalColors::COL_WHITE);
 }
 
-namespace {
+namespace
+{
 static constexpr float SCROLL_STEP = 1.0F;
 }
 

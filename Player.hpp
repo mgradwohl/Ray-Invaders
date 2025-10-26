@@ -33,7 +33,10 @@ class Player
                 HitManager &i_hits);
 
     [[nodiscard]] auto get_hitbox() const noexcept -> Rectangle;
-    auto get_player_bullets() noexcept -> std::vector<Bullet> & { return _bullets; }
+    auto get_player_bullets() noexcept -> std::vector<Bullet> &
+    {
+        return _bullets;
+    }
 
   private: // Is it okay to call this variable "dead"?
     // I mean, it's a spaceship.

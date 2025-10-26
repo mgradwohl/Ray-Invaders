@@ -35,5 +35,8 @@ Window::~Window()
     CloseWindow();
 }
 
-bool Window::ShouldClose() const noexcept { return WindowShouldClose(); }
+bool Window::ShouldClose() const noexcept
+{
+    return WindowShouldClose();
+}
 } // namespace raylib

@@ -61,7 +61,10 @@ class SharedSound
     [[nodiscard]] bool IsValid() const noexcept;
 
     // Get filename for debugging
-    [[nodiscard]] const std::string &getFilename() const noexcept { return _filename; }
+    [[nodiscard]] const std::string &getFilename() const noexcept
+    {
+        return _filename;
+    }
 
   private:
     std::string _filename;

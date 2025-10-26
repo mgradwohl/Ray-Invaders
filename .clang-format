@@ -11,6 +11,9 @@ SpacesInParentheses: false
 SpaceAfterCStyleCast: true
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortBlocksOnASingleLine: false
+AllowShortLambdasOnASingleLine: None
 # Explicit Allman brace control for fine-grained consistency
 BraceWrapping:
   AfterClass: true

@@ -86,7 +86,8 @@ void Ufo::draw(raylib::DrawSession &ds) const
     {
         // Only draw the explosion animation until it's finished
         _explosion.draw(ds, _explosion_x, _y - (UFO_EXPLOSION_Y_OFFSET * GlobalConstant::BASE_SIZE), GlobalColors::EXPLOSION_ORANGE_RED);
-        _explosion.draw(ds, _explosion_x, (_y - (UFO_EXPLOSION_MAGIC_OFFSET * GlobalConstant::BASE_SIZE)), GlobalColors::EXPLOSION_ORANGE_RED);
+        _explosion.draw(ds, _explosion_x, (_y - (UFO_EXPLOSION_MAGIC_OFFSET * GlobalConstant::BASE_SIZE)),
+                        GlobalColors::EXPLOSION_ORANGE_RED);
         _explosion.draw(ds, _explosion_x, _y - 0.5F * GlobalConstant::BASE_SIZE, GlobalColors::EXPLOSION_ORANGE_RED);
     }
 
@@ -168,9 +169,15 @@ void Ufo::update(std::mt19937_64 &i_random_engine)
     {
         powerup_animation.update();
     }
-    _powerups.erase(remove_if(_powerups.begin(), _powerups.end(), [](const PowerUpItem &i_powerup) noexcept
-                              { return i_powerup.isdead(); }),
+    _powerups.erase(remove_if(_powerups.begin(), _powerups.end(),
+                              [](const PowerUpItem &i_powerup) noexcept
+                              {
+                                  return i_powerup.isdead();
+                              }),
                     _powerups.end());
 }
 
-Rectangle Ufo::get_hitbox() const noexcept { return Rectangle{_x, _y, 2 * GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE}; }
+Rectangle Ufo::get_hitbox() const noexcept
+{
+    return Rectangle{_x, _y, 2 * GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
+}

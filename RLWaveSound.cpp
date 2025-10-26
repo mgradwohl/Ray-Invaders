@@ -3,8 +3,8 @@
 
 // Standard library headers
 #include <cstdio>
-#include <string>
 #include <iostream>
+#include <string>
 
 // Third-party headers
 #include <raylib.h>
@@ -14,12 +14,12 @@ namespace raylib
 WaveSound::WaveSound(const std::string &filename) noexcept
 {
     // First, try the simple path
-        _sound = LoadSound(filename.c_str());
-        if (!::IsSoundValid(_sound))
-        {
-            // Surface a clear warning that this specific sound failed to load
-            fprintf(stderr, "Warning: Failed to load sound: %s\n", filename.c_str());
-        }
+    _sound = LoadSound(filename.c_str());
+    if (!::IsSoundValid(_sound))
+    {
+        // Surface a clear warning that this specific sound failed to load
+        fprintf(stderr, "Warning: Failed to load sound: %s\n", filename.c_str());
+    }
 
     if (!::IsSoundValid(_sound))
     {
@@ -68,7 +68,7 @@ void WaveSound::Stop() const noexcept
 }
 
 bool WaveSound::IsPlaying() const noexcept
-    {
-        return ::IsSoundPlaying(_sound);
-    }
+{
+    return ::IsSoundPlaying(_sound);
+}
 } // namespace raylib

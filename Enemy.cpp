@@ -21,13 +21,31 @@ Enemy::Enemy(Type i_type, float i_x, float i_y, GameTypes::Health health) noexce
 {
 }
 
-GameTypes::Health Enemy::get_health() const noexcept { return _health; }
-GameTypes::Timer Enemy::get_hit_timer() const noexcept { return _hit_timer; }
-[[nodiscard]] Enemy::Type Enemy::get_type() const noexcept { return _type; }
-float Enemy::get_x() const noexcept { return _x; }
-float Enemy::get_y() const noexcept { return _y; }
+GameTypes::Health Enemy::get_health() const noexcept
+{
+    return _health;
+}
+GameTypes::Timer Enemy::get_hit_timer() const noexcept
+{
+    return _hit_timer;
+}
+[[nodiscard]] Enemy::Type Enemy::get_type() const noexcept
+{
+    return _type;
+}
+float Enemy::get_x() const noexcept
+{
+    return _x;
+}
+float Enemy::get_y() const noexcept
+{
+    return _y;
+}
 
-void Enemy::hit() noexcept { _hit_timer = GlobalConstant::Int::ENEMY_HIT_TIMER_DURATION; }
+void Enemy::hit() noexcept
+{
+    _hit_timer = GlobalConstant::Int::ENEMY_HIT_TIMER_DURATION;
+}
 
 void Enemy::move()
 {

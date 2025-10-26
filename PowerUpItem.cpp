@@ -9,9 +9,14 @@
 // Project
 #include "Global.hpp"
 
-PowerUpItem::PowerUpItem(float i_x, float i_y, Type i_type) noexcept : _x(i_x), _y(i_y), _type(i_type) {}
+PowerUpItem::PowerUpItem(float i_x, float i_y, Type i_type) noexcept : _x(i_x), _y(i_y), _type(i_type)
+{
+}
 
-void PowerUpItem::bump_y(GameTypes::Distance ybump) noexcept { _y += ybump; }
+void PowerUpItem::bump_y(GameTypes::Distance ybump) noexcept
+{
+    _y += ybump;
+}
 
 [[nodiscard]] auto PowerUpItem::get_hitbox() const noexcept -> Rectangle
 {
@@ -21,12 +26,27 @@ void PowerUpItem::bump_y(GameTypes::Distance ybump) noexcept { _y += ybump; }
                      HITBOX_SCALE * GlobalConstant::BASE_SIZE, HITBOX_SCALE * GlobalConstant::BASE_SIZE};
 }
 
-PowerUpItem::Type PowerUpItem::get_type() const noexcept { return _type; }
+PowerUpItem::Type PowerUpItem::get_type() const noexcept
+{
+    return _type;
+}
 
-bool PowerUpItem::isdead() const noexcept { return _dead; }
+bool PowerUpItem::isdead() const noexcept
+{
+    return _dead;
+}
 
-void PowerUpItem::isdead(bool dead) noexcept { _dead = dead; }
+void PowerUpItem::isdead(bool dead) noexcept
+{
+    _dead = dead;
+}
 
-float PowerUpItem::get_x() const noexcept { return _x; }
+float PowerUpItem::get_x() const noexcept
+{
+    return _x;
+}
 
-float PowerUpItem::get_y() const noexcept { return _y; }
+float PowerUpItem::get_y() const noexcept
+{
+    return _y;
+}

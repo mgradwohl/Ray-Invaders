@@ -12,8 +12,14 @@ class PowerUpManager
     void draw(raylib::DrawSession &ds, const Player &player, float bannerHeightLogical) const;
 
     // Accessors for banner composition
-    [[nodiscard]] auto get_sprite() const noexcept -> const Texture2D & { return _powerup_bar_sprite.get(); }
-    [[nodiscard]] auto get_color() const noexcept -> Color { return _color; }
+    [[nodiscard]] auto get_sprite() const noexcept -> const Texture2D &
+    {
+        return _powerup_bar_sprite.get();
+    }
+    [[nodiscard]] auto get_color() const noexcept -> Color
+    {
+        return _color;
+    }
     [[nodiscard]] auto get_fill_fraction(const Player &player) const noexcept -> float;
 
   private:

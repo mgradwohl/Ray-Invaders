@@ -34,10 +34,19 @@ class Base
     void draw_base(raylib::DrawSession &ds) const;
     void draw_damage(raylib::DrawSession &ds) const;
     [[nodiscard]] auto get_hitbox() const noexcept -> Rectangle;
-    [[nodiscard]] auto is_dead() const noexcept -> bool { return _dead; }
+    [[nodiscard]] auto is_dead() const noexcept -> bool
+    {
+        return _dead;
+    }
     // Change return type to int to match _damage type and avoid casting
-    [[nodiscard]] auto get_damage() const noexcept -> int { return static_cast<int>(_damage); }
-    [[nodiscard]] auto has_damage() const noexcept -> bool { return _has_damage && _damage_tex.id() > 0; }
+    [[nodiscard]] auto get_damage() const noexcept -> int
+    {
+        return static_cast<int>(_damage);
+    }
+    [[nodiscard]] auto has_damage() const noexcept -> bool
+    {
+        return _has_damage && _damage_tex.id() > 0;
+    }
 
     // Records a bullet impact at the specified position and modifies the texture (damage mask)
     void apply_impact(float rel_x, float rel_y, float damage_amount);

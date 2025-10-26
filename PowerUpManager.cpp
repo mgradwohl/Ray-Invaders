@@ -8,7 +8,9 @@
 #include "Global.hpp"
 #include "RLDrawSession.hpp"
 
-PowerUpManager::PowerUpManager(const std::string &spritefile) : _powerup_bar_sprite(spritefile), _spritefile(spritefile) {}
+PowerUpManager::PowerUpManager(const std::string &spritefile) : _powerup_bar_sprite(spritefile), _spritefile(spritefile)
+{
+}
 
 PowerUpManager::~PowerUpManager()
 {
@@ -53,7 +55,8 @@ auto PowerUpManager::get_fill_fraction(const Player &player) const noexcept -> f
         return 0.0F;
     }
     const float spriteWidth = _powerup_bar_sprite.widthF();
-    const float maxFillLogical = spriteWidth - GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE - GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE;
+    const float maxFillLogical =
+        spriteWidth - GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE - GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE;
     const float currentFillLogical =
         ceil(player.get_power_timer() * maxFillLogical / static_cast<float>(GlobalConstant::Int::POWERUP_DURATION));
     return (maxFillLogical > 0.0F) ? (currentFillLogical / maxFillLogical) : 0.0F;

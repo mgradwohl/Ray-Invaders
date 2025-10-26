@@ -273,10 +273,10 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
     if (_damage_image.data)
     {
         // increase alpha like in update(): radial falloff per-impact
-    const int base_alpha_incr = static_cast<int>(std::ceil(128.0F * damage_amount * 2.5F)); // increased damage per hit
+        const int base_alpha_incr = static_cast<int>(std::ceil(128.0F * damage_amount * 2.5F)); // increased damage per hit
         const int px = static_cast<int>(std::floor(rel_x));
         const int py = static_cast<int>(std::floor(rel_y));
-    const int pr = static_cast<int>(std::ceil(2.0F + damage_amount * 0.5F)) + 1;
+        const int pr = static_cast<int>(std::ceil(2.0F + damage_amount * 0.5F)) + 1;
         bool any_changed = false;
 
         unsigned char *base_mask_ptr = _base_mask.empty() ? nullptr : _base_mask.data();

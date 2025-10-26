@@ -29,5 +29,7 @@ struct Hit
 
     // Convenience constructor to allow in-place construction in vectors
     constexpr Hit(float ix, float iy, float iradius, int ittl, HitSubject isubject, HitOutcome ioutcome) noexcept
-        : x(ix), y(iy), radius(iradius), ttl(ittl), subject(isubject), outcome(ioutcome) {}
+        : x(ix), y(iy), radius(iradius), ttl(ittl), subject(isubject), outcome(ioutcome)
+    {
+    }
 };

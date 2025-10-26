@@ -30,18 +30,36 @@ Player::Player()
     reset();
 }
 
-bool Player::get_dead() const noexcept { return _dead; }
+bool Player::get_dead() const noexcept
+{
+    return _dead;
+}
 
-bool Player::get_dead_animation_over() const noexcept { return _dead_animation_over; }
+bool Player::get_dead_animation_over() const noexcept
+{
+    return _dead_animation_over;
+}
 
-GameTypes::Count Player::get_current_power() const noexcept { return _current_power; }
+GameTypes::Count Player::get_current_power() const noexcept
+{
+    return _current_power;
+}
 
-GameTypes::Duration Player::get_power_timer() const noexcept { return _power_timer; }
+GameTypes::Duration Player::get_power_timer() const noexcept
+{
+    return _power_timer;
+}
 
-float Player::get_y() const noexcept { return _y; }
+float Player::get_y() const noexcept
+{
+    return _y;
+}
 
 // I don't know why, but this is funny.
-void Player::die() noexcept { _dead = true; }
+void Player::die() noexcept
+{
+    _dead = true;
+}
 
 void Player::draw(raylib::DrawSession &ds) const
 {
@@ -51,10 +69,10 @@ void Player::draw(raylib::DrawSession &ds) const
         // sprite.setTextureRect(sf::IntRect(BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE));
         Vector2 dest{_x, _y};
         // Using float constants to avoid static_cast
-    const Rectangle source{GlobalConstant::BASE_SIZE * _current_power, // _current_power is unsigned char, safe implicit
-                                       // conversion to float
-                   0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
-    ds.DrawTexture(_player_sprite.get(), source, dest, GlobalColors::COL_WHITE);
+        const Rectangle source{GlobalConstant::BASE_SIZE * _current_power, // _current_power is unsigned char, safe implicit
+                                                                           // conversion to float
+                               0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
+        ds.DrawTexture(_player_sprite.get(), source, dest, GlobalColors::COL_WHITE);
 
         for (const Bullet &bullet : _bullets)
         {
@@ -278,8 +296,11 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
         }
     }
 
-    _bullets.erase(remove_if(_bullets.begin(), _bullets.end(), [](const Bullet &i_bullet)
-                             { return true == i_bullet.IsDead(); }),
+    _bullets.erase(remove_if(_bullets.begin(), _bullets.end(),
+                             [](const Bullet &i_bullet)
+                             {
+                                 return true == i_bullet.IsDead();
+                             }),
                    _bullets.end());
 }
 
