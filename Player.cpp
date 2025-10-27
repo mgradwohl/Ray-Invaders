@@ -30,9 +30,36 @@ Player::Player()
     reset();
 }
 
+// Lives API
+auto Player::get_lives() const noexcept -> int
+{
+    return _lives;
+}
+
+void Player::set_lives(int lives) noexcept
+{
+    _lives = lives;
+}
+
+void Player::add_lives(int n) noexcept
+{
+    _lives += n;
+}
+
+auto Player::lose_life() noexcept -> int
+{
+    if (_lives > 0)
+    {
+        _lives--;
+    }
+
+    return _lives;
+}
+
 bool Player::get_dead() const noexcept
 {
-    return _dead;
+    // Player is considered dead (game-over) when lives are exhausted
+    return _lives <= 0;
 }
 
 bool Player::get_dead_animation_over() const noexcept
@@ -55,35 +82,30 @@ float Player::get_y() const noexcept
     return _y;
 }
 
-// I don't know why, but this is funny.
+// Mark the current life as destroyed and start explosion animation.
 void Player::die() noexcept
 {
-    _dead = true;
+    _destroyed = true;
+    _dead_animation_over = false;
+    _explosion.reset();
 }
 
 void Player::draw(raylib::DrawSession &ds) const
 {
-    if (!_dead)
+    if (!_destroyed)
     {
-        // sprite.setPosition(x, y);
-        // sprite.setTextureRect(sf::IntRect(BASE_SIZE * current_power, 0, BASE_SIZE, BASE_SIZE));
         Vector2 dest{_x, _y};
         // Using float constants to avoid static_cast
-        const Rectangle source{GlobalConstant::BASE_SIZE * _current_power, // _current_power is unsigned char, safe implicit
-                                                                           // conversion to float
+        const Rectangle source{GlobalConstant::BASE_SIZE * _current_power,
                                0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
         ds.DrawTexture(_player_sprite.get(), source, dest, GlobalColors::COL_WHITE);
 
         for (const Bullet &bullet : _bullets)
         {
-            // bullet_sprite.setPosition(bullet.x, bullet.y);
-            // i_window.draw(bullet_sprite);
-
             dest.x = bullet.get_x();
             dest.y = bullet.get_y();
             ds.DrawTexture(_bullet_sprite.get(), source, dest, GlobalColors::COL_WHITE);
         }
-        // i_window.draw(sprite);
 
         if (!_shield_animation_over)
         {
@@ -100,7 +122,7 @@ void Player::draw(raylib::DrawSession &ds) const
 
 void Player::reset()
 {
-    _dead = false;
+    _destroyed = false;
     _dead_animation_over = false;
     _shield_animation_over = true;
 
@@ -118,7 +140,7 @@ void Player::reset()
 void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_enemy_bullets, std::vector<Enemy> &i_enemies, Ufo &i_ufo,
                     HitManager &i_hits)
 {
-    if (!_dead)
+    if (!_destroyed)
     {
         GameTypes::Count powerup_type;
         if (IsKeyDown(KEY_LEFT))
@@ -139,8 +161,6 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
             if (4 == _current_power)
             {
                 // Mirrored controls power-DOWN!
-                // I'm never gonna get tired of this joke.
-                // NEVER!
                 _x = std::max(_x - GlobalConstant::PLAYER_MOVE_SPEED, GlobalConstant::BASE_SIZE);
             }
             else
@@ -162,8 +182,8 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
                 else
                 {
                     _reload_timer = GlobalConstant::Int::RELOAD_DURATION;
-                } // No need for conversions since Bullet constructor now accepts float params
-                  // directly
+                }
+
                 _bullets.emplace_back(0.0F, -GlobalConstant::PLAYER_BULLET_SPEED, _x, _y);
 
                 if (3 == _current_power)
@@ -206,9 +226,11 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
                 }
                 else
                 {
-                    _dead = true;
+                    // Fatal player hit for this life: mark destroyed and play sound
+                    _destroyed = true;
+                    _dead_animation_over = false;
+                    _explosion.reset();
                     [[maybe_unused]] bool played = _playerdestroysound.Play();
-                    // Fatal player hit - presets for radius and TTL
                     i_hits.add_hit(HitSubject::Player, HitOutcome::Destroyed, impact_world_x, impact_world_y);
                 }
 
@@ -311,3 +333,4 @@ Rectangle Player::get_hitbox() const noexcept
                      GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE,
                      GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE};
 }
+

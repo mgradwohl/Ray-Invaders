@@ -29,6 +29,8 @@ class BannerUI
 
   private:
     raylib::Texture2DFile _banner; // owned RAII
+    // Small icon used to represent remaining lives in the banner
+    raylib::Texture2DFile _life_icon;
     const PowerUpManager *_pum{nullptr};
     int _level{-1};
 };

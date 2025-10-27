@@ -66,7 +66,18 @@ auto main() -> int
             // We're gonna show the "Game over!" text after the player's death animation.
             if (player.get_dead_animation_over())
             {
-                game_over = true;
+                // If player has remaining lives, consume one and respawn; otherwise
+                // enter game over as before.
+                if (player.get_lives() > 1)
+                {
+                    // Consume a life and reset player for respawn
+                    player.lose_life();
+                    player.reset();
+                }
+                else
+                {
+                    game_over = true;
+                }
             }
             // Player's Y position is already a float, so we can check directly
             if (enemy_manager.reached_player(player.get_y()))
@@ -114,6 +125,8 @@ auto main() -> int
                 game_over = false;
                 level = 0;
                 background.reset();
+                // Reset player's lives to initial value on a fresh game
+                player.set_lives(GlobalConstant::Int::INITIAL_LIVES);
                 player.reset();
                 enemy_manager.reset(level);
                 ufo.reset(true, random_engine);
@@ -130,7 +143,11 @@ auto main() -> int
                     raylib::DrawSession dsGameplay(backbuffer.GetGameplayRenderTexture(), BLACK);
                     background.draw(dsGameplay);
                     player.draw(dsGameplay);
-                    if (!player.get_dead())
+
+                    // Draw world entities while the game is active. The "Game over!"
+                    // message is shown only when the game_over flag is true (i.e. the
+                    // player has no lives left and the session ended).
+                    if (!game_over)
                     {
                         enemy_manager.draw(dsGameplay);
                         ufo.draw(dsGameplay);

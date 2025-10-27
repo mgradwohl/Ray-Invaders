@@ -65,6 +65,8 @@ constexpr GameTypes::Speed UFO_ANIMATION_SPEED = 8;
 constexpr GameTypes::Speed UFO_MOVE_SPEED = 1;
 constexpr GameTypes::Count BASE_COUNT = 4;
 constexpr GameTypes::Size BASE_WIDTH = 30;
+    // Initial number of player lives at the start of a new game
+    constexpr int INITIAL_LIVES = 3;
 constexpr GameTypes::Size FONT_SIZE_BIG = 32;
 // Reserved UI strip at top of window for banner (logical pixels)
 constexpr GameTypes::Size BANNER_HEIGHT = 20;
