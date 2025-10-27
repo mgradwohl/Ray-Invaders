@@ -20,11 +20,11 @@
 #include "RLDrawSession.hpp"
 #include "RLWindow.hpp"
 #include "Ufo.hpp"
+#include "Popup.hpp"
 
 auto main() -> int
 {
     bool game_over = false;
-    bool next_level = false;
     GameTypes::Level level = 1;
     GameTypes::Timer next_level_timer = GlobalConstant::Int::NEXT_LEVEL_TRANSITION;
 
@@ -45,6 +45,12 @@ auto main() -> int
     PowerUpManager powerup("Resources/Images/PowerupBar.png");
     Ufo ufo(random_engine);
     Bases bases("Resources/Images/Base.png");
+    // Popups (attempt to load art assets; user may provide images)
+    Popup popupNextLevel;
+    popupNextLevel.loadFromFile("Resources/Images/PopupNextLevel.png");
+    Popup popupGameOver;
+    popupGameOver.loadFromFile("Resources/Images/PopupGameOver.png");
+
 
     // we draw everything to this, and then render this to the screen
     Backbuffer backbuffer(GlobalConstant::Int::SCREEN_WIDTH, GlobalConstant::Int::SCREEN_HEIGHT, GlobalConstant::Int::SCREEN_RESIZE);
@@ -54,14 +60,25 @@ auto main() -> int
     while (!window.ShouldClose())
     {
         // Making the game frame rate independent.
-        const std::chrono::microseconds delta_time =
-            std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - previous_time);
+        const std::chrono::microseconds delta_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - previous_time);
         lag += delta_time;
         previous_time += delta_time;
 
         while (GlobalConstant::Time::FRAME_DURATION <= lag)
         {
             lag -= GlobalConstant::Time::FRAME_DURATION;
+
+            // Update popups each tick so their timers/inputs progress even when they are blocking the game world.
+            popupNextLevel.update();
+            popupGameOver.update();
+            // Always age out hits each tick, regardless of game state (transition, game over, etc.)
+            hit_manager.update();
+
+            // Player's Y position is already a float, so we can check directly
+            if (enemy_manager.reached_player(player.get_y()))
+            {
+                player.die();
+            }
 
             // We're gonna show the "Game over!" text after the player's death animation.
             if (player.get_dead_animation_over())
@@ -79,11 +96,6 @@ auto main() -> int
                     game_over = true;
                 }
             }
-            // Player's Y position is already a float, so we can check directly
-            if (enemy_manager.reached_player(player.get_y()))
-            {
-                player.die();
-            }
 
             if (!game_over)
             {
@@ -92,8 +104,8 @@ auto main() -> int
                 {
                     if (next_level_timer == 0U)
                     {
-                        next_level = false;
                         level++;
+                        popupNextLevel.hide();
                         next_level_timer = GlobalConstant::Int::NEXT_LEVEL_TRANSITION;
                         background.reset();
                         player.reset();
@@ -103,39 +115,67 @@ auto main() -> int
                     }
                     else // Here we're showing the next level transition.
                     {
-                        next_level = true;
+                        // Show a non-interactive popup synced with the timer. The show
+                        // call is idempotent while active.
+                        popupNextLevel.show(0, true, true);
                         next_level_timer--;
                     }
                 }
                 else
                 {
-                    // enemies left, update everything
-                    player.update(random_engine, enemy_manager.get_enemy_bullets(), enemy_manager.get_enemies(), ufo, hit_manager);
-                    powerup.update(player);
-                    background.update(player);
-                    enemy_manager.update(random_engine);
-                    ufo.update(random_engine);
-                    bases.update(enemy_manager.get_enemy_bullets(), hit_manager);
-                    bases.update(player.get_player_bullets(), hit_manager);
+                    // there are still enemies, update everything
+                    // If a blocking popup is active, skip gameplay updates
+                    const bool popupBlockingActive = (popupNextLevel.isActive() && popupNextLevel.isBlocking()) ||
+                                                     (popupGameOver.isActive() && popupGameOver.isBlocking());
+
+                    if (!popupBlockingActive)
+                    {
+                        // enemies left, update everything
+                        player.update(random_engine, enemy_manager.get_enemy_bullets(), enemy_manager.get_enemies(), ufo, hit_manager);
+                        powerup.update(player);
+                        background.update(player);
+                        enemy_manager.update(random_engine);
+                        ufo.update(random_engine);
+                        bases.update(enemy_manager.get_enemy_bullets(), hit_manager);
+                        bases.update(player.get_player_bullets(), hit_manager);
+                    }
+                    else
+                    {
+                        // While a blocking popup is active we intentionally do NOT advance
+                        // the game world state (enemies, bullets, bases). Only advance
+                        // player animations (and other minor visual-only updates). To
+                        // avoid processing new hits that would put enemies into a
+                        // half-dead state (hit timer set but no enemy.update to finish
+                        // the death), call player.update with empty enemy/bullet lists.
+                        std::vector<Bullet> empty_enemy_bullets;
+                        std::vector<Enemy> empty_enemies;
+                        player.update(random_engine, empty_enemy_bullets, empty_enemies, ufo, hit_manager);
+                    }
                 }
             }
-            else if (IsKeyPressed(KEY_ENTER))
+
+            if (game_over)
             {
-                // player started a new game
-                game_over = false;
-                level = 0;
-                background.reset();
-                // Reset player's lives to initial value on a fresh game
-                player.set_lives(GlobalConstant::Int::INITIAL_LIVES);
-                player.reset();
-                enemy_manager.reset(level);
-                ufo.reset(true, random_engine);
-                bases.reset();
+                // Show blocking game-over popup that waits for input
+                popupGameOver.show(0, true, true);
+
+                if (IsKeyPressed(KEY_ENTER))
+                {
+                    popupGameOver.hide();
+                    // player started a new game
+                    game_over = false;
+                    level = 0;
+                    background.reset();
+                    // Reset player's lives to initial value on a fresh game
+                    player.set_lives(GlobalConstant::Int::INITIAL_LIVES);
+                    player.reset();
+                    enemy_manager.reset(level);
+                    ufo.reset(true, random_engine);
+                    bases.reset();
+                }
             }
 
-            // Always age out hits each tick, regardless of game state (transition, game over, etc.)
-            hit_manager.update();
-
+            // draw everything if we have time left this frame
             if (GlobalConstant::Time::FRAME_DURATION > lag)
             {
                 {
@@ -154,17 +194,14 @@ auto main() -> int
                         bases.draw(dsGameplay);
                         hit_manager.draw(dsGameplay);
                     }
-                    else
-                    {
-                        dsGameplay.DrawTextCentered("Game over!", GlobalConstant::Int::SCREEN_WIDTH / 2,
-                                                    GlobalConstant::Int::SCREEN_HEIGHT / 2, GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
-                    }
-                    if (next_level)
-                    {
-                        dsGameplay.DrawTextCentered("Next level!", GlobalConstant::Int::SCREEN_WIDTH / 2,
-                                                    GlobalConstant::Int::SCREEN_HEIGHT / 2, GlobalConstant::Int::FONT_SIZE_BIG, WHITE);
-                    }
+
+                    // Draw active popups (they render centered on the screen). If a
+                    // popup isn't active we fall back to the old text draw.
+                    popupNextLevel.draw(dsGameplay);
+                    popupGameOver.draw(dsGameplay);
+
                 } // dsGameplay
+
                 {
                     // Draw banner into banner render texture
                     raylib::DrawSession dsBanner(backbuffer.GetBannerRenderTexture(), BLACK);
