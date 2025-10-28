@@ -51,6 +51,26 @@ When introducing a new shared color, add it to `GlobalColors` with a descriptive
 
 # Ray Invaders
 
+## Developer note: image pixel access and std::span
+
+We access CPU-side images via a typed, non-owning view to avoid raw pointer arithmetic:
+
+- Pixel type is `std::array<uint8_t, 4>` (RGBA8), with helpers `pixel_view(Image&)` returning `std::span<Pixel>`.
+- We assert the image format is `PIXELFORMAT_UNCOMPRESSED_R8G8B8A8` before creating the view, and normalize with `ImageFormat` where needed (e.g., in `Base::reset`).
+- This requires C++20 or newer (we compile as C++23). If your editor shows "std::span not found" but builds succeed, your language server likely isn’t using the same compile flags.
+
+Fix editor warnings (clangd):
+
+- Provide proper compile flags to clangd via one of:
+	- A `.clangd` file with `CompileFlags: Add: ["-std=c++23", "-I/usr/local/include", "-I."]`
+	- A `compile_commands.json` generated from your build (e.g., with `bear -- make debug`).
+- clang-tidy tasks in VS Code already pass `-std=c++23`; clangd needs the same flags to parse headers like `<span>`.
+
+Why std::span?
+
+- Zero-copy, bounds-friendly view over the image buffer, keeps API ownership with raylib.
+- Makes intent clear and eliminates brittle byte math while preserving performance.
+
 This is a port of kofybrek's SFML Space Invaders to raylib. I'll also make it more object oriented and do some performance profiling and clean up the code.
 
 To get this working:

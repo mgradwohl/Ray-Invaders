@@ -1,2 +1,7 @@
 CompileFlags:
-  Add: ["-I", "c:/raylib/include"]
+  Add:
+    - "-std=c++23"
+    - "-I/usr/local/include"
+    - "-I."
+    - "-I"
+    - "c:/raylib/include"
