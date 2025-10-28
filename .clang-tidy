@@ -10,3 +10,14 @@ Checks: >
 WarningsAsErrors: ''
 HeaderFilterRegex: '.*\.(h|hpp)$'
 FormatStyle: file
+
+# Allow short identifiers by setting minimum lengths to 1
+CheckOptions:
+  - key: readability-identifier-length.MinimumVariableNameLength
+    value: '1'
+  - key: readability-identifier-length.MinimumParameterNameLength
+    value: '1'
+  - key: readability-identifier-length.MinimumLoopCounterNameLength
+    value: '1'
+  - key: readability-identifier-length.MinimumExceptionNameLength
+    value: '1'
