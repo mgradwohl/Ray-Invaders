@@ -3,7 +3,12 @@
 
 // Standard library headers
 #include <algorithm>
+#include <array>
+#include <cassert>
 #include <cmath>
+#include <cstdint>
+#include <span>
+#include <cstddef>
 
 // Third-party headers
 #include <raylib.h>
@@ -11,6 +16,7 @@
 // Project headers
 #include "Bullet.hpp"
 #include "Collision.hpp"
+#include "Global.hpp"
 #include "HitManager.hpp"
 #include "RLWaveSound.hpp"
 
@@ -20,14 +26,38 @@ Base::Base(float x) noexcept
     // Texture is initialized in reset()
 }
 
+namespace
+{
+using Pixel = std::array<std::uint8_t, 4>; // RGBA8
+
+inline auto pixel_view(Image &img) -> std::span<Pixel>
+{
+    assert(img.data != nullptr);
+    assert(img.width > 0 && img.height > 0);
+    // This code assumes uncompressed RGBA8 layout (4 bytes per pixel)
+    assert(img.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
+    const std::size_t count = static_cast<std::size_t>(img.width) * static_cast<std::size_t>(img.height);
+    return {reinterpret_cast<Pixel *>(img.data), count};
+}
+
+inline auto pixel_view(const Image &img) -> std::span<const Pixel>
+{
+    assert(img.data != nullptr);
+    assert(img.width > 0 && img.height > 0);
+    assert(img.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
+    const std::size_t count = static_cast<std::size_t>(img.width) * static_cast<std::size_t>(img.height);
+    return {reinterpret_cast<const Pixel *>(img.data), count};
+}
+} // namespace
+
 Base::~Base()
 {
     // RAII wrappers handle Texture unloading; explicitly free Image data if present
-    if (_damage_image.data)
+    if (_damage_image.data != nullptr)
     {
         UnloadImage(_damage_image);
     }
-    if (_base_alpha.data)
+    if (_base_alpha.data != nullptr)
     {
         UnloadImage(_base_alpha);
     }
@@ -46,25 +76,27 @@ void Base::reset(const Image &baseImage) noexcept
     Rectangle sourceRec = {0.0F, 0.0F, GlobalConstant::BASE_WIDTH, static_cast<float>(baseImage.height)};
     Image baseCopy = ImageCopy(baseImage);
     ImageCrop(&baseCopy, sourceRec);
+    // Ensure a known pixel layout for typed access
+    ImageFormat(&baseCopy, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
 
     // Build a compact per-pixel mask (1 == visible, 0 == transparent) from the cropped baseCopy
     // before we release it. This ensures the mask maps exactly to the sprite pixels.
     const int bcw = baseCopy.width;
     const int bch = baseCopy.height;
-    _base_mask.assign(bcw * bch, 0);
-    auto *bcptr = reinterpret_cast<unsigned char *>(baseCopy.data);
+    _base_mask.assign(static_cast<std::size_t>(bcw) * static_cast<std::size_t>(bch), 0);
+    auto basePixels = pixel_view(baseCopy);
     for (int y = 0; y < bch; ++y)
     {
         for (int x = 0; x < bcw; ++x)
         {
-            int idx = (y * bcw + x) * 4;
-            unsigned char a = bcptr[idx + 3];
-            _base_mask[y * bcw + x] = (a > 0) ? 1 : 0;
+            const std::size_t sidx = (static_cast<std::size_t>(y) * static_cast<std::size_t>(bcw)) + static_cast<std::size_t>(x);
+            const std::uint8_t a = basePixels[sidx][3];
+            _base_mask[sidx] = (a > 0U) ? 1U : 0U;
         }
     }
 
     // Keep a copy of the base image alpha for possible future use
-    if (_base_alpha.data)
+    if (_base_alpha.data != nullptr)
     {
         UnloadImage(_base_alpha);
     }
@@ -125,37 +157,39 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
             const float inter_y2 = std::min(base_y2, bulletHB.y + bulletHB.height);
             const float inter_w = std::max(0.0F, inter_x2 - inter_x1);
             const float inter_h = std::max(0.0F, inter_y2 - inter_y1);
-            const float impact_world_x = inter_x1 + 0.5F * inter_w;
-            const float impact_world_y = inter_y1 + 0.5F * inter_h;
+            const float impact_world_x = inter_x1 + (GlobalConstant::HALF * inter_w);
+            const float impact_world_y = inter_y1 + (GlobalConstant::HALF * inter_h);
 
             // Convert to base-local coordinates
             const float rel_x = impact_world_x - _x;
             const float rel_y = impact_world_y - _y;
 
             // Record an impact (do not mutate texture immediately for visuals)
-            const float radius = 2.0F + 0.5F * 1.0F; // damage_amount=1.0F
+            const float radius = 2.5F;// + 0.5F * 1.0F; // damage_amount=1.0F
 
             // Use the center pixel alpha as the collision test. A pixel alpha >= threshold
             // is treated as destroyed; bullets pass through destroyed pixels.
             bool collision_counts = true;
-            if (_damage_image.data)
+            if (_damage_image.data != nullptr)
             {
                 const int cx = static_cast<int>(std::floor(rel_x));
                 const int cy = static_cast<int>(std::floor(rel_y));
                 if (cx >= 0 && cx < _damage_image.width && cy >= 0 && cy < _damage_image.height)
                 {
-                    int sidx = cy * _damage_image.width + cx;
-                    unsigned char *spix = reinterpret_cast<unsigned char *>(_damage_image.data) + sidx * 4;
-                    const unsigned char alpha = spix[3]; // check alpha transparency, lower = more damaged
-                    // Also ensure the base sprite at this pixel is visible; if not, the bullet hit
-                    // empty space
-                    bool base_visible = (_base_mask.empty() ? true : (_base_mask[sidx] != 0));
+                    // calculate where in the damage image the impact point maps to
+                    int sidx = (cy * _damage_image.width) + cx;
+
+                    // Read alpha at that location via a typed pixel view
+                    auto pixels = pixel_view(_damage_image);
+                    const std::uint8_t alpha = pixels[static_cast<std::size_t>(sidx)][3];
+                    // Ensure the base sprite at this pixel is visible; if not, the bullet hit empty space
+                    bool base_visible = (_base_mask.empty() ? true : (_base_mask[static_cast<std::size_t>(sidx)] != 0));
                     if (!base_visible)
                     {
                         collision_counts = false;
                     }
                     // If alpha is high (opaque damage), pixel is damaged and bullets pass through
-                    const unsigned char alpha_threshold = 128; // above this = damaged/destroyed
+                    const std::uint8_t alpha_threshold = 128; // above this = damaged/destroyed
                     if (alpha >= alpha_threshold)
                     {
                         collision_counts = false;
@@ -184,20 +218,9 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
                 const auto pr_float = static_cast<float>(pr);
                 bool any_changed = false;
 
-                // Use compact base mask for opacity tests
-                unsigned char *base_mask_ptr = _base_mask.empty() ? nullptr : _base_mask.data();
-                auto *dmg_ptr = reinterpret_cast<unsigned char *>(_damage_image.data);
-
-                // // Print a quick sanity report about local coords and image sizes
-                // // Bounds check for the impact center point
-                // if (px >= 0 && py >= 0 && px < _damage_image.width && py < _damage_image.height)
-                // {
-                //     // Impact point is within bounds, proceed with damage application
-                // }
-                // else
-                // {
-                //     // Impact point is outside bounds, skip damage application
-                // }
+                // Typed views for compact base mask and pixel buffer
+                std::span<const std::uint8_t> baseMask{_base_mask.data(), _base_mask.size()};
+                auto pixelsWrite = pixel_view(_damage_image);
 
                 for (int y = std::max(0, py - pr); y <= std::min(_damage_image.height - 1, py + pr); ++y)
                 {
@@ -205,7 +228,7 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
                     {
                         const int dx = x - px;
                         const int dy = y - py;
-                        const int dist_squared = dx * dx + dy * dy;
+                        const int dist_squared = (dx * dx) + (dy * dy);
                         if (dist_squared <= pr_squared)
                         {
                             // Only calculate sqrt for pixels within radius (much fewer
@@ -213,13 +236,13 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
                             const float dist = std::sqrt(static_cast<float>(dist_squared));
                             const float f = 1.0F - (dist / pr_float);
                             const int incr = static_cast<int>(std::ceil(base_alpha_incr * f));
-                            int idx = y * _damage_image.width + x;
-                            if ((base_mask_ptr == nullptr) || base_mask_ptr[idx] == 0)
+                            int idx = (y * _damage_image.width) + x;
+                            if (baseMask.empty() || baseMask[static_cast<std::size_t>(idx)] == 0)
                             {
                                 continue; // skip transparent pixels
                             }
-                            unsigned char *pix = dmg_ptr + idx * 4;
-                            int old_alpha = static_cast<int>(pix[3]); // check current alpha
+                            auto &pix = pixelsWrite[static_cast<std::size_t>(idx)];
+                            int old_alpha = static_cast<int>(pix[3]); // current alpha
                             // Increase alpha to create opaque damage areas that will create holes
                             // via multiplicative blending
                             int new_alpha = std::min(255, old_alpha + incr);
@@ -232,7 +255,7 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
                                 pix[0] = 255;
                                 pix[1] = 255;
                                 pix[2] = 255;       // white RGB
-                                pix[3] = new_alpha; // high alpha = transparent holes
+                                pix[3] = static_cast<std::uint8_t>(new_alpha); // high alpha = transparent holes
                                 any_changed = true;
                             }
                         }
@@ -249,14 +272,14 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
             _damage += 1.0F;
             bullet.IsDead(true);
             break;
-        }
     }
 
     // If any damage pixels were changed this frame (either new impacts or fade), update GPU texture
-    if (_damage_gpu_dirty && _damage_image.data)
+    if (_damage_gpu_dirty && (_damage_image.data != nullptr))
     {
         _damage_tex.update(_damage_image.data);
         _damage_gpu_dirty = false;
+    }
     }
 }
 
@@ -287,8 +310,8 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
         const int pr = static_cast<int>(std::ceil(2.0F + damage_amount * 0.5F)) + 1;
         bool any_changed = false;
 
-        unsigned char *base_mask_ptr = _base_mask.empty() ? nullptr : _base_mask.data();
-        auto *dmg_ptr = reinterpret_cast<unsigned char *>(_damage_image.data);
+    std::span<const std::uint8_t> baseMask{_base_mask.data(), _base_mask.size()};
+    auto pixels = pixel_view(_damage_image);
 
         for (int y = std::max(0, py - pr); y <= std::min(_damage_image.height - 1, py + pr); ++y)
         {
@@ -301,20 +324,20 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
                 {
                     const float f = 1.0F - (dist / static_cast<float>(pr));
                     const int incr = static_cast<int>(std::ceil(base_alpha_incr * f));
-                    int idx = y * _damage_image.width + x;
-                    if (!base_mask_ptr || base_mask_ptr[idx] == 0)
+                    int idx = (y * _damage_image.width) + x;
+                    if (baseMask.empty() || baseMask[static_cast<std::size_t>(idx)] == 0)
                     {
                         continue; // skip transparent background
                     }
-                    unsigned char *pix = dmg_ptr + idx * 4;
+                    auto &pix = pixels[static_cast<std::size_t>(idx)];
                     int old_brightness = static_cast<int>(pix[0]); // RGB should be same for grayscale
                     int new_brightness = std::max(0, old_brightness - incr);
                     if (new_brightness != old_brightness)
                     {
                         // Set RGB to the new brightness level (for multiplicative blending)
-                        pix[0] = new_brightness;
-                        pix[1] = new_brightness;
-                        pix[2] = new_brightness;
+                        pix[0] = static_cast<std::uint8_t>(new_brightness);
+                        pix[1] = static_cast<std::uint8_t>(new_brightness);
+                        pix[2] = static_cast<std::uint8_t>(new_brightness);
                         pix[3] = 255; // keep alpha at 255 for multiplicative blending
                         any_changed = true;
                     }
