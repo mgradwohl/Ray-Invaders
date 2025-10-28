@@ -24,9 +24,13 @@ Base::~Base()
 {
     // RAII wrappers handle Texture unloading; explicitly free Image data if present
     if (_damage_image.data)
+    {
         UnloadImage(_damage_image);
+    }
     if (_base_alpha.data)
+    {
         UnloadImage(_base_alpha);
+    }
 }
 
 void Base::reset(const Image &baseImage) noexcept
@@ -48,7 +52,7 @@ void Base::reset(const Image &baseImage) noexcept
     const int bcw = baseCopy.width;
     const int bch = baseCopy.height;
     _base_mask.assign(bcw * bch, 0);
-    unsigned char *bcptr = reinterpret_cast<unsigned char *>(baseCopy.data);
+    auto *bcptr = reinterpret_cast<unsigned char *>(baseCopy.data);
     for (int y = 0; y < bch; ++y)
     {
         for (int x = 0; x < bcw; ++x)
@@ -61,7 +65,9 @@ void Base::reset(const Image &baseImage) noexcept
 
     // Keep a copy of the base image alpha for possible future use
     if (_base_alpha.data)
+    {
         UnloadImage(_base_alpha);
+    }
     _base_alpha = ImageCopy(baseCopy);
 
     // Load texture from the cropped image and free the copy
@@ -69,7 +75,7 @@ void Base::reset(const Image &baseImage) noexcept
     UnloadImage(baseCopy);
 
     // Initialize CPU damage image (transparent black == intact). Size matches base texture.
-    if (_damage_image.data)
+    if (_damage_image.data != nullptr)
     {
         UnloadImage(_damage_image);
     }
@@ -86,10 +92,9 @@ void Base::reset(const Image &baseImage) noexcept
 void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, HitManager &hits)
 {
     if (_dead)
+    {
         return;
-
-    // Removed automatic one-time T-test; interactive T-key remains and only applies when mouse is
-    // over a base
+    }
 
     // Calculate total damage for possible death check
     // Only mark as dead when there are animation frames to progress through.
@@ -146,48 +151,53 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
                     // empty space
                     bool base_visible = (_base_mask.empty() ? true : (_base_mask[sidx] != 0));
                     if (!base_visible)
+                    {
                         collision_counts = false;
+                    }
                     // If alpha is high (opaque damage), pixel is damaged and bullets pass through
                     const unsigned char alpha_threshold = 128; // above this = damaged/destroyed
                     if (alpha >= alpha_threshold)
+                    {
                         collision_counts = false;
+                    }
                 }
             }
 
             if (!collision_counts)
-                continue;
+            {
+               continue;
+            }
 
-            // Emit a global hit decal in world space at the impact point
+            // Emit a global hit decal in world space at the impact point and play the sound effect
             hits.add_hit(HitSubject::Base, HitOutcome::NonFatal, _x + rel_x, _y + rel_y, radius);
             [[maybe_unused]] bool played = _basehitsound.Play();
-            // play the sound effect for the impact
 
             // Mutate the CPU damage image: increase alpha in a radial falloff so damage accumulates
-            if (_damage_image.data)
+            if (_damage_image.data != nullptr)
             {
                 // Prepare per-hit alpha increment (higher -> faster destruction)
-                const int base_alpha_incr = static_cast<int>(std::ceil(128.0F * 2.5F)); // increased damage per hit - was 1.0F
+                const int base_alpha_incr = static_cast<int>(std::ceil(128.0F * 2.5F));
                 const int px = static_cast<int>(std::floor(rel_x));
                 const int py = static_cast<int>(std::floor(rel_y));
                 const int pr = static_cast<int>(std::ceil(radius)) + 1;
-                const int pr_squared = pr * pr;                // Precompute squared radius
-                const float pr_float = static_cast<float>(pr); // Precompute for division
+                const int pr_squared = pr * pr;
+                const auto pr_float = static_cast<float>(pr);
                 bool any_changed = false;
 
                 // Use compact base mask for opacity tests
                 unsigned char *base_mask_ptr = _base_mask.empty() ? nullptr : _base_mask.data();
-                unsigned char *dmg_ptr = reinterpret_cast<unsigned char *>(_damage_image.data);
+                auto *dmg_ptr = reinterpret_cast<unsigned char *>(_damage_image.data);
 
-                // Print a quick sanity report about local coords and image sizes
-                // Bounds check for the impact center point
-                if (px >= 0 && py >= 0 && px < _damage_image.width && py < _damage_image.height)
-                {
-                    // Impact point is within bounds, proceed with damage application
-                }
-                else
-                {
-                    // Impact point is outside bounds, skip damage application
-                }
+                // // Print a quick sanity report about local coords and image sizes
+                // // Bounds check for the impact center point
+                // if (px >= 0 && py >= 0 && px < _damage_image.width && py < _damage_image.height)
+                // {
+                //     // Impact point is within bounds, proceed with damage application
+                // }
+                // else
+                // {
+                //     // Impact point is outside bounds, skip damage application
+                // }
 
                 for (int y = std::max(0, py - pr); y <= std::min(_damage_image.height - 1, py + pr); ++y)
                 {
@@ -204,7 +214,7 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
                             const float f = 1.0F - (dist / pr_float);
                             const int incr = static_cast<int>(std::ceil(base_alpha_incr * f));
                             int idx = y * _damage_image.width + x;
-                            if (!base_mask_ptr || base_mask_ptr[idx] == 0)
+                            if ((base_mask_ptr == nullptr) || base_mask_ptr[idx] == 0)
                             {
                                 continue; // skip transparent pixels
                             }
@@ -242,8 +252,6 @@ void Base::update(std::vector<Bullet> &i_bullets, GameTypes::Count framecount, H
         }
     }
 
-    // No fade logic - damage is now permanent (transparent holes stay transparent)
-
     // If any damage pixels were changed this frame (either new impacts or fade), update GPU texture
     if (_damage_gpu_dirty && _damage_image.data)
     {
@@ -257,7 +265,7 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
     // Clamp rel coords to the damage image / texture dimensions (avoid clamping to generic
     // constants) Clamp rel coords to the damage image / texture dimensions (avoid clamping to
     // generic constants)
-    if (_damage_image.data)
+    if (_damage_image.data != nullptr)
     {
         const float maxx = static_cast<float>(std::max(1, _damage_image.width) - 1);
         const float maxy = static_cast<float>(std::max(1, _damage_image.height) - 1);
@@ -270,7 +278,7 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
         rel_y = std::max(0.0F, std::min(rel_y, GlobalConstant::BASE_SIZE));
     }
     // Mutate the CPU damage image similarly to update()
-    if (_damage_image.data)
+    if (_damage_image.data != nullptr)
     {
         // increase alpha like in update(): radial falloff per-impact
         const int base_alpha_incr = static_cast<int>(std::ceil(128.0F * damage_amount * 2.5F)); // increased damage per hit
@@ -280,7 +288,7 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
         bool any_changed = false;
 
         unsigned char *base_mask_ptr = _base_mask.empty() ? nullptr : _base_mask.data();
-        unsigned char *dmg_ptr = reinterpret_cast<unsigned char *>(_damage_image.data);
+        auto *dmg_ptr = reinterpret_cast<unsigned char *>(_damage_image.data);
 
         for (int y = std::max(0, py - pr); y <= std::min(_damage_image.height - 1, py + pr); ++y)
         {
@@ -321,8 +329,6 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
     }
 }
 
-// create_impact_on_texture removed - transient scorch visuals are rendered by HitManager
-
 void Base::draw(raylib::DrawSession &ds) const
 {
     // Default path keeps backward compatibility: draw base, then damage overlay with local blend
@@ -333,8 +339,6 @@ void Base::draw(raylib::DrawSession &ds) const
         draw_damage(ds);
         EndBlendMode();
     }
-
-    // Transient impact visuals for bases now come from the global HitManager.
 }
 
 void Base::draw_base(raylib::DrawSession &ds) const
@@ -347,7 +351,10 @@ void Base::draw_base(raylib::DrawSession &ds) const
 void Base::draw_damage(raylib::DrawSession &ds) const
 {
     if (!has_damage())
+    {
         return;
+    }
+
     const Rectangle damage_src = {0.0F, 0.0F, _damage_tex.widthF(), _damage_tex.heightF()};
     const Vector2 pos = {_x, _y};
     // Semi-transparent black overlay to create visible holes
@@ -355,7 +362,7 @@ void Base::draw_damage(raylib::DrawSession &ds) const
     ds.DrawTexture(_damage_tex.get(), damage_src, pos, hole_color);
 }
 
-Rectangle Base::get_hitbox() const noexcept
+auto Base::get_hitbox() const noexcept -> Rectangle
 {
     // Create hitbox that matches the texture dimensions exactly
     // This ensures proper collision detection with the visual representation

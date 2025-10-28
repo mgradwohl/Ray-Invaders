@@ -29,8 +29,8 @@ void BannerUI::draw(raylib::DrawSession &ds, const Player &player) const noexcep
     if (_banner.id() > 0)
     {
         const Texture2D &bannerTex = _banner.get();
-        const float bsrcW = static_cast<float>(bannerTex.width);
-        const float bsrcH = static_cast<float>(bannerTex.height);
+        const auto bsrcW = static_cast<float>(bannerTex.width);
+        const auto bsrcH = static_cast<float>(bannerTex.height);
         const Rectangle bsrc{0.0F, 0.0F, bsrcW, bsrcH};
         const float s = (bsrcH > 0.0F) ? (bannerHeightLogical / bsrcH) : 1.0F;
         // Pixel-perfect integral destination
@@ -51,7 +51,7 @@ void BannerUI::draw(raylib::DrawSession &ds, const Player &player) const noexcep
         const std::string text = "Level: " + std::to_string(_level);
         const float drawX = GlobalConstant::BANNER_PADDING;
         const float drawY = (bannerHeightLogical - static_cast<float>(fontSize)) * 0.5F;
-        ds.DrawText(text.c_str(), static_cast<int>(drawX), static_cast<int>(drawY), fontSize, GlobalColors::COL_WHITE);
+        ds.DrawText(text, static_cast<int>(drawX), static_cast<int>(drawY), fontSize, GlobalColors::COL_WHITE);
     }
 
     // Lives icons (draw to the right of the level text). We'll draw up to a reasonable
@@ -70,7 +70,7 @@ void BannerUI::draw(raylib::DrawSession &ds, const Player &player) const noexcep
             const int fontSize = 10; // same as above
             const std::string levelText = "Level: " + std::to_string(_level);
             const int tW = MeasureText(levelText.c_str(), fontSize);
-            iconsStartX += static_cast<float>(tW) + 8.0F; // small gap
+            iconsStartX += static_cast<float>(tW) + GlobalConstant::BANNER_PADDING;
         }
 
         // Draw icons scaled to about 75% of banner height
@@ -81,11 +81,11 @@ void BannerUI::draw(raylib::DrawSession &ds, const Player &player) const noexcep
                 const float srcW = GlobalConstant::BASE_SIZE;
                 const float srcH = GlobalConstant::BASE_SIZE;
 
-                const float iconDstH = bannerHeightLogical * 0.5F;
+                const float iconDstH = bannerHeightLogical * GlobalConstant::HALF;
                 const float iconDstW = iconDstH; // square frame
 
                 float x = iconsStartX;
-                const float y = (bannerHeightLogical - iconDstH) * 0.5F;
+                const float y = (bannerHeightLogical - iconDstH) * GlobalConstant::HALF;
 
                 for (int i = 0; i < iconsToDraw; ++i)
                 {

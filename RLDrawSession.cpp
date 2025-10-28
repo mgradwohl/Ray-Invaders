@@ -2,7 +2,6 @@
 #include "RLDrawSession.hpp"
 
 // Standard library headers
-#include <format>
 #include <string>
 
 // Third-party headers

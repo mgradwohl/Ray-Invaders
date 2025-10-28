@@ -25,14 +25,14 @@ constexpr float RADIUS_UFO = 5.0F;
 constexpr float OUTLINE_DELTA = 1.0F;
 
 // Map ttl into alpha 255..50 over a TTL_WINDOW_DEFAULT-frame window
-inline unsigned char alpha_from_ttl(int ttl) noexcept
+inline auto alpha_from_ttl(int ttl) noexcept -> unsigned char
 {
     const int t = std::clamp(ttl, 0, TTL_WINDOW_DEFAULT);
     return static_cast<unsigned char>(50 + (205 * t) / TTL_WINDOW_DEFAULT);
 }
 
 // TTL presets per subject/outcome
-inline int default_ttl(HitSubject subject, HitOutcome outcome) noexcept
+inline auto default_ttl(HitSubject subject, HitOutcome outcome) noexcept -> int
 {
     // Keep base fade window parity: 60 for most; UFO can be a touch longer if desired.
     switch (subject)
@@ -57,8 +57,10 @@ struct Style
     Color outline;
 };
 
-inline Style style_for(HitSubject subject, HitOutcome outcome, unsigned char alpha) noexcept
+inline auto style_for(HitSubject subject, HitOutcome outcome, unsigned char alpha) noexcept -> Style
 {
+    // TODO refactor this to just set colors in each case and then return at the end
+
     switch (subject)
     {
     case HitSubject::Base:
@@ -83,7 +85,7 @@ inline Style style_for(HitSubject subject, HitOutcome outcome, unsigned char alp
 }
 
 // Radius presets per subject/outcome
-inline float default_radius(HitSubject subject, HitOutcome outcome) noexcept
+inline auto default_radius(HitSubject subject, HitOutcome outcome) noexcept -> float
 {
     switch (subject)
     {
@@ -127,19 +129,23 @@ void HitManager::update() noexcept
     {
         it->ttl -= 1;
         if (it->ttl <= 0)
+        {
             it = _hits.erase(it);
+        }
         else
+        {
             ++it;
+        }
     }
 }
 
 void HitManager::draw(raylib::DrawSession &ds) const
 {
-    for (const auto &h : _hits)
+    for (const auto &hit : _hits)
     {
-        const unsigned char a = alpha_from_ttl(h.ttl);
-        const Style s = style_for(h.subject, h.outcome, a);
-        ds.DrawCircle(h.x, h.y, h.radius, s.core);
-        ds.DrawCircle(h.x, h.y, h.radius + OUTLINE_DELTA, s.outline);
+        const unsigned char a = alpha_from_ttl(hit.ttl);
+        const Style s = style_for(hit.subject, hit.outcome, a);
+        ds.DrawCircle(hit.x, hit.y, hit.radius, s.core);
+        ds.DrawCircle(hit.x, hit.y, hit.radius + OUTLINE_DELTA, s.outline);
     }
 }

@@ -8,13 +8,13 @@
 #include "Global.hpp"
 
 Bullet::Bullet(float i_step_x, float i_step_y, float i_x, float i_y) noexcept
-    : _x(i_x), _y(i_y), _dead(false), _real_x(i_x), _real_y(i_y), _step_x(i_step_x), _step_y(i_step_y)
+    : _x(i_x), _y(i_y), _real_x(i_x), _real_y(i_y), _step_x(i_step_x), _step_y(i_step_y)
 {
     _previous_x.fill(_x);
     _previous_y.fill(_y);
 }
 
-bool Bullet::IsDead() const noexcept
+auto Bullet::IsDead() const noexcept -> bool
 {
     return _dead;
 }
@@ -58,25 +58,25 @@ constexpr float BULLET_HITBOX_HEIGHT = GlobalConstant::BASE_SIZE / 2.0F;
 constexpr float BULLET_HITBOX_X_OFFSET = (GlobalConstant::BASE_SIZE - BULLET_HITBOX_WIDTH) * GlobalConstant::HALF;
 } // namespace
 
-Rectangle Bullet::get_hitbox() const noexcept
+auto Bullet::get_hitbox() const noexcept -> Rectangle
 {
     // Smaller hitboxes make the game so much better!
     return Rectangle{_x + BULLET_HITBOX_X_OFFSET, _y, BULLET_HITBOX_WIDTH, BULLET_HITBOX_HEIGHT};
 }
 
-float Bullet::get_x() const noexcept
+auto Bullet::get_x() const noexcept -> float
 {
     return _x;
 }
-float Bullet::get_y() const noexcept
+auto Bullet::get_y() const noexcept -> float
 {
     return _y;
 }
-const std::array<float, 3> &Bullet::get_previous_x() const noexcept
+auto Bullet::get_previous_x() const noexcept -> const std::array<float, 3> &
 {
     return _previous_x;
 }
-const std::array<float, 3> &Bullet::get_previous_y() const noexcept
+auto Bullet::get_previous_y() const noexcept -> const std::array<float, 3> &
 {
     return _previous_y;
 }

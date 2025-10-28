@@ -1,17 +1,20 @@
 #pragma once
-#include <functional>
 #include <string>
 
 #include <raylib.h>
 
 #include "RLTexture2D.hpp"
 #include "RLDrawSession.hpp"
-#include "Global.hpp"
 
 class Popup
 {
   public:
     Popup() = default;
+    Popup(const Popup &) = delete;
+    Popup(Popup &&) = delete;
+    auto operator=(const Popup &) -> Popup & = delete;
+    auto operator=(Popup &&) -> Popup & = delete;
+
     ~Popup() = default;
 
     // Load a graphic for the popup. Returns true on success.

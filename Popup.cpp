@@ -5,9 +5,10 @@
 
 #include <raylib.h>
 
+#include "Global.hpp"
 #include "RLDrawSession.hpp"
 
-bool Popup::loadFromFile(const std::string &path)
+auto Popup::loadFromFile(const std::string &path) -> bool
 {
     _tex.load(path);
     if (!IsTextureValid(_tex.get()))
@@ -122,15 +123,15 @@ void Popup::draw(raylib::DrawSession &ds) const noexcept
     }
 
     const Texture2D &tex = _tex.get();
-    const float screenW = static_cast<float>(GlobalConstant::Int::SCREEN_WIDTH);
-    const float screenH = static_cast<float>(GlobalConstant::Int::SCREEN_HEIGHT);
+    const auto screenW = static_cast<float>(GlobalConstant::Int::SCREEN_WIDTH);
+    const auto screenH = static_cast<float>(GlobalConstant::Int::SCREEN_HEIGHT);
     const float scale = 0.5F;
 
     if (tex.id > 0)
     {
         // Debug: indicate we're drawing the popup and current alpha
-        const float srcW = static_cast<float>(tex.width);
-        const float srcH = static_cast<float>(tex.height);
+        const auto srcW = static_cast<float>(tex.width);
+        const auto srcH = static_cast<float>(tex.height);
 
         const float dstW = std::round(srcW * scale);
         const float dstH = std::round(srcH * scale);
@@ -138,6 +139,6 @@ void Popup::draw(raylib::DrawSession &ds) const noexcept
         const float cx = (screenW - dstW) * 0.5F;
         const float cy = (screenH - dstH) * 0.5F;
 
-        ds.DrawTextureEx(_tex.get(), cx, cy, 0.5F, GlobalColors::COL_WHITE);
+        ds.DrawTextureEx(_tex.get(), cx, cy, GlobalConstant::HALF, GlobalColors::COL_WHITE);
     }
 }

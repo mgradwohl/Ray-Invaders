@@ -2,7 +2,6 @@
 #include "Player.hpp"
 
 // Standard library headers
-#include <chrono>
 #include <random>
 
 // Third-party headers
@@ -16,7 +15,6 @@
 #include "HitManager.hpp"
 #include "RLDrawSession.hpp"
 #include "RLWaveSound.hpp"
-#include "RLWindow.hpp"
 #include "Ufo.hpp"
 
 Player::Player()
@@ -56,28 +54,28 @@ auto Player::lose_life() noexcept -> int
     return _lives;
 }
 
-bool Player::get_dead() const noexcept
+auto Player::get_dead() const noexcept -> bool
 {
     // Player is considered dead (game-over) when lives are exhausted
     return _lives <= 0;
 }
 
-bool Player::get_dead_animation_over() const noexcept
+auto Player::get_dead_animation_over() const noexcept -> bool
 {
     return _dead_animation_over;
 }
 
-GameTypes::Count Player::get_current_power() const noexcept
+auto Player::get_current_power() const noexcept -> GameTypes::Count
 {
     return _current_power;
 }
 
-GameTypes::Duration Player::get_power_timer() const noexcept
+auto Player::get_power_timer() const noexcept -> GameTypes::Duration
 {
     return _power_timer;
 }
 
-float Player::get_y() const noexcept
+auto Player::get_y() const noexcept -> float
 {
     return _y;
 }
@@ -169,7 +167,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
             }
         }
 
-        if (!_reload_timer)
+        if (_reload_timer == 0u)
         {
             if (IsKeyPressed(KEY_Z))
             {
@@ -249,7 +247,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
             [[maybe_unused]] bool played = _powerupsound.Play();
         }
 
-        if (!_power_timer)
+        if (_power_timer == 0u)
         {
             _current_power = 0;
         }
@@ -321,15 +319,16 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
     _bullets.erase(remove_if(_bullets.begin(), _bullets.end(),
                              [](const Bullet &i_bullet)
                              {
-                                 return true == i_bullet.IsDead();
+                                 return i_bullet.IsDead();
                              }),
                    _bullets.end());
 }
 
-Rectangle Player::get_hitbox() const noexcept
+auto Player::get_hitbox() const noexcept -> Rectangle
 {
     // Use the fraction constants from the F namespace
-    return Rectangle{_x + GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE, _y + GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE,
+    return Rectangle{_x + GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE,
+                        _y + GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE,
                      GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE,
                      GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE};
 }

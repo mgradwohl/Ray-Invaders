@@ -7,10 +7,8 @@
 
 #include "Base.hpp"
 #include "Bullet.hpp"
-#include "Global.hpp"
 #include "HitManager.hpp"
 #include "RLDrawSession.hpp"
-#include "RLWaveSound.hpp"
 
 class Bases
 {

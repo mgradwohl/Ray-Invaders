@@ -38,15 +38,14 @@ class Player
         return _bullets;
     }
 
-  private: // Is it okay to call this variable "dead"?
-    // I mean, it's a spaceship.
-    // And spaceships don't die, they get destroyed.
-      // _destroyed indicates the player is currently destroyed and the death
-    // explosion animation should play. _dead (final out-of-lives) is derived
+  private:
+    // _destroyed indicates the player is currently destroyed and the death
+    // explosion animation should play.
+    // _dead (final out-of-lives) is derived
     // from the lives counter via get_dead().
     bool _destroyed{false};
-      bool _dead_animation_over{false};
-  bool _shield_animation_over{false};
+    bool _dead_animation_over{false};
+    bool _shield_animation_over{false};
 
     GameTypes::Count _current_power{0};
     GameTypes::Timer _reload_timer{0};

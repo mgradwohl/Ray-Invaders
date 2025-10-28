@@ -2,7 +2,6 @@
 #include "Backbuffer.hpp"
 
 // Standard library
-#include <string>
 
 // Third-party headers
 #include <raylib.h>

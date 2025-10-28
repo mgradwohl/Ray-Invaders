@@ -23,10 +23,7 @@ constexpr float GRID_X_OFFSET_TILES = 1.0F;
 constexpr float GRID_Y_OFFSET_TILES = 2.0F;
 } // namespace
 
-// There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same
-// thing we did in the game "Frogger".
-//  Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis), centered
-//  for precise collision detection.
+// There are 8 levels. Once the player finishes level 8, we go back to level 4.
 EnemyManager::EnemyManager() noexcept
     : _shoot_distribution(0, GlobalConstant::Int::ENEMY_SHOOT_CHANCE), _enemy_bullet_sprite("Resources/Images/EnemyBullet.png"),
       _enemymove("Resources/Sounds/Enemy Move.wav"), _enemydestroy("Resources/Sounds/Enemy Destroy.wav")
@@ -45,7 +42,7 @@ EnemyManager::EnemyManager() noexcept
     }
 }
 
-bool EnemyManager::reached_player(float i_player_y) const
+auto EnemyManager::reached_player(float i_player_y) const -> bool
 {
     for (const Enemy &enemy : _enemies)
     {
@@ -134,15 +131,15 @@ void EnemyManager::reset(GameTypes::Level i_level)
     GameTypes::Count enemy_x = 0;
     GameTypes::Count enemy_y = 0;
 
-    std::string level_sketch = "";
-    _move_pause = std::max<short>(GlobalConstant::Int::ENEMY_MOVE_PAUSE_START_MIN,
+    std::string level_sketch;
+    _move_pause = std::max<int>(GlobalConstant::Int::ENEMY_MOVE_PAUSE_START_MIN,
                                   GlobalConstant::Int::ENEMY_MOVE_PAUSE_START - GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * i_level);
     _move_timer = _move_pause;
 
     _shoot_distribution = std::uniform_int_distribution<GameTypes::Probability>(
-        0, std::max<GameTypes::Probability>(GlobalConstant::Int::ENEMY_SHOOT_CHANCE_MIN,
-                                            GlobalConstant::Int::ENEMY_SHOOT_CHANCE -
-                                                GlobalConstant::Int::ENEMY_SHOOT_CHANCE_INCREASE * i_level));
+        0,
+        std::max<GameTypes::Probability>(GlobalConstant::Int::ENEMY_SHOOT_CHANCE_MIN,
+        GlobalConstant::Int::ENEMY_SHOOT_CHANCE - GlobalConstant::Int::ENEMY_SHOOT_CHANCE_INCREASE * i_level));
 
     for (Animation &enemy_animation : _enemy_animations)
     {
@@ -154,10 +151,7 @@ void EnemyManager::reset(GameTypes::Level i_level)
 
     _enemies.clear();
     _enemies.reserve(64);
-    // There are 8 levels. Once the player finishes level 8, we go back to level 4. This is the same
-    // thing we did in the game "Frogger".
-    //  Fine-tune: Base hitbox is now 93.3% of BASE_WIDTH (based on sprite bitmap analysis),
-    //  centered for precise collision detection.
+    // There are 8 levels. Once the player finishes level 8, we go back to level 4.
     if (GlobalConstant::Int::TOTAL_LEVELS <= i_level)
     {
         // Since GlobalConstant::Int::TOTAL_LEVELS is 8 (a small number), we can avoid casts
@@ -238,10 +232,8 @@ void EnemyManager::reset(GameTypes::Level i_level)
         }
         case '0':
         {
-            const float enemyXPos =
-                GlobalConstant::BASE_SIZE * (GRID_X_OFFSET_TILES + enemy_x); // enemy_x is unsigned char, implicit conversion to float
-            const float enemyYPos =
-                GlobalConstant::BASE_SIZE * (GRID_Y_OFFSET_TILES + enemy_y); // enemy_y is unsigned char, implicit conversion to float
+            const float enemyXPos = GlobalConstant::BASE_SIZE * (GRID_X_OFFSET_TILES + enemy_x);
+            const float enemyYPos = GlobalConstant::BASE_SIZE * (GRID_Y_OFFSET_TILES + enemy_y);
             _enemies.emplace_back(Enemy::Type::Cyan, enemyXPos, enemyYPos, enemy_health);
             break;
         }
@@ -266,7 +258,7 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
 {
     std::vector<Enemy>::iterator dead_enemies_start;
 
-    if (!_move_timer)
+    if (_move_timer == 0)
     {
         _move_timer = _move_pause;
 
@@ -291,24 +283,19 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
     {
         enemy.update();
 
-        if (!_shoot_distribution(i_random_engine))
+        if (_shoot_distribution(i_random_engine) == 0u)
         {
             enemy.shoot(_enemy_bullets);
         }
     }
 
-    // I used a lambda!
-    // I'm a pro!
-    // No, not like that.
-    // I'M A PROFESSIONAL C++ PROGRAMMER!!!!
-    // Yeah, that's better.
     dead_enemies_start = remove_if(_enemies.begin(), _enemies.end(),
                                    [](const Enemy &i_enemy)
                                    {
                                        return 0 == i_enemy.get_health();
                                    });
+
     // The more enemies we kill, the faster they become.
-    // No need for casting with int type
     auto alive_count = std::distance(dead_enemies_start, _enemies.end());
     // Specify explicit template parameter to help the compiler
     auto new_pause = std::max<int>(GlobalConstant::Int::ENEMY_MOVE_PAUSE_MIN,
@@ -322,8 +309,6 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
         enemy_bullet.update();
     }
 
-    // I used a lambda!
-    // AGAIN!
     _enemy_bullets.erase(remove_if(_enemy_bullets.begin(), _enemy_bullets.end(),
                                    [](const Bullet &i_bullet)
                                    {
@@ -333,12 +318,12 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
 }
 
 // Yes, that's a reference return type.
-std::vector<Bullet> &EnemyManager::get_enemy_bullets() noexcept
+auto EnemyManager::get_enemy_bullets() noexcept -> std::vector<Bullet> &
 {
     return _enemy_bullets;
 }
 
-std::vector<Enemy> &EnemyManager::get_enemies() noexcept
+auto EnemyManager::get_enemies() noexcept -> std::vector<Enemy> &
 {
     return _enemies;
 }

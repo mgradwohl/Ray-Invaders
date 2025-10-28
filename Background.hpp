@@ -11,9 +11,16 @@
 class Background
 {
   public:
-    Background() = default;
     Background(const std::string &spritefile);
+
+    Background() = default;
+    Background(const Background &) = delete;
+    Background(Background &&) = delete;
+    auto operator=(const Background &) -> Background & = delete;
+    auto operator=(Background &&) -> Background & = delete;
+
     ~Background() = default;
+
     void draw(raylib::DrawSession &ds) const;
     void update(Player &player) noexcept;
     void reset() noexcept;

@@ -105,6 +105,7 @@ constexpr float PLAYER_BULLET_SPEED = 4.0F; // Int::PLAYER_BULLET_SPEED
 constexpr float PLAYER_MOVE_SPEED = 2.0F;   // Int::PLAYER_MOVE_SPEED
 constexpr float POWERUP_SPEED = 2.0F;       // Int::POWERUP_SPEED
 constexpr float UFO_MOVE_SPEED = 1.0F;      // Int::GlobalConstant::UFO_MOVE_SPEED
+constexpr float SCROLL_STEP = 1.0F;
 
 // Screen dimensions
 constexpr float SCREEN_HEIGHT = static_cast<float>(Int::SCREEN_HEIGHT);

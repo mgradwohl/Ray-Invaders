@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 
 #include <raylib.h>
 
@@ -13,6 +12,10 @@ class Player;
 class BannerUI
 {
   public:
+    BannerUI(const BannerUI &) = delete;
+    BannerUI(BannerUI &&) = delete;
+    auto operator=(const BannerUI &) -> BannerUI & = delete;
+    auto operator=(BannerUI &&) -> BannerUI & = delete;
     explicit BannerUI(const PowerUpManager *pum) noexcept;
     ~BannerUI() = default;
 
@@ -20,7 +23,7 @@ class BannerUI
     {
         _level = level;
     }
-    [[nodiscard]] GameTypes::Coordinate getHeight() const noexcept
+    [[nodiscard]] auto getHeight() const noexcept -> GameTypes::Coordinate
     {
         return static_cast<GameTypes::Coordinate>(_banner.height());
     }

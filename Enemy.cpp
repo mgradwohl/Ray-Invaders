@@ -3,7 +3,6 @@
 
 // Standard library headers
 #include <algorithm>
-#include <chrono>
 #include <cmath>
 #include <vector>
 
@@ -15,29 +14,29 @@
 #include "SoundManager.hpp"
 
 Enemy::Enemy(Type i_type, float i_x, float i_y, GameTypes::Health health) noexcept
-    : _direction(Direction::Down), _health(health), _hit_timer(0), _type(i_type), _x(i_x), // No cast needed with float parameters
+    : _health(health), _type(i_type), _x(i_x), // No cast needed with float parameters
       _y(i_y),                                                                             // No cast needed with float parameters
       _enemylaser("Resources/Sounds/Enemy Laser.wav")
 {
 }
 
-GameTypes::Health Enemy::get_health() const noexcept
+auto Enemy::get_health() const noexcept -> GameTypes::Health
 {
     return _health;
 }
-GameTypes::Timer Enemy::get_hit_timer() const noexcept
+auto Enemy::get_hit_timer() const noexcept -> GameTypes::Timer
 {
     return _hit_timer;
 }
-[[nodiscard]] Enemy::Type Enemy::get_type() const noexcept
+[[nodiscard]] auto Enemy::get_type() const noexcept -> Enemy::Type
 {
     return _type;
 }
-float Enemy::get_x() const noexcept
+auto Enemy::get_x() const noexcept -> float
 {
     return _x;
 }
-float Enemy::get_y() const noexcept
+auto Enemy::get_y() const noexcept -> float
 {
     return _y;
 }
@@ -63,7 +62,7 @@ void Enemy::move()
         {
             // Direction enum is defined with underlying type char, which can be converted to float
             // We can avoid the static_cast by using a switch statement or direct mapping
-            float moveOffset = 0.0f;
+            float moveOffset = 0.0F;
 
             switch (_direction)
             {
@@ -74,7 +73,7 @@ void Enemy::move()
                 moveOffset = GlobalConstant::ENEMY_MOVE_SPEED;
                 break;
             default: // Direction::Down
-                moveOffset = 0.0f;
+                moveOffset = 0.0F;
                 break;
             }
 
@@ -83,9 +82,9 @@ void Enemy::move()
     }
     else
     {
-        _y = std::min<float>(_y + GlobalConstant::ENEMY_MOVE_SPEED, GlobalConstant::BASE_SIZE * ceil(_y / GlobalConstant::BASE_SIZE));
-        if (_y >= GlobalConstant::BASE_SIZE * ceil(_y / GlobalConstant::BASE_SIZE) - 0.1f) // Using approximate comparison for float
-        {                                                                                  // Calculate row using floor division with floats
+        _y = std::min<float>(_y + GlobalConstant::ENEMY_MOVE_SPEED, GlobalConstant::BASE_SIZE * std::ceil(_y / GlobalConstant::BASE_SIZE));
+        if (_y >= GlobalConstant::BASE_SIZE * std::ceil(_y / GlobalConstant::BASE_SIZE) - 0.1F)
+        {                                                                                  
             const float rowFloat = _y / GlobalConstant::BASE_SIZE;
             // This cast is necessary for the modulo operation which requires an integer
             const int rowInt = static_cast<int>(rowFloat);
@@ -101,7 +100,7 @@ void Enemy::shoot(std::vector<Bullet> &i_enemy_bullets)
     {
     case Type::Cyan:
     {
-        i_enemy_bullets.emplace_back(0.0f, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
+        i_enemy_bullets.emplace_back(0.0F, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
         break;
     }
     case Type::Purple:
@@ -112,7 +111,7 @@ void Enemy::shoot(std::vector<Bullet> &i_enemy_bullets)
     }
     case Type::Green:
     {
-        i_enemy_bullets.emplace_back(0.0f, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
+        i_enemy_bullets.emplace_back(0.0F, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
         i_enemy_bullets.emplace_back(0.25F * GlobalConstant::ENEMY_BULLET_SPEED, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
         i_enemy_bullets.emplace_back(-0.25F * GlobalConstant::ENEMY_BULLET_SPEED, GlobalConstant::ENEMY_BULLET_SPEED, _x, _y);
         break;
@@ -140,10 +139,10 @@ void Enemy::update() noexcept
     // Impact visuals are handled globally by HitManager now.
 }
 
-Rectangle Enemy::get_hitbox() const noexcept
+auto Enemy::get_hitbox() const noexcept -> Rectangle
 {
     // The sprite width is 16 pixels but the hitbox should be 12 pixels wide, centered
-    constexpr float hitbox_width = 12.0f;
-    constexpr float x_offset = (GlobalConstant::BASE_SIZE - hitbox_width) * 0.5f; // Center the 12px hitbox within the 16px sprite
-    return Rectangle{_x + x_offset, _y + 0.25f * GlobalConstant::BASE_SIZE, hitbox_width, 0.5f * GlobalConstant::BASE_SIZE};
+    constexpr float hitbox_width = 12.0F;
+    constexpr float x_offset = (GlobalConstant::BASE_SIZE - hitbox_width) * GlobalConstant::HALF; // Center the 12px hitbox within the 16px sprite
+    return Rectangle{_x + x_offset, _y + GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE, hitbox_width, GlobalConstant::HALF * GlobalConstant::BASE_SIZE};
 }

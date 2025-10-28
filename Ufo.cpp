@@ -60,7 +60,7 @@ auto Ufo::check_bullet_collision(std::mt19937_64 &i_random_engine, const Rectang
     return false;
 }
 
-GameTypes::Count Ufo::check_powerup_collision(const Rectangle &i_player_hitbox) noexcept
+auto Ufo::check_powerup_collision(const Rectangle &i_player_hitbox) noexcept -> GameTypes::Count
 {
     for (PowerUpItem &powerup : _powerups)
     {
@@ -152,12 +152,6 @@ void Ufo::update(std::mt19937_64 &i_random_engine)
     }
     for (PowerUpItem &powerup : _powerups)
     {
-        // Why didn't I made an update function for the powerups?
-        // No, seriously.
-        // I did it for the Bullet struct.
-        // But not for the PowerUpItem struct.
-        //
-        //  powerup._y += GlobalConstant::POWERUP_SPEED;
         powerup.bump_y(GlobalConstant::POWERUP_SPEED);
         if (GlobalConstant::SCREEN_HEIGHT <= powerup.get_y())
         {
@@ -177,7 +171,7 @@ void Ufo::update(std::mt19937_64 &i_random_engine)
                     _powerups.end());
 }
 
-Rectangle Ufo::get_hitbox() const noexcept
+auto Ufo::get_hitbox() const noexcept -> Rectangle
 {
     return Rectangle{_x, _y, 2 * GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
 }

@@ -43,9 +43,9 @@ Bases::~Bases()
 
 void Bases::reset()
 {
-    for (std::size_t i = 0; i < _bases.size(); ++i)
+    for (auto &base : _bases)
     {
-        _bases[i]->reset(_baseImage);
+        base->reset(_baseImage);
     }
 }
 
