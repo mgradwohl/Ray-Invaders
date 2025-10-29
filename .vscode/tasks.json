@@ -1,540 +1,163 @@
 {
+	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "CMake: Configure (ninja-debug-clang) - Linux",
 			"type": "shell",
-			"label": "Build Release (Linux - Makefile - Optimized)",
-			"command": "make",
-			"args": [
-				"release",
-				"ENABLE_LTO=1",
-				"ENABLE_NATIVE=1"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build",
-			"detail": "Build Ray-Invaders (Release) with ThinLTO and -march=native - Linux",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			},
-			"dependsOn": "Clean Build (Linux)"
+			"command": "cmake",
+			"args": ["--preset", "ninja-debug-clang"],
+			"problemMatcher": []
 		},
 		{
+			"label": "CMake: Build (ninja-debug-clang) - Linux",
 			"type": "shell",
-			"label": "Build Debug (Linux - Makefile)",
-			"command": "make",
-			"args": [
-				"debug"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"detail": "Build Ray-Invaders project with Clang 21 (Debug) - Linux",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			}
+			"command": "cmake",
+			"args": ["--build", "--preset", "ninja-debug-clang"],
+			"problemMatcher": ["$gcc"],
+			"dependsOn": "CMake: Configure (ninja-debug-clang) - Linux"
 		},
 		{
+			"label": "CMake: Run (ninja-debug-clang) - Linux",
 			"type": "shell",
-			"label": "Build Release (Linux - Makefile)",
-			"command": "make",
-			"args": [
-				"release"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
+			"command": "cmake",
+			"args": ["--build", "--preset", "ninja-debug-clang", "--target", "run"],
+			"problemMatcher": []
+		},
+
+		{
+			"label": "CMake: Configure (ninja-release) - Linux",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--preset", "ninja-release"],
+			"problemMatcher": []
+		},
+		{
+			"label": "CMake: Build (ninja-release) - Linux",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--build", "--preset", "ninja-release"],
+			"problemMatcher": ["$gcc"],
+			"dependsOn": "CMake: Configure (ninja-release) - Linux"
+		},
+		{
+			"label": "CMake: Run (ninja-release) - Linux",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--build", "--preset", "ninja-release", "--target", "run"],
+			"problemMatcher": []
+		},
+
+		{
+			"label": "CMake: Configure (ninja-optimized) - Linux",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--preset", "ninja-optimized"],
+			"problemMatcher": []
+		},
+		{
+			"label": "CMake: Build (ninja-optimized) - Linux",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--build", "--preset", "ninja-optimized"],
+			"problemMatcher": ["$gcc"],
+			"dependsOn": "CMake: Configure (ninja-optimized) - Linux"
+		},
+		{
+			"label": "CMake: Run (ninja-optimized) - Linux",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--build", "--preset", "ninja-optimized", "--target", "run"],
+			"problemMatcher": []
+		},
+
+		{
+			"label": "CMake: Configure (vs-debug-msvc) - Windows",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--preset", "vs-debug-msvc"],
+			"problemMatcher": []
+		},
+		{
+			"label": "CMake: Configure (vs-release-msvc) - Windows",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--preset", "vs-release-msvc"],
+			"problemMatcher": []
+		},
+		{
+			"label": "CMake: Build (vs-release-msvc) - Windows",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--build", "--preset", "vs-release-msvc", "--config", "Release"],
+			"problemMatcher": ["$msCompile"],
+			"dependsOn": "CMake: Configure (vs-release-msvc) - Windows"
+		},
+		{
+			"label": "CMake: Run (vs-release-msvc) - Windows",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--build", "--preset", "vs-release-msvc", "--config", "Release", "--target", "run"],
+			"problemMatcher": []
+		},
+		{
+			"label": "CMake: Build (vs-debug-msvc) - Windows",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--build", "--preset", "vs-debug-msvc", "--config", "Debug"],
+			"problemMatcher": ["$msCompile"],
+			"dependsOn": "CMake: Configure (vs-debug-msvc) - Windows"
+		},
+		{
+			"label": "CMake: Configure (vs-clangpp-debug) - Windows",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--preset", "vs-clangpp-debug"],
+			"problemMatcher": []
+		},
+			{
+				"label": "CMake: Build (vs-clangpp-debug) - Windows",
+				"type": "shell",
+				"command": "cmake",
+				"args": ["--build", "--preset", "vs-clangpp-debug"],
+				"problemMatcher": ["$msCompile"],
+				"dependsOn": "CMake: Configure (vs-clangpp-debug) - Windows"
 			},
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build",
-			"detail": "Build Ray-Invaders project with Clang 21 (Release) - Linux",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			}
-		},
-		{
-			"type": "shell",
-			"label": "Clean Build (Linux)",
-			"command": "make",
-			"args": [
-				"clean"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
+			{
+				"label": "CMake: Configure (vs-clangpp-release) - Windows",
+				"type": "shell",
+				"command": "cmake",
+				"args": ["--preset", "vs-clangpp-release"],
+				"problemMatcher": []
 			},
-			"problemMatcher": [],
-			"group": "build",
-			"detail": "Clean build artifacts - Linux",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			}
-		},
-		{
-			"type": "shell",
-			"label": "Run Game (Linux)",
-			"command": "make",
-			"args": [
-				"run"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
+			{
+				"label": "CMake: Build (vs-clangpp-release) - Windows",
+				"type": "shell",
+				"command": "cmake",
+				"args": ["--build", "--preset", "vs-clangpp-release"],
+				"problemMatcher": ["$msCompile"],
+				"dependsOn": "CMake: Configure (vs-clangpp-release) - Windows"
 			},
-			"problemMatcher": [],
-			"group": "test",
-			"detail": "Build and run Ray-Invaders - Linux",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
+			{
+				"label": "CMake: Configure (vs-clangpp-optimized) - Windows",
+				"type": "shell",
+				"command": "cmake",
+				"args": ["--preset", "vs-clangpp-optimized"],
+				"problemMatcher": []
 			},
-			"dependsOn": "Build Debug (Linux - Makefile)"
-		},
-		{
-			"type": "shell",
-			"label": "Run Release (Linux)",
-			"command": "make",
-			"args": [
-				"run-release"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
+			{
+				"label": "CMake: Build (vs-clangpp-optimized) - Windows",
+				"type": "shell",
+				"command": "cmake",
+				"args": ["--build", "--preset", "vs-clangpp-optimized"],
+				"problemMatcher": ["$msCompile"],
+				"dependsOn": "CMake: Configure (vs-clangpp-optimized) - Windows"
 			},
-			"problemMatcher": [],
-			"group": "test",
-			"detail": "Build (Release) and run Ray-Invaders - Linux",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			},
-			"dependsOn": "Build Release (Linux - Makefile)"
-		},
 		{
+			"label": "CMake: Run (vs-debug-msvc) - Windows",
 			"type": "shell",
-			"label": "Run Release (Linux - Optimized)",
-			"command": "make",
-			"args": [
-				"run-release"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [],
-			"group": "test",
-			"detail": "Build (Release + ThinLTO + -march=native) and run Ray-Invaders - Linux",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			},
-			"dependsOn": [
-				"Clean Build (Linux)",
-				"Build Release (Linux - Makefile - Optimized)"
-			]
-		},
-		{
-			"type": "cppbuild",
-			"label": "C/C++: cl.exe build active file (Debug) - Windows",
-			"command": "cl.exe",
-			"args": [
-				"/std:c++latest",
-				"/Zc:__cplusplus",
-				"/Zi",
-				"/EHsc",
-				"/W4",
-				"/utf-8",
-				"/MP",
-				"/nologo",
-				"/Od",
-				"/I",
-				"${workspaceFolder}",
-				"/I",
-				"c:\\raylib\\include",
-				"${workspaceFolder}\\Main.cpp",
-				"${workspaceFolder}\\RLWindow.cpp",
-				"${workspaceFolder}\\RLDrawSession.cpp",
-				"${workspaceFolder}\\RLWaveSound.cpp",
-				"${workspaceFolder}\\Animation.cpp",
-				"${workspaceFolder}\\Backbuffer.cpp",
-				"${workspaceFolder}\\Background.cpp",
-				"${workspaceFolder}\\Base.cpp",
-				"${workspaceFolder}\\Bases.cpp",
-				"${workspaceFolder}\\Bullet.cpp",
-				"${workspaceFolder}\\Enemy.cpp",
-				"${workspaceFolder}\\EnemyManager.cpp",
-				"${workspaceFolder}\\Ufo.cpp",
-				"${workspaceFolder}\\Player.cpp",
-				"${workspaceFolder}\\PowerUpItem.cpp",
-				"${workspaceFolder}\\PowerUpManager.cpp",
-				"/Fe${workspaceFolder}\\bin\\Debug\\Ray-Invaders.exe",
-				"/Fo${workspaceFolder}\\bin\\Debug\\",
-				"/Fd${workspaceFolder}\\bin\\Debug\\",
-				"/link",
-				"/DEBUG",
-				"/MACHINE:X64",
-				"/LIBPATH:c:\\raylib\\lib",
-				"/NODEFAULTLIB:libucrt.lib",
-				"/NODEFAULTLIB:MSVCRT",
-				"raylib.lib",
-				"ucrt.lib",
-				"winmm.lib",
-				"kernel32.lib",
-				"user32.lib",
-				"gdi32.lib",
-				"shell32.lib"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [
-				"$msCompile"
-			],
-			"group": "build",
-			"detail": "Build Ray-Invaders project with MSVC (Debug) - Windows"
-		},
-		{
-			"type": "cppbuild",
-			"label": "C/C++: cl.exe build active file (Release) - Windows",
-			"command": "cl.exe",
-			"args": [
-				"/std:c++latest",
-				"/Zc:__cplusplus",
-				"/EHsc",
-				"/W4",
-				"/utf-8",
-				"/MP",
-				"/nologo",
-				"/O2",
-				"/GL",
-				"/I",
-				"${workspaceFolder}",
-				"/I",
-				"c:\\raylib\\include",
-				"${workspaceFolder}\\Main.cpp",
-				"${workspaceFolder}\\RLWindow.cpp",
-				"${workspaceFolder}\\RLDrawSession.cpp",
-				"${workspaceFolder}\\RLWaveSound.cpp",
-				"${workspaceFolder}\\Animation.cpp",
-				"${workspaceFolder}\\Backbuffer.cpp",
-				"${workspaceFolder}\\Background.cpp",
-				"${workspaceFolder}\\Base.cpp",
-				"${workspaceFolder}\\Bases.cpp",
-				"${workspaceFolder}\\Bullet.cpp",
-				"${workspaceFolder}\\Enemy.cpp",
-				"${workspaceFolder}\\EnemyManager.cpp",
-				"${workspaceFolder}\\Ufo.cpp",
-				"${workspaceFolder}\\Player.cpp",
-				"${workspaceFolder}\\PowerUpItem.cpp",
-				"${workspaceFolder}\\PowerUpManager.cpp",
-				"/Fe${workspaceFolder}\\bin\\Release\\Ray-Invaders.exe",
-				"/Fo${workspaceFolder}\\bin\\Release\\",
-				"/link",
-				"/LTCG",
-				"/OPT:REF",
-				"/OPT:ICF",
-				"/MACHINE:X64",
-				"/LIBPATH:c:\\raylib\\lib",
-				"/NODEFAULTLIB:libucrt.lib",
-				"/NODEFAULTLIB:MSVCRT",
-				"raylib.lib",
-				"ucrt.lib",
-				"winmm.lib",
-				"kernel32.lib",
-				"user32.lib",
-				"gdi32.lib",
-				"shell32.lib"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [
-				"$msCompile"
-			],
-			"group": "build",
-			"detail": "Build Ray-Invaders project with MSVC (Release) - Windows"
-		},
-		{
-			"type": "cppbuild",
-			"label": "C/C++: clang++-21 build active file (Direct) - Linux",
-			"command": "clang++-21",
-			"args": [
-				"-std=c++23",
-				"-Wall",
-				"-Wextra",
-				"-Wpedantic",
-				"-g",
-				"-O0",
-				"-I${workspaceFolder}",
-				"-I/usr/local/include",
-				"${workspaceFolder}/*.cpp",
-				"-o",
-				"${workspaceFolder}/build/ray-invaders",
-				"-lraylib",
-				"-lGL",
-				"-lm",
-				"-lpthread",
-				"-ldl",
-				"-lrt",
-				"-lX11"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build",
-			"detail": "Build Ray-Invaders project with Clang 21 (Direct compilation) - Linux"
-		},
-		{
-			"type": "shell",
-			"label": "Clang-Tidy: Analyze All Files",
-			"command": "find",
-			"args": [
-				".",
-				"-name",
-				"*.cpp",
-				"-exec",
-				"clang-tidy-21",
-				"{}",
-				"--",
-				"-std=c++23",
-				"-I.",
-				"-I/usr/local/include",
-				";"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [],
-			"group": "test",
-			"detail": "Run clang-tidy on all .cpp files in the project",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			}
-		},
-		{
-			"type": "shell",
-			"label": "Clang-Tidy: Analyze Current File",
-			"command": "clang-tidy-21",
-			"args": [
-				"${file}",
-				"--",
-				"-std=c++23",
-				"-I${workspaceFolder}",
-				"-I/usr/local/include"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [],
-			"group": "test",
-			"detail": "Run clang-tidy on the currently active file",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			}
-		},
-		{
-			"type": "shell",
-			"label": "Clang-Tidy: Fix Current File",
-			"command": "clang-tidy-21",
-			"args": [
-				"${file}",
-				"--fix",
-				"--",
-				"-std=c++23",
-				"-I${workspaceFolder}",
-				"-I/usr/local/include"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [],
-			"group": "test",
-			"detail": "Run clang-tidy with --fix on the currently active file (automatically applies fixes)",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			}
-		},
-		{
-			"type": "shell",
-			"label": "C/C++: clang++ build active file (Debug) - Windows",
-			"command": "${workspaceFolder}/build-clang-debug.bat",
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [
-				"$msCompile",
-				"$gcc"
-			],
-			"group": "build",
-			"detail": "Build Ray-Invaders project with Clang 21 (Debug) - Windows",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			}
-		},
-		{
-			"type": "shell",
-			"label": "C/C++: clang++ build active file (Release) - Windows",
-			"command": "${workspaceFolder}/build-clang-release.bat",
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [
-				"$msCompile",
-				"$gcc"
-			],
-			"group": "build",
-			"detail": "Build Ray-Invaders project with Clang 21 (Release) - Windows",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			}
-		},
-		{
-			"label": "Build Debug (Linux - Makefile)",
-			"type": "shell",
-			"command": "make",
-			"args": [
-				"debug"
-			],
-			"isBackground": false,
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build"
-		},
-		{
-			"label": "Build Debug (Linux - Makefile)",
-			"type": "shell",
-			"command": "make",
-			"args": [
-				"debug"
-			],
-			"isBackground": false,
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build"
-		},
-		{
-			"label": "Build Debug (Linux - Makefile)",
-			"type": "shell",
-			"command": "make",
-			"args": [
-				"debug"
-			],
-			"isBackground": false,
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build"
-		},
-		{
-			"label": "Build Debug (Linux - Makefile)",
-			"type": "shell",
-			"command": "make",
-			"args": [
-				"debug"
-			],
-			"isBackground": false,
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build"
-		},
-		{
-			"label": "Build Debug (Linux - Makefile)",
-			"type": "shell",
-			"command": "make",
-			"args": [
-				"debug"
-			],
-			"isBackground": false,
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build"
-		},
-		{
-			"label": "Build Debug (Linux - Makefile)",
-			"type": "shell",
-			"command": "make",
-			"args": [
-				"debug"
-			],
-			"isBackground": false,
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build"
-		},
-		{
-			"label": "Build Debug (Linux - Makefile)",
-			"type": "shell",
-			"command": "make",
-			"args": [
-				"debug"
-			],
-			"isBackground": false,
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build"
-		},
-		{
-			"label": "Build Debug (Linux - Makefile)",
-			"type": "shell",
-			"command": "make",
-			"args": [
-				"debug"
-			],
-			"isBackground": false,
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build"
+			"command": "cmake",
+			"args": ["--build", "--preset", "vs-debug-msvc", "--config", "Debug", "--target", "run"],
+			"problemMatcher": []
 		}
-	],
-	"version": "2.0.0"
+	]
 }

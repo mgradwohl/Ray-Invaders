@@ -1,0 +1,119 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": { "major": 3, "minor": 20, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "ninja-debug-clang",
+      "displayName": "Debug (Ninja + clang) - Linux",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/ninja-debug-clang",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "C:/Program Files/LLVM/bin/clang.exe",
+        "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
+        "ENABLE_LTO": "OFF",
+        "ENABLE_NATIVE": "OFF",
+        "ENABLE_CLANG_TIDY": "OFF"
+      }
+    },
+    
+    {
+      "name": "ninja-release",
+      "displayName": "Release (Ninja)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/ninja-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "ENABLE_LTO": "ON",
+        "ENABLE_NATIVE": "OFF",
+        "ENABLE_CLANG_TIDY": "OFF"
+      }
+    },
+    {
+      "name": "ninja-optimized",
+      "displayName": "Optimized (Ninja + LTO + native)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/ninja-optimized",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "ENABLE_LTO": "ON",
+        "ENABLE_NATIVE": "ON",
+        "ENABLE_CLANG_TIDY": "OFF"
+      }
+    },
+    {
+      "name": "vs-debug-msvc",
+      "displayName": "Visual Studio Debug (MSVC)",
+      "generator": "Visual Studio 17 2022",
+      "binaryDir": "${sourceDir}/build/vs/debug",
+      "architecture": "x64",
+      "cacheVariables": {
+        "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
+        "ENABLE_CLANG_TIDY": "OFF"
+      }
+    },
+    {
+      "name": "vs-release-msvc",
+      "displayName": "Visual Studio Release (MSVC)",
+      "generator": "Visual Studio 17 2022",
+      "binaryDir": "${sourceDir}/build/vs/release",
+      "architecture": "x64",
+      "cacheVariables": {
+        "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
+        "ENABLE_LTO": "ON",
+        "ENABLE_CLANG_TIDY": "OFF"
+      }
+    },
+    {
+      "name": "vs-clangpp-debug",
+      "displayName": "Visual Studio Debug (clang++) - Windows",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/vs-clangpp/debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "C:/Program Files/LLVM/bin/clang.exe",
+        "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
+        "ENABLE_CLANG_TIDY": "OFF"
+      }
+    }
+    ,
+    {
+      "name": "vs-clangpp-release",
+      "displayName": "Visual Studio Release (clang++) - Windows",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/vs-clangpp/release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "C:/Program Files/LLVM/bin/clang.exe",
+        "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
+        "ENABLE_LTO": "ON",
+        "ENABLE_NATIVE": "OFF",
+        "ENABLE_CLANG_TIDY": "OFF"
+      }
+    },
+    {
+      "name": "vs-clangpp-optimized",
+      "displayName": "Visual Studio Optimized (clang++ + LTO + native) - Windows",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/vs-clangpp/optimized",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "C:/Program Files/LLVM/bin/clang.exe",
+        "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
+        "ENABLE_LTO": "ON",
+        "ENABLE_NATIVE": "ON",
+        "ENABLE_CLANG_TIDY": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [
+  { "name": "ninja-debug-clang", "configurePreset": "ninja-debug-clang" },
+    { "name": "ninja-release", "configurePreset": "ninja-release" },
+    { "name": "ninja-optimized", "configurePreset": "ninja-optimized" },
+    { "name": "vs-debug-msvc", "configurePreset": "vs-debug-msvc" },
+    { "name": "vs-release-msvc", "configurePreset": "vs-release-msvc" },
+    { "name": "vs-clangpp-debug", "configurePreset": "vs-clangpp-debug" }
+    ,{ "name": "vs-clangpp-release", "configurePreset": "vs-clangpp-release" }
+    ,{ "name": "vs-clangpp-optimized", "configurePreset": "vs-clangpp-optimized" }
+  ]
+}

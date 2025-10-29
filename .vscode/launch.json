@@ -1,104 +1,98 @@
 {
-    "version": "0.2.0",
-    "configurations": [        
-        {
-            "name": "(Linux) Launch Debug",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/Debug/ray-invaders",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "Build Debug (Linux - Makefile)",
-            "miDebuggerPath": "/usr/bin/gdb"
-        },
-        {
-            "name": "(Linux) Launch Release (Optimized)",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/Release/ray-invaders",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "preLaunchTask": "Build Release (Linux - Makefile - Optimized)",
-            "miDebuggerPath": "/usr/bin/gdb"
-        },
-        {
-            "name": "(Linux) Launch Release",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/Release/ray-invaders",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "preLaunchTask": "Build Release (Linux - Makefile)",
-            "miDebuggerPath": "/usr/bin/gdb"
-        },
-        {
-            "name": "(Windows) Launch Debug",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/bin/Debug/Ray-Invaders.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "externalTerminal",
-            "preLaunchTask": "C/C++: cl.exe build active file (Debug) - Windows"
-        },
-        {
-            "name": "(Windows) Launch Release",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/bin/Release/Ray-Invaders.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "externalTerminal",
-            "preLaunchTask": "C/C++: cl.exe build active file (Release) - Windows"
-        },
-        {
-            "name": "(Windows) Launch Debug - Clang",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/bin/Debug/Ray-Invaders.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "externalTerminal",
-            "preLaunchTask": "C/C++: clang++ build active file (Debug) - Windows",
-            "symbolSearchPath": "${workspaceFolder}/bin/Debug"
-        },
-        {
-            "name": "(Windows) Launch Release - Clang",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/bin/Release/Ray-Invaders.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "externalTerminal",
-            "preLaunchTask": "C/C++: clang++ build active file (Release) - Windows",
-            "symbolSearchPath": "${workspaceFolder}/bin/Release"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch (Ninja clang++) - Debug - Linux",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/ninja-debug-clang/Ray-Invaders",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+    "environment": [],
+  "console": "externalTerminal",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "preLaunchTask": "CMake: Build (ninja-debug-clang) - Linux"
+    },
+
+    {
+  "name": "Launch (Ninja clang++) - Release - Linux",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/ninja-release/Ray-Invaders",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+    "environment": [],
+  "console": "externalTerminal",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "preLaunchTask": "CMake: Build (ninja-release) - Linux"
+    }, 
+    {
+  "name": "Launch (Ninja clang++) - Optimized - Linux",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/ninja-optimized/Ray-Invaders",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+    "environment": [],
+  "console": "externalTerminal",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "preLaunchTask": "CMake: Build (ninja-optimized) - Linux"
+    },
+    {
+      "name": "Launch (Ninja clang++) - Debug - Windows",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/vs-clangpp/debug/Ray-Invaders.exe",
+  "args": [],
+  "cwd": "${workspaceFolder}",
+  "console": "externalTerminal",
+  "preLaunchTask": "CMake: Build (vs-clangpp-debug) - Windows"
+    },
+    {
+      "name": "Launch (Ninja clang++) - Release - Windows",
+      "type": "cppvsdbg",
+      "request": "launch",
+  "program": "${workspaceFolder}/build/vs-clangpp/release/Ray-Invaders.exe",
+  "args": [],
+  "cwd": "${workspaceFolder}",
+  "console": "externalTerminal",
+      "preLaunchTask": "CMake: Build (vs-clangpp-release) - Windows"
+    },
+    {
+      "name": "Launch (Ninja clang++) - Optimized - Windows",
+      "type": "cppvsdbg",
+      "request": "launch",
+  "program": "${workspaceFolder}/build/vs-clangpp/optimized/Ray-Invaders.exe",
+  "args": [],
+  "cwd": "${workspaceFolder}",
+  "console": "externalTerminal",
+      "preLaunchTask": "CMake: Build (vs-clangpp-optimized) - Windows"
+    },
+    {
+  "name": "Launch (VS/MSVC) - Debug",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/vs/debug/Debug/Ray-Invaders.exe",
+  "args": [],
+  "cwd": "${workspaceFolder}",
+  "console": "externalTerminal",
+  "preLaunchTask": "CMake: Build (vs-debug-msvc) - Windows"
+    },
+    {
+      "name": "Launch (VS/MSVC) - Release",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/vs/release/Release/Ray-Invaders.exe",
+  "args": [],
+  "cwd": "${workspaceFolder}",
+  "console": "externalTerminal",
+  "preLaunchTask": "CMake: Build (vs-release-msvc) - Windows"
+    }
+  ]
 }
