@@ -21,7 +21,7 @@
 #include "RLWaveSound.hpp"
 
 Base::Base(float x) noexcept
-    : _x(x), _y(GlobalConstant::SCREEN_HEIGHT - 3.0F * GlobalConstant::BASE_SIZE), _basehitsound("Resources/Sounds/Base Hit.wav")
+    : _x(x), _y(GlobalConstant::SCREEN_HEIGHT - (3.0F * GlobalConstant::BASE_SIZE)), _basehitsound("Resources/Sounds/Base Hit.wav")
 {
     // Texture is initialized in reset()
 }
@@ -37,7 +37,7 @@ inline auto pixel_view(Image &img) -> std::span<Pixel>
     // This code assumes uncompressed RGBA8 layout (4 bytes per pixel)
     assert(img.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
     const std::size_t count = static_cast<std::size_t>(img.width) * static_cast<std::size_t>(img.height);
-    return {reinterpret_cast<Pixel *>(img.data), count};
+    return {static_cast<Pixel *>(img.data), count};
 }
 
 inline auto pixel_view(const Image &img) -> std::span<const Pixel>
@@ -46,7 +46,7 @@ inline auto pixel_view(const Image &img) -> std::span<const Pixel>
     assert(img.width > 0 && img.height > 0);
     assert(img.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
     const std::size_t count = static_cast<std::size_t>(img.width) * static_cast<std::size_t>(img.height);
-    return {reinterpret_cast<const Pixel *>(img.data), count};
+    return {static_cast<const Pixel *>(img.data), count};
 }
 } // namespace
 
@@ -307,7 +307,7 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
         const int base_alpha_incr = static_cast<int>(std::ceil(128.0F * damage_amount * 2.5F)); // increased damage per hit
         const int px = static_cast<int>(std::floor(rel_x));
         const int py = static_cast<int>(std::floor(rel_y));
-        const int pr = static_cast<int>(std::ceil(2.0F + damage_amount * 0.5F)) + 1;
+        const int pr = static_cast<int>(std::ceil(2.0F + (damage_amount * GlobalConstant::HALF))) + 1;
         bool any_changed = false;
 
     std::span<const std::uint8_t> baseMask{_base_mask.data(), _base_mask.size()};
@@ -319,7 +319,7 @@ void Base::apply_impact(float rel_x, float rel_y, float damage_amount)
             {
                 const int dx = x - px;
                 const int dy = y - py;
-                const float dist = std::sqrt(static_cast<float>(dx * dx + dy * dy));
+                const float dist = std::sqrt(static_cast<float>((dx * dx) + (dy * dy)));
                 if (dist <= static_cast<float>(pr))
                 {
                     const float f = 1.0F - (dist / static_cast<float>(pr));

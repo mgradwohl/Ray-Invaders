@@ -11,23 +11,19 @@
 #include "RLRenderTexture2D.hpp"
 namespace raylib
 {
-DrawSession::DrawSession(Color clearColor) noexcept
+DrawSession::DrawSession(Color clearColor) noexcept : _textureMode(false)
 {
-    _textureMode = false;
     BeginDrawing();
     ClearBackground(clearColor);
 }
-DrawSession::DrawSession(const raylib::RenderTexture2D &backbuffer, const Color clearColor) noexcept
+DrawSession::DrawSession(const raylib::RenderTexture2D &backbuffer, const Color clearColor) noexcept : _textureMode(true)
 {
-    _textureMode = true;
     BeginTextureMode(backbuffer.get());
-
     ClearBackground(clearColor);
 }
 
-DrawSession::DrawSession(const raylib::RenderTexture2D &backbuffer) noexcept
+DrawSession::DrawSession(const raylib::RenderTexture2D &backbuffer) noexcept : _textureMode(true)
 {
-    _textureMode = true;
     BeginTextureMode(backbuffer.get());
 }
 
@@ -42,6 +38,7 @@ DrawSession::~DrawSession()
         EndDrawing();
     }
 }
+
 void DrawSession::DrawRectangle(const int x, const int y, const int width, const int height, const Color color) noexcept
 {
     ::DrawRectangle(x, y, width, height, color);
@@ -89,8 +86,8 @@ void DrawSession::DrawText(const std::string &text, const int x, const int y, co
 void DrawSession::DrawTextCentered(const std::string &text, const int x, const int y, const int fontSize, const Color color) noexcept
 {
     const int textWidth = MeasureText(text.c_str(), fontSize);
-    const int drawX = x - textWidth / 2;
-    const int drawY = y - fontSize / 2;
+    const int drawX = x - (textWidth / 2);
+    const int drawY = y - (fontSize / 2);
     ::DrawText(text.c_str(), drawX, drawY, fontSize, color);
 }
 

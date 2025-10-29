@@ -46,7 +46,7 @@ auto EnemyManager::reached_player(float i_player_y) const -> bool
 {
     for (const Enemy &enemy : _enemies)
     {
-        if (enemy.get_y() > i_player_y - GlobalConstant::HALF * GlobalConstant::BASE_SIZE)
+        if (enemy.get_y() > i_player_y - (GlobalConstant::HALF * GlobalConstant::BASE_SIZE))
         {
             // As soon as the enemies reach the player, the game is over!
             return true;
@@ -133,13 +133,13 @@ void EnemyManager::reset(GameTypes::Level i_level)
 
     std::string level_sketch;
     _move_pause = std::max<int>(GlobalConstant::Int::ENEMY_MOVE_PAUSE_START_MIN,
-                                  GlobalConstant::Int::ENEMY_MOVE_PAUSE_START - GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * i_level);
+                                  GlobalConstant::Int::ENEMY_MOVE_PAUSE_START - (GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * i_level));
     _move_timer = _move_pause;
 
     _shoot_distribution = std::uniform_int_distribution<GameTypes::Probability>(
         0,
         std::max<GameTypes::Probability>(GlobalConstant::Int::ENEMY_SHOOT_CHANCE_MIN,
-        GlobalConstant::Int::ENEMY_SHOOT_CHANCE - GlobalConstant::Int::ENEMY_SHOOT_CHANCE_INCREASE * i_level));
+        GlobalConstant::Int::ENEMY_SHOOT_CHANCE - (GlobalConstant::Int::ENEMY_SHOOT_CHANCE_INCREASE * i_level)));
 
     for (Animation &enemy_animation : _enemy_animations)
     {
@@ -283,7 +283,7 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
     {
         enemy.update();
 
-        if (_shoot_distribution(i_random_engine) == 0u)
+        if (_shoot_distribution(i_random_engine) == 0U)
         {
             enemy.shoot(_enemy_bullets);
         }
@@ -299,7 +299,7 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
     auto alive_count = std::distance(dead_enemies_start, _enemies.end());
     // Specify explicit template parameter to help the compiler
     auto new_pause = std::max<int>(GlobalConstant::Int::ENEMY_MOVE_PAUSE_MIN,
-                                   _move_pause - GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * static_cast<int>(alive_count));
+                                   _move_pause - (GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * static_cast<int>(alive_count)));
     _move_pause = std::max<int>(0, new_pause);
 
     _enemies.erase(dead_enemies_start, _enemies.end());

@@ -4,6 +4,8 @@
 // Third-party headers
 #include <raylib.h>
 
+#include <cmath>
+
 // Project headers
 #include "Global.hpp"
 #include "RLDrawSession.hpp"
@@ -55,10 +57,8 @@ auto PowerUpManager::get_fill_fraction(const Player &player) const noexcept -> f
         return 0.0F;
     }
     const float spriteWidth = _powerup_bar_sprite.widthF();
-    const float maxFillLogical =
-        spriteWidth - GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE - GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE;
-    const float currentFillLogical =
-        ceil(player.get_power_timer() * maxFillLogical / static_cast<float>(GlobalConstant::Int::POWERUP_DURATION));
+    const float maxFillLogical = spriteWidth - (GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE) - (GlobalConstant::QUARTER * GlobalConstant::BASE_SIZE);
+    const float currentFillLogical = std::ceil(player.get_power_timer() * maxFillLogical / static_cast<float>(GlobalConstant::Int::POWERUP_DURATION));
     return (maxFillLogical > 0.0F) ? (currentFillLogical / maxFillLogical) : 0.0F;
 }
 

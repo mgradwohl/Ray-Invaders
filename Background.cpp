@@ -2,6 +2,7 @@
 #include "Background.hpp"
 
 // Standard library headers
+#include <algorithm>
 #include <string>
 
 // Third-party headers
@@ -41,22 +42,13 @@ void Background::update([[maybe_unused]] Player &player) noexcept
 
     // Use a named constant for clarity and to avoid repeated casts
     const float bgWidth = _backgroundsprite.widthF();
-    if (_source.x >= bgWidth)
-    {
-        _source.x = bgWidth;
-    }
+    _source.x = std::min(_source.x, bgWidth);
 
-    if (_source.x <= 0.0F)
-    {
-        _source.x = 0.0F;
-    }
+    _source.x = std::max(_source.x, 0.0F);
 
     // Decrease Y position by a fixed scroll step rather than integer decrement
     _source.y -= GlobalConstant::SCROLL_STEP;
-    if (_source.y <= 0.0F)
-    {
-        _source.y = 0.0F;
-    }
+    _source.y = std::max(_source.y, 0.0F);
 }
 
 void Background::reset() noexcept

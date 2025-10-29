@@ -64,7 +64,7 @@ class Base
     // Mark that damage texture needs GPU update (to avoid frequent uploads)
     mutable bool _damage_gpu_dirty{false};
     // Per-pixel boolean mask (1 = opaque/visible, 0 = transparent) derived from the base sprite
-    std::vector<unsigned char> _base_mask{};
+    std::vector<unsigned char> _base_mask;
     bool _has_damage{false};
     float _damage{0.0F}; // Changed from unsigned short to float to avoid casting
     bool _dead{false};

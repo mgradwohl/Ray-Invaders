@@ -19,13 +19,12 @@ class Texture2DFile
     }
 
     Texture2DFile(const Texture2DFile &) = delete;
-    Texture2DFile &operator=(const Texture2DFile &) = delete;
-    Texture2DFile(Texture2DFile &&other) noexcept
+    auto operator=(const Texture2DFile &) -> Texture2DFile & = delete;
+    Texture2DFile(Texture2DFile &&other) noexcept : _tex(other._tex)
     {
-        _tex = other._tex;
         other._tex = {};
     }
-    Texture2DFile &operator=(Texture2DFile &&other) noexcept
+    auto operator=(Texture2DFile &&other) noexcept -> Texture2DFile &
     {
         if (this != &other)
         {
@@ -62,24 +61,24 @@ class Texture2DFile
     {
         return _tex;
     }
-    [[nodiscard]] int id() const noexcept
+    [[nodiscard]] auto id() const noexcept -> int
     {
         return _tex.id;
     }
-    [[nodiscard]] int width() const noexcept
+    [[nodiscard]] auto width() const noexcept -> int
     {
         return _tex.width;
     }
-    [[nodiscard]] float widthF() const noexcept
+    [[nodiscard]] auto widthF() const noexcept -> float
     {
         return static_cast<float>(_tex.width);
     }
 
-    [[nodiscard]] int height() const noexcept
+    [[nodiscard]] auto height() const noexcept -> int
     {
         return _tex.height;
     }
-    [[nodiscard]] float heightF() const noexcept
+    [[nodiscard]] auto heightF() const noexcept -> float
     {
         return static_cast<float>(_tex.height);
     }
@@ -103,12 +102,11 @@ class Texture2DFromImage
 
     Texture2DFromImage(const Texture2DFromImage &) = delete;
     Texture2DFromImage &operator=(const Texture2DFromImage &) = delete;
-    Texture2DFromImage(Texture2DFromImage &&other) noexcept
+    Texture2DFromImage(Texture2DFromImage &&other) noexcept : _tex(other._tex)
     {
-        _tex = other._tex;
         other._tex = {};
     }
-    Texture2DFromImage &operator=(Texture2DFromImage &&other) noexcept
+    auto operator=(Texture2DFromImage &&other) noexcept -> Texture2DFromImage &
     {
         if (this != &other)
         {
@@ -127,42 +125,48 @@ class Texture2DFromImage
     void unload() noexcept
     {
         if (_tex.id > 0)
+        {
             ::UnloadTexture(_tex);
+        }
         _tex = {};
     }
     void update(const void *pixels) noexcept
     {
         if (_tex.id > 0)
+        {
             ::UpdateTexture(_tex, pixels);
+        }
     }
 
     void setPointFiltering() noexcept
     {
         if (_tex.id > 0)
+        {
             ::SetTextureFilter(_tex, TEXTURE_FILTER_POINT);
+        }
     }
 
-    [[nodiscard]] const Texture2D &get() const noexcept
+    [[nodiscard]] auto get() const noexcept -> const Texture2D &
     {
         return _tex;
     }
-    [[nodiscard]] int id() const noexcept
+    [[nodiscard]] auto id() const noexcept -> int
     {
         return _tex.id;
     }
-    [[nodiscard]] int width() const noexcept
+    [[nodiscard]] auto width() const noexcept -> int
     {
         return _tex.width;
     }
-    [[nodiscard]] float widthF() const noexcept
+    [[nodiscard]] auto widthF() const noexcept -> float
     {
         return static_cast<float>(_tex.width);
     }
-    [[nodiscard]] int height() const noexcept
+    [[nodiscard]] auto height() const noexcept -> int
     {
         return _tex.height;
     }
-    [[nodiscard]] float heightF() const noexcept
+    [[nodiscard]] auto heightF() const noexcept -> float
     {
         return static_cast<float>(_tex.height);
     }

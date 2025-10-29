@@ -15,7 +15,7 @@ Bases::Bases(const std::string &filename)
 {
     // Load the base image and calculate framecount
     _baseImage = LoadImage(filename.c_str());
-    _framecount = static_cast<int>(_baseImage.width / GlobalConstant::BASE_WIDTH - 1.0F);
+    _framecount = static_cast<int>((_baseImage.width / GlobalConstant::BASE_WIDTH) - 1.0F);
 
     // Calculate positioning for bases
     const float offset = (GlobalConstant::SCREEN_WIDTH - (GlobalConstant::Int::BASE_COUNT * GlobalConstant::BASE_WIDTH)) /

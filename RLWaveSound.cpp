@@ -2,7 +2,6 @@
 #include "RLWaveSound.hpp"
 
 // Standard library headers
-#include <cstdio>
 #include <iostream>
 #include <string>
 
@@ -17,8 +16,8 @@ WaveSound::WaveSound(const std::string &filename) noexcept
     _sound = LoadSound(filename.c_str());
     if (!::IsSoundValid(_sound))
     {
-        // Surface a clear warning that this specific sound failed to load
-        fprintf(stderr, "Warning: Failed to load sound: %s\n", filename.c_str());
+    // Surface a clear warning that this specific sound failed to load
+    std::cerr << "Warning: Failed to load sound: " << filename << '\n';
     }
 
     if (!::IsSoundValid(_sound))
@@ -49,7 +48,7 @@ WaveSound::~WaveSound()
     }
 }
 
-bool WaveSound::Play() const noexcept
+auto WaveSound::Play() const noexcept -> bool
 {
     if (!::IsSoundValid(_sound))
     {
@@ -67,7 +66,7 @@ void WaveSound::Stop() const noexcept
     }
 }
 
-bool WaveSound::IsPlaying() const noexcept
+auto WaveSound::IsPlaying() const noexcept -> bool
 {
     return ::IsSoundPlaying(_sound);
 }

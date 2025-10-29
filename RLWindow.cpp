@@ -19,13 +19,13 @@ Window::Window(const uint16_t width, const uint16_t height, const uint16_t fps, 
     if (!IsAudioDeviceReady())
     {
         // Minimal diagnostic to help trace audio init issues at runtime
-        fprintf(stderr, "Warning: Audio device not ready after InitAudioDevice()\n");
+        fprintf(stderr, "Warning: Audio device not ready after InitAudioDevice()");
     }
     SetMasterVolume(1.0F);
     if (!IsAudioDeviceReady())
     {
         // Helpful runtime hint when audio backend initialization fails
-        fprintf(stderr, "Warning: Audio device is not ready. Sounds may not play.\n");
+        fprintf(stderr, "Warning: Audio device is not ready. Sounds may not play.");
     }
 }
 
@@ -35,7 +35,7 @@ Window::~Window()
     CloseWindow();
 }
 
-bool Window::ShouldClose() const noexcept
+auto Window::ShouldClose() const noexcept -> bool
 {
     return WindowShouldClose();
 }
