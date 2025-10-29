@@ -77,10 +77,28 @@ endif()
 
 # Try to find raylib first (package config), then fallback to pkg-config, then allow user override
 find_package(raylib CONFIG QUIET)
+
+# If a config-package was found, prefer the imported targets it supplies. Some
+# installations may set raylib_FOUND but not provide an imported target; handle
+# that case by falling back to pkg-config / manual lookup / FetchContent below.
+set(_raylib_target_linked FALSE)
 if (raylib_FOUND)
-    message(STATUS "Found raylib via config package")
-    target_link_libraries(Ray-Invaders PRIVATE raylib::raylib)
-else()
+    if (TARGET raylib::raylib)
+        message(STATUS "Found raylib via config package (target raylib::raylib)")
+        target_link_libraries(Ray-Invaders PRIVATE raylib::raylib)
+        set(_raylib_target_linked TRUE)
+    elseif (TARGET raylib)
+        message(STATUS "Found raylib via config package (target raylib)")
+        target_link_libraries(Ray-Invaders PRIVATE raylib)
+        set(_raylib_target_linked TRUE)
+    else()
+        message(WARNING "find_package(raylib) reported found but did not provide an imported target. Falling back to pkg-config / FetchContent logic.")
+    endif()
+endif()
+
+# If we didn't successfully link an imported raylib target above, try pkg-config,
+# a user-provided RAYLIB_ROOT, or finally FetchContent to build raylib locally.
+if (NOT _raylib_target_linked)
     find_package(PkgConfig QUIET)
     if (PkgConfig_FOUND)
         pkg_check_modules(RAYLIB pkg-config QUIET raylib)

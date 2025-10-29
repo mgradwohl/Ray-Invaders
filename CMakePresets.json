@@ -9,8 +9,8 @@
       "binaryDir": "${sourceDir}/build/ninja-debug-clang",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_C_COMPILER": "C:/Program Files/LLVM/bin/clang.exe",
-        "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
+        "CMAKE_C_COMPILER": "/usr/bin/clang",
+        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
         "ENABLE_LTO": "OFF",
         "ENABLE_NATIVE": "OFF",
         "ENABLE_CLANG_TIDY": "OFF"
@@ -24,6 +24,8 @@
       "binaryDir": "${sourceDir}/build/ninja-release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "/usr/bin/clang",
+        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
         "ENABLE_LTO": "ON",
         "ENABLE_NATIVE": "OFF",
         "ENABLE_CLANG_TIDY": "OFF"
@@ -36,9 +38,15 @@
       "binaryDir": "${sourceDir}/build/ninja-optimized",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "/usr/bin/clang",
+        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
         "ENABLE_LTO": "ON",
         "ENABLE_NATIVE": "ON",
-        "ENABLE_CLANG_TIDY": "OFF"
+  "ENABLE_CLANG_TIDY": "OFF",
+  "CMAKE_CXX_FLAGS_RELEASE": "-O3 -DNDEBUG",
+        "CMAKE_C_FLAGS_RELEASE": "-O3 -DNDEBUG",
+        "CMAKE_EXE_LINKER_FLAGS": "-s",
+        "CMAKE_SHARED_LINKER_FLAGS": "-s"
       }
     },
     {
@@ -110,10 +118,10 @@
   { "name": "ninja-debug-clang", "configurePreset": "ninja-debug-clang" },
     { "name": "ninja-release", "configurePreset": "ninja-release" },
     { "name": "ninja-optimized", "configurePreset": "ninja-optimized" },
+    { "name": "vs-clangpp-debug", "configurePreset": "vs-clangpp-debug" },
+    { "name": "vs-clangpp-release", "configurePreset": "vs-clangpp-release" },
+    { "name": "vs-clangpp-optimized", "configurePreset": "vs-clangpp-optimized" },
     { "name": "vs-debug-msvc", "configurePreset": "vs-debug-msvc" },
-    { "name": "vs-release-msvc", "configurePreset": "vs-release-msvc" },
-    { "name": "vs-clangpp-debug", "configurePreset": "vs-clangpp-debug" }
-    ,{ "name": "vs-clangpp-release", "configurePreset": "vs-clangpp-release" }
-    ,{ "name": "vs-clangpp-optimized", "configurePreset": "vs-clangpp-optimized" }
+    { "name": "vs-release-msvc", "configurePreset": "vs-release-msvc" }
   ]
 }

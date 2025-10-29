@@ -14,5 +14,13 @@
     "C_Cpp.codeAnalysis.clangTidy.args": [
         "-std=c++23"
     ],
-    "C_Cpp.codeAnalysis.runAutomatically": true
+    "C_Cpp.codeAnalysis.runAutomatically": true,
+    "clangd.arguments": [
+        "--compile-commands-dir=build/ninja-debug-clang"
+    ],
+    "clangd.fallbackFlags": ["-std=c++23"],
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "files.watcherExclude": {
+        "**/build/**": true
+    }
 }
