@@ -40,14 +40,14 @@ inline auto pixel_view(Image &img) -> std::span<Pixel>
     return {static_cast<Pixel *>(img.data), count};
 }
 
-inline auto pixel_view(const Image &img) -> std::span<const Pixel>
-{
-    assert(img.data != nullptr);
-    assert(img.width > 0 && img.height > 0);
-    assert(img.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
-    const std::size_t count = static_cast<std::size_t>(img.width) * static_cast<std::size_t>(img.height);
-    return {static_cast<const Pixel *>(img.data), count};
-}
+// inline auto pixel_view(const Image &img) -> std::span<const Pixel>
+// {
+//     assert(img.data != nullptr);
+//     assert(img.width > 0 && img.height > 0);
+//     assert(img.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
+//     const std::size_t count = static_cast<std::size_t>(img.width) * static_cast<std::size_t>(img.height);
+//     return {static_cast<const Pixel *>(img.data), count};
+// }
 } // namespace
 
 Base::~Base()
