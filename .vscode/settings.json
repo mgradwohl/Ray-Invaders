@@ -4,7 +4,8 @@
         "cmath": "cpp"
     },
     "terminal.integrated.env.windows": {
-        "RAYLIB_PATH": "c:\\raylib"
+        // RAYLIB_PATH is intentionally left unset here; raylib discovery is handled by CMake
+        // and the active preset's compile database. Setting this here caused stale overrides.
     },
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy-21",
@@ -15,8 +16,10 @@
         "-std=c++23"
     ],
     "C_Cpp.codeAnalysis.runAutomatically": true,
+    // Ensure clangd reads the compilation database for the active VS Clang++ preset so
+    // editor diagnostics match the compiler. Update this path if you switch presets.
     "clangd.arguments": [
-        "--compile-commands-dir=build/ninja-debug-clang"
+        "--compile-commands-dir=build/vs-clangpp/debug"
     ],
     "clangd.fallbackFlags": ["-std=c++23"],
     "C_Cpp.intelliSenseEngine": "disabled",

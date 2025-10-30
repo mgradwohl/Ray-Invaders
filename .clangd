@@ -3,5 +3,11 @@ CompileFlags:
     - "-std=c++23"
     - "-I/usr/local/include"
     - "-I."
-    - "-I"
-    - "c:/raylib/include"
+
+# Prefer using the CMake-generated compilation database for accurate includes.
+CompilationDatabase:
+  Directory: "build/vs-clangpp/debug"
+
+# Note: do not hard-code a raylib include path here. Configure the project
+# using the CMake presets (which set RAYLIB_ROOT) so CMake regenerates
+# compile_commands.json with the correct include directories for clangd.
