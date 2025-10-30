@@ -5,8 +5,8 @@ CompileFlags:
     - "-I."
 
 # Prefer using the CMake-generated compilation database for accurate includes.
-CompilationDatabase:
-  Directory: "build/vs-clangpp/debug"
+# CompilationDatabase:
+#  Directory: "build/vs-clangpp/debug"
 
 # Note: do not hard-code a raylib include path here. Configure the project
 # using the CMake presets (which set RAYLIB_ROOT) so CMake regenerates

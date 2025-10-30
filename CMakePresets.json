@@ -8,9 +8,8 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/ninja-debug-clang",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_C_COMPILER": "/usr/bin/clang",
-        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+  "CMAKE_BUILD_TYPE": "Debug",
+  "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
         "RAYLIB_ROOT": "${sourceDir}/build/ninja-debug-clang/_deps/raylib-src",
         "ENABLE_LTO": "OFF",
         "ENABLE_NATIVE": "OFF",
@@ -24,9 +23,8 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/ninja-release",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_C_COMPILER": "/usr/bin/clang",
-        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+  "CMAKE_BUILD_TYPE": "Release",
+  "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
         "RAYLIB_ROOT": "${sourceDir}/build/ninja-release/_deps/raylib-src",
         "ENABLE_LTO": "ON",
         "ENABLE_NATIVE": "OFF",
@@ -39,9 +37,8 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/ninja-optimized",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_C_COMPILER": "/usr/bin/clang",
-        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+  "CMAKE_BUILD_TYPE": "Release",
+  "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
         "RAYLIB_ROOT": "${sourceDir}/build/ninja-optimized/_deps/raylib-src",
         "ENABLE_LTO": "ON",
         "ENABLE_NATIVE": "ON",
@@ -83,9 +80,8 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/vs-clangpp/debug",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_C_COMPILER": "C:/Program Files/LLVM/bin/clang.exe",
-        "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
+  "CMAKE_BUILD_TYPE": "Debug",
+  "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
         "RAYLIB_ROOT": "${sourceDir}/build/vs-clangpp/debug/_deps/raylib-src",
         "ENABLE_CLANG_TIDY": "OFF"
       }
@@ -97,9 +93,8 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/vs-clangpp/release",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_C_COMPILER": "C:/Program Files/LLVM/bin/clang.exe",
-        "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
+  "CMAKE_BUILD_TYPE": "Release",
+  "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
         "RAYLIB_ROOT": "${sourceDir}/build/vs-clangpp/release/_deps/raylib-src",
         "ENABLE_LTO": "ON",
         "ENABLE_NATIVE": "OFF",
@@ -112,9 +107,8 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/vs-clangpp/optimized",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_C_COMPILER": "C:/Program Files/LLVM/bin/clang.exe",
-        "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
+  "CMAKE_BUILD_TYPE": "Release",
+  "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
         "RAYLIB_ROOT": "${sourceDir}/build/vs-clangpp/optimized/_deps/raylib-src",
         "ENABLE_LTO": "ON",
         "ENABLE_NATIVE": "ON",
