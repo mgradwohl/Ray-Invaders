@@ -98,68 +98,32 @@ endif()
 
 # If we didn't successfully link an imported raylib target above, try pkg-config,
 # a user-provided RAYLIB_ROOT, or finally FetchContent to build raylib locally.
-if (NOT _raylib_target_linked)
-    find_package(PkgConfig QUIET)
-    if (PkgConfig_FOUND)
-        pkg_check_modules(RAYLIB pkg-config QUIET raylib)
-    endif()
-    if (RAYLIB_FOUND)
-        message(STATUS "Found raylib via pkg-config")
-        target_include_directories(Ray-Invaders PRIVATE ${RAYLIB_INCLUDE_DIRS})
-        target_link_libraries(Ray-Invaders PRIVATE ${RAYLIB_LIBRARIES})
-    else()
-        # Fallback: allow user to set RAYLIB_ROOT or RAYLIB_DIR
-        if (NOT DEFINED RAYLIB_ROOT)
-            set(RAYLIB_ROOT "C:/raylib" CACHE PATH "Path to raylib root (fallback)")
-        endif()
-        # Try to find headers and a library under the user-provided root
-        find_path(RAYLIB_INCLUDE_DIR raylib.h HINTS ${RAYLIB_ROOT} ${RAYLIB_ROOT}/include)
-        find_library(RAYLIB_LIBRARY NAMES raylib raupinderaylib HINTS ${RAYLIB_ROOT} ${RAYLIB_ROOT}/lib)
+## Always fetch raylib via FetchContent when building from source.
+## This project no longer attempts to detect a user-installed copy under
+## C:/raylib or via pkg-config. If you want to use a system installation,
+## add it to your toolchain or supply a different CMake configuration.
+include(FetchContent)
 
-        # Track whether we successfully found and will use a compatible prebuilt raylib
-        set(_raylib_used FALSE)
-        if (RAYLIB_INCLUDE_DIR AND RAYLIB_LIBRARY)
-            # Detect common incompatibility: a MinGW-built static library (.a) being used with
-            # MSVC/clang-cl + lld-link on Windows. That will produce unresolved symbols at link time.
-            # Use a regex match for ".a" suffix to be robust.
-            string(REGEX MATCH "\\.a$" _raylib_is_mingw_lib "${RAYLIB_LIBRARY}")
-            if (WIN32 AND _raylib_is_mingw_lib AND (MSVC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
-                message(WARNING "Found raylib at ${RAYLIB_ROOT} but it appears to be a MinGW static library (.a) which is incompatible with the current compiler/linker. Falling back to building raylib from source.")
-            else()
-                message(STATUS "Found raylib via RAYLIB_ROOT: ${RAYLIB_ROOT}")
-                target_include_directories(Ray-Invaders PRIVATE ${RAYLIB_INCLUDE_DIR})
-                target_link_libraries(Ray-Invaders PRIVATE ${RAYLIB_LIBRARY})
-                set(_raylib_used TRUE)
-            endif()
-        endif()
+# Overwrite any existing cached value to a sensible default (do not FORCE in case
+# a user explicitly set a different tag in their cache; leave as CACHE STRING).
+set(RAYLIB_GIT_TAG "master" CACHE STRING "Tag or branch of raylib to fetch when not found")
 
-        if (NOT _raylib_used)
-            message(STATUS "raylib not found locally or not compatible; falling back to FetchContent to acquire raylib")
-            include(FetchContent)
-            # Overwrite any existing cached value to a robust default (use FORCE to replace stale cached tags)
-            set(RAYLIB_GIT_TAG "master" CACHE STRING "Tag or branch of raylib to fetch when not found" FORCE)
-            FetchContent_Declare(
-                raylib
-                GIT_REPOSITORY https://github.com/raysan5/raylib.git
-                GIT_TAG ${RAYLIB_GIT_TAG}
-            )
-            FetchContent_MakeAvailable(raylib)
-            if (TARGET raylib)
-                message(STATUS "Using fetched raylib target")
-                target_link_libraries(Ray-Invaders PRIVATE raylib)
-            elseif (TARGET raylib::raylib)
-                message(STATUS "Using fetched raylib::raylib target")
-                target_link_libraries(Ray-Invaders PRIVATE raylib::raylib)
-            else()
-                message(WARNING "Fetched raylib but couldn't locate a usable target. You may need to install raylib manually.")
-            endif()
-        endif()
-        # If we ended up using a prebuilt RAYLIB_LIBRARY on Windows, ensure we link
-        # common audio/system libs that may be required (e.g., timeBeginPeriod/timeEndPeriod live in winmm).
-        if (WIN32 AND _raylib_used)
-            target_link_libraries(Ray-Invaders PRIVATE winmm)
-        endif()
-    endif()
+message(STATUS "Acquiring raylib via FetchContent (GIT_TAG=${RAYLIB_GIT_TAG})")
+FetchContent_Declare(
+    raylib
+    GIT_REPOSITORY https://github.com/raysan5/raylib.git
+    GIT_TAG ${RAYLIB_GIT_TAG}
+)
+FetchContent_MakeAvailable(raylib)
+
+if (TARGET raylib)
+    message(STATUS "Using fetched raylib target")
+    target_link_libraries(Ray-Invaders PRIVATE raylib)
+elseif (TARGET raylib::raylib)
+    message(STATUS "Using fetched raylib::raylib target")
+    target_link_libraries(Ray-Invaders PRIVATE raylib::raylib)
+else()
+    message(WARNING "Fetched raylib but couldn't locate a usable target. You may need to install raylib manually.")
 endif()
 
 # Clang-tidy support (opt-in)
@@ -188,7 +152,12 @@ if (ENABLE_LTO)
     if (ipo_supported)
         set_target_properties(Ray-Invaders PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
     else()
-        message(WARNING "LTO requested but not supported: ${ipo_error}")
+        # Don't escalate this to a CMake WARNING — some toolchains (notably
+        # certain MSVC/clang-cl combinations) don't report IPO support via
+        # CMake's check yet still compile fine without INTERPROCEDURAL_OPTIMIZATION.
+        # Present this as an informational status so configure output is quieter
+        # while still documenting the reason we didn't enable LTO.
+        message(STATUS "LTO requested but not supported: ${ipo_error}. Continuing without LTO.")
     endif()
 endif()
 
