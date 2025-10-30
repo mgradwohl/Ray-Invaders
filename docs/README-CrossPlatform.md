@@ -13,113 +13,88 @@ See README.md for the canonical guideline.
 
 # Ray-Invaders - Cross-Platform Setup
 
-This project supports both **Windows (MSVC)** and **Linux (Clang 21)** with C++23 and raylib.
+This project supports both Windows (MSVC) and Linux (Clang) using C++23 and raylib.
 
 ## Platform-Specific Prerequisites
 
 ### Linux
-- Clang 21 (already installed)
-- raylib (installed from source)
-- Standard build tools (make, cmake, git)
-- X11 development libraries
-- OpenGL libraries
+- Clang (system clang/clang++)
+- CMake (>= 3.20) and Ninja
+- raylib (system package or supplied via CMake FetchContent fallback)
+- X11 / OpenGL development libraries
+- Recommended editor tooling: clangd (language server), CodeLLDB (VS Code extension)
 
 ### Windows
-- Visual Studio 2022 with MSVC
-- raylib installed to `c:\raylib\`
-- Windows SDK
+- Visual Studio (MSVC)
+- raylib installed to a Windows-accessible path (optional)
 
-## Building the Project
+## Building the Project (Linux)
 
-### Linux - Using Make (Recommended)
+We use CMake presets with the Ninja generator. Presets are defined in `CMakePresets.json`.
 
-```bash
-# Debug build (default)
-make debug
+Common workflows:
 
-# Release build (optimized)  
-make release
+```
+# Configure a build directory using the named preset (creates build/ninja-debug-clang etc.)
+cmake --preset ninja-debug-clang
 
-# Clean build artifacts
-make clean
+# Build using the same preset
+cmake --build --preset ninja-debug-clang
 
-# Build and run
-make run
+# Run the built executable (output path depends on preset)
+./build/ninja-debug-clang/Ray-Invaders
+
+# Release/optimized presets
+cmake --preset ninja-release
+cmake --build --preset ninja-release
+
+cmake --preset ninja-optimized
+cmake --build --preset ninja-optimized
 ```
 
-### Windows - Using VS Code Tasks
-
-Use the Windows-specific tasks:
-- "C/C++: cl.exe build active file (Debug) - Windows"
-- "C/C++: cl.exe build active file (Release) - Windows"
-
-### Available Make Targets (Linux)
-
-- `make` or `make debug` - Build debug version with symbols
-- `make release` - Build optimized release version
-- `make clean` - Remove all build artifacts
-- `make run` - Build and run the game
-- `make help` - Show available targets
-- `make install` - Install build dependencies
+Notes:
+- The `ninja-optimized` preset sets higher optimization and strips debug symbols for a smaller runtime binary.
+- If raylib is not found on the system, CMake will fall back to fetching and building it automatically (see `CMakeLists.txt`).
 
 ## Using VS Code (Cross-Platform)
 
-The project includes VS Code configuration files for both platforms:
+This repository provides VS Code configuration under `.vscode/`.
 
-### Linux Tasks
-- **Build Debug (Linux - Makefile)** - Default Linux build
-- **Build Release (Linux - Makefile)** - Release build  
-- **Clean Build (Linux)** - Clean artifacts
-- **Run Game (Linux)** - Build and run
-- **C/C++: clang++-21 build active file (Direct) - Linux** - Direct compilation
+Linux workflow recommendations:
+- Use the provided VS Code tasks which call CMake with presets (`tasks.json`).
+- Debug using the CodeLLDB adapter (launch configurations use `type: "lldb"`).
+- Use `clangd` for language services. A workspace-level symlink `compile_commands.json -> build/ninja-debug-clang/compile_commands.json` is recommended (or set `clangd.arguments` in `.vscode/settings.json`).
 
-### Windows Tasks
-- **C/C++: cl.exe build active file (Debug) - Windows** - MSVC Debug build
-- **C/C++: cl.exe build active file (Release) - Windows** - MSVC Release build
-
-### Debug Configurations
-- **(Linux) Launch Debug** - Debug on Linux with GDB
-- **(Linux) Launch Release** - Release on Linux
-- **(Windows) Launch Debug** - Debug on Windows with MSVC debugger  
-- **(Windows) Launch Release** - Release on Windows
+Windows workflow:
+- Existing Windows tasks and launch configurations are left intact for MSVC users.
 
 ## Project Structure
 
 ```
 Ray-Invaders/
-├── build/                 # Build output directory
-├── Resources/            # Game assets
-│   ├── Images/          # Textures and sprites  
-│   └── Sounds/          # Audio files
-├── *.cpp, *.hpp         # Source code files
-├── Makefile             # Build configuration
-└── .vscode/             # VS Code configuration
-    ├── tasks.json       # Build tasks
-    ├── launch.json      # Debug configuration
-    └── c_cpp_properties.json  # IntelliSense config
+├── build/                 # Build output directories (created by CMake presets)
+├── Resources/             # Game assets (Images/, Sounds/)
+├── *.cpp, *.hpp           # Source code files
+├── CMakeLists.txt         # CMake project definition
+└── .vscode/               # VS Code configuration (tasks, launch, settings)
 ```
 
-## Dependencies Installed
+## Dependencies
 
-- **raylib 5.5.0** - Installed from source to `/usr/local/`
-- **X11 libraries** - For window management
-- **OpenGL libraries** - For graphics rendering
-- **Audio libraries** - For sound support
+- raylib — found via `find_package` / `pkg-config` or built via FetchContent fallback
+- Clang, CMake, Ninja, X11/OpenGL dev libs
 
 ## Notes
 
-- The executable is built as `build/ray-invaders`
-- All resource paths are relative to the project root
-- Debug builds include symbols and debugging information
-- Release builds are optimized for performance
+- Built executables are located in `build/<preset>/Ray-Invaders`.
+- Resource files are copied into the corresponding build output directory at configure/build time so the game can find them at runtime.
+- Debug builds include symbols; optimized builds may be stripped depending on the preset.
 
 ## Troubleshooting
 
-If you encounter build issues:
+1. Check that a preset configures correctly: `cmake --preset ninja-debug-clang`.
+2. Verify raylib availability: `pkg-config --libs raylib` or rely on CMake FetchContent.
+3. If editor diagnostics look wrong, ensure `compile_commands.json` points to the active build directory (the workspace root symlink is convenient).
+4. For debugging in VS Code, install the CodeLLDB extension and use the provided "(Linux) Launch Debug" configuration.
 
-1. Ensure raylib is properly installed: `pkg-config --libs raylib`
-2. Check Clang 21 installation: `clang++-21 --version`  
-3. Verify all dependencies: `make install`
-4. Clean and rebuild: `make clean && make debug`
-
-For graphics issues, ensure you have proper OpenGL drivers installed.
+If you'd like, I can add a short developer setup section to the main README and optionally add a CI workflow that validates the Linux presets automatically.
