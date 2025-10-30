@@ -28,7 +28,7 @@ constexpr float OUTLINE_DELTA = 1.0F;
 inline auto alpha_from_ttl(int ttl) noexcept -> unsigned char
 {
     const int t = std::clamp(ttl, 0, TTL_WINDOW_DEFAULT);
-    return static_cast<unsigned char>(50 + (205 * t) / TTL_WINDOW_DEFAULT);
+    return static_cast<unsigned char>(50 + (205 * t / TTL_WINDOW_DEFAULT));
 }
 
 // TTL presets per subject/outcome

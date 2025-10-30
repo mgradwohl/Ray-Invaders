@@ -11,7 +11,7 @@
 #include "RLRenderTexture2D.hpp"
 namespace raylib
 {
-DrawSession::DrawSession(Color clearColor) noexcept : _textureMode(false)
+DrawSession::DrawSession(Color clearColor) noexcept
 {
     BeginDrawing();
     ClearBackground(clearColor);

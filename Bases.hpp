@@ -21,7 +21,7 @@ class Bases
     auto operator=(Bases &&) noexcept -> Bases & = default;
 
     void reset();
-    void update(std::vector<Bullet> &i_enemy_bullets, class HitManager &hits);
+    void update(std::vector<Bullet> &i_bullets, HitManager &hits);
     void draw(raylib::DrawSession &ds) const;
 
   private:

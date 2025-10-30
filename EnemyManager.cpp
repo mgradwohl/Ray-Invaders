@@ -44,16 +44,12 @@ EnemyManager::EnemyManager() noexcept
 
 auto EnemyManager::reached_player(float i_player_y) const -> bool
 {
-    for (const Enemy &enemy : _enemies)
-    {
-        if (enemy.get_y() > i_player_y - (GlobalConstant::HALF * GlobalConstant::BASE_SIZE))
-        {
-            // As soon as the enemies reach the player, the game is over!
-            return true;
-        }
-    }
-
-    return false;
+    // Return true if any enemy has crossed the threshold near the player's Y
+    // coordinate. Use the C++20 ranges algorithm for clarity.
+    // todo this isn't very awesome
+    return std::ranges::any_of(_enemies, [i_player_y](const Enemy &enemy){
+        return enemy.get_y() > i_player_y - (GlobalConstant::HALF * GlobalConstant::BASE_SIZE);
+    });
 }
 
 void EnemyManager::draw(raylib::DrawSession &ds) const

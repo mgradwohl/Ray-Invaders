@@ -20,9 +20,9 @@ class RenderTexture2D
 
     RenderTexture2D(const RenderTexture2D &) = delete;
     RenderTexture2D &operator=(const RenderTexture2D &) = delete;
-    RenderTexture2D(RenderTexture2D &&other) noexcept
+    RenderTexture2D(RenderTexture2D &&other) noexcept : _rt(other._rt)
     {
-        _rt = other._rt;
+        
         other._rt = {};
     }
     RenderTexture2D &operator=(RenderTexture2D &&other) noexcept

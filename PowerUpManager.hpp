@@ -7,7 +7,14 @@ class PowerUpManager
 {
   public:
     PowerUpManager(const std::string &spritefile);
+
+    PowerUpManager(const PowerUpManager &) = delete;
+    PowerUpManager(PowerUpManager &&) = delete;
+    auto operator=(const PowerUpManager &) -> PowerUpManager & = delete;
+    auto operator=(PowerUpManager &&) -> PowerUpManager & = delete;
+
     ~PowerUpManager();
+
     void update(const Player &player);
     void draw(raylib::DrawSession &ds, const Player &player, float bannerHeightLogical) const;
 

@@ -1,6 +1,6 @@
 // Standard library headers
 #include <chrono>
-#include <cstdlib>
+// #include <cstdlib>
 #include <random>
 #include <string>
 
@@ -45,12 +45,10 @@ auto main() -> int
     PowerUpManager powerup("Resources/Images/PowerupBar.png");
     Ufo ufo(random_engine);
     Bases bases("Resources/Images/Base.png");
-    // Popups (attempt to load art assets; user may provide images)
     Popup popupNextLevel;
     popupNextLevel.loadFromFile("Resources/Images/PopupNextLevel.png");
     Popup popupGameOver;
     popupGameOver.loadFromFile("Resources/Images/PopupGameOver.png");
-
 
     // we draw everything to this, and then render this to the screen
     Backbuffer backbuffer(GlobalConstant::Int::SCREEN_WIDTH, GlobalConstant::Int::SCREEN_HEIGHT, GlobalConstant::Int::SCREEN_RESIZE);
@@ -60,7 +58,7 @@ auto main() -> int
     while (!window.ShouldClose())
     {
         // Making the game frame rate independent.
-        const std::chrono::microseconds delta_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - previous_time);
+        const auto delta_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - previous_time);
         lag += delta_time;
         previous_time += delta_time;
 
@@ -75,16 +73,17 @@ auto main() -> int
             hit_manager.update();
 
             // Player's Y position is already a float, so we can check directly
+            // This should be moved to enemy_manager.update or similar
             if (enemy_manager.reached_player(player.get_y()))
             {
                 player.die();
             }
 
+            // This could probably be moved to player.update, but for keep it here for now    
             // We're gonna show the "Game over!" text after the player's death animation.
             if (player.get_dead_animation_over())
             {
-                // If player has remaining lives, consume one and respawn; otherwise
-                // enter game over as before.
+                // If player has remaining lives, consume one and respawn; otherwise enter game over as before
                 if (player.get_lives() > 1)
                 {
                     // Consume a life and reset player for respawn
@@ -96,7 +95,7 @@ auto main() -> int
                     game_over = true;
                 }
             }
-
+            // this should be in a new class called Game, and happen during Game::Update
             if (!game_over)
             {
                 // no more enemies left
@@ -147,6 +146,9 @@ auto main() -> int
                         // avoid processing new hits that would put enemies into a
                         // half-dead state (hit timer set but no enemy.update to finish
                         // the death), call player.update with empty enemy/bullet lists.
+
+                        // todo refine this, is it really a problem?
+                        // Or should we just empty the real vectors when we show a popup
                         std::vector<Bullet> empty_enemy_bullets;
                         std::vector<Enemy> empty_enemies;
                         player.update(random_engine, empty_enemy_bullets, empty_enemies, ufo, hit_manager);
@@ -154,6 +156,8 @@ auto main() -> int
                 }
             }
 
+            // game_over should be a state inside a Game class
+            // over, paused, playing, transitioning, etc.
             if (game_over)
             {
                 // Show blocking game-over popup that waits for input
@@ -204,7 +208,7 @@ auto main() -> int
 
                 {
                     // Draw banner into banner render texture
-                    raylib::DrawSession dsBanner(backbuffer.GetBannerRenderTexture(), BLACK);
+                    raylib::DrawSession dsBanner(backbuffer.GetBannerRenderTexture(), GlobalColors::COL_BLACK);
                     bannerUI.setLevel(level);
                     bannerUI.draw(dsBanner, player);
                 } // dsBanner

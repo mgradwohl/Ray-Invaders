@@ -1,4 +1,5 @@
 #pragma once
+#include <atomic>
 #include <string>
 
 #include <raylib.h>
@@ -47,7 +48,7 @@ class Popup
     }
 
   private:
-    enum class State
+    enum class State : std::uint8_t
     {
         Hidden,
         // FadingIn,

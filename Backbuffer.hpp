@@ -11,9 +11,9 @@ class Backbuffer
     Backbuffer(GameTypes::Coordinate width, GameTypes::Coordinate height, GameTypes::Size scale) noexcept;
     ~Backbuffer();
     Backbuffer(const Backbuffer &) = delete;
-    Backbuffer &operator=(const Backbuffer &) = delete;
+    auto operator=(const Backbuffer &) -> Backbuffer & = delete;
     Backbuffer(Backbuffer &&) = delete;
-    Backbuffer &operator=(Backbuffer &&) = delete;
+    auto operator=(Backbuffer &&) -> Backbuffer & = delete;
     void flip() const noexcept;
     // Access render targets for gameplay and banner drawing from Main
     [[nodiscard]] auto GetGameplayRenderTexture() noexcept -> raylib::RenderTexture2D &

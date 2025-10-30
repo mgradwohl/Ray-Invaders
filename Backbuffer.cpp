@@ -10,11 +10,10 @@
 #include "RLDrawSession.hpp"
 // Banner height is fixed via GlobalConstant::Int::BANNER_HEIGHT
 
-Backbuffer::Backbuffer(GameTypes::Coordinate width, GameTypes::Coordinate height, GameTypes::Size scale) noexcept
+Backbuffer::Backbuffer(GameTypes::Coordinate width, GameTypes::Coordinate height, GameTypes::Size scale) noexcept : _scale(scale)
 {
     _rtGameplay.create(width, height);
     _rtBanner.create(width, static_cast<GameTypes::Coordinate>(GlobalConstant::Int::BANNER_HEIGHT));
-    _scale = scale;
 }
 
 Backbuffer::~Backbuffer() = default;

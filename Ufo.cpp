@@ -2,6 +2,7 @@
 #include "Ufo.hpp"
 
 // Standard library headers
+#include <algorithm>
 #include <random>
 #include <string>
 
@@ -51,7 +52,7 @@ auto Ufo::check_bullet_collision(std::mt19937_64 &i_random_engine, const Rectang
             // Get the powerup type from the distribution and cast to enum
             GameTypes::Count powerupIndex = _powerup_distribution(i_random_engine) % GlobalConstant::Int::POWERUP_TYPES;
             auto powerupType = static_cast<PowerUpItem::Type>(powerupIndex);
-            _powerups.emplace_back(_x + 0.5F * GlobalConstant::BASE_SIZE, _y, powerupType);
+            _powerups.emplace_back(_x + (0.5F * GlobalConstant::BASE_SIZE), _y, powerupType);
 
             return true;
         }
@@ -88,7 +89,7 @@ void Ufo::draw(raylib::DrawSession &ds) const
         _explosion.draw(ds, _explosion_x, _y - (UFO_EXPLOSION_Y_OFFSET * GlobalConstant::BASE_SIZE), GlobalColors::EXPLOSION_ORANGE_RED);
         _explosion.draw(ds, _explosion_x, (_y - (UFO_EXPLOSION_MAGIC_OFFSET * GlobalConstant::BASE_SIZE)),
                         GlobalColors::EXPLOSION_ORANGE_RED);
-        _explosion.draw(ds, _explosion_x, _y - 0.5F * GlobalConstant::BASE_SIZE, GlobalColors::EXPLOSION_ORANGE_RED);
+        _explosion.draw(ds, _explosion_x, _y - (0.5F * GlobalConstant::BASE_SIZE), GlobalColors::EXPLOSION_ORANGE_RED);
     }
 
     for (const PowerUpItem &powerup : _powerups)
@@ -163,12 +164,13 @@ void Ufo::update(std::mt19937_64 &i_random_engine)
     {
         powerup_animation.update();
     }
-    _powerups.erase(remove_if(_powerups.begin(), _powerups.end(),
-                              [](const PowerUpItem &i_powerup) noexcept
-                              {
-                                  return i_powerup.isdead();
-                              }),
-                    _powerups.end());
+
+    // Erase-remove idiom: remove dead powerups from the vector
+    _powerups.erase(std::remove_if(_powerups.begin(), _powerups.end(),
+                                   [](const PowerUpItem &i_powerup) noexcept {
+                                       return i_powerup.isdead();
+                                   }),
+                     _powerups.end());
 }
 
 auto Ufo::get_hitbox() const noexcept -> Rectangle

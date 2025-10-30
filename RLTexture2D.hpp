@@ -57,7 +57,7 @@ class Texture2DFile
         }
     }
 
-    [[nodiscard]] const Texture2D &get() const noexcept
+    [[nodiscard]] auto get() const noexcept -> const Texture2D &
     {
         return _tex;
     }

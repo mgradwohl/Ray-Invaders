@@ -166,7 +166,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
             }
         }
 
-        if (_reload_timer == 0u)
+        if (_reload_timer == 0U)
         {
             if (IsKeyPressed(KEY_Z))
             {

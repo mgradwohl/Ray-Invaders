@@ -22,16 +22,16 @@ void PowerUpItem::bump_y(GameTypes::Distance ybump) noexcept
 {
     constexpr float HITBOX_SCALE = 0.5F;
     constexpr float HITBOX_OFFSET = 0.25F;
-    return Rectangle{_x + HITBOX_OFFSET * GlobalConstant::BASE_SIZE, _y + HITBOX_OFFSET * GlobalConstant::BASE_SIZE,
+    return Rectangle{_x + (HITBOX_OFFSET * GlobalConstant::BASE_SIZE), _y + (HITBOX_OFFSET * GlobalConstant::BASE_SIZE),
                      HITBOX_SCALE * GlobalConstant::BASE_SIZE, HITBOX_SCALE * GlobalConstant::BASE_SIZE};
 }
 
-PowerUpItem::Type PowerUpItem::get_type() const noexcept
+auto PowerUpItem::get_type() const noexcept -> PowerUpItem::Type
 {
     return _type;
 }
 
-bool PowerUpItem::isdead() const noexcept
+auto PowerUpItem::isdead() const noexcept -> bool
 {
     return _dead;
 }
