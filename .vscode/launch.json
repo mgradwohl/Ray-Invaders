@@ -9,7 +9,7 @@
   "args": [],
   "stopOnEntry": false,
       "cwd": "${workspaceFolder}",
-      "terminal": "external",
+      "console": "externalTerminal",
       "preLaunchTask": "CMake: Build (ninja-debug-clang) - Linux"
     },
 
@@ -21,7 +21,7 @@
   "args": [],
   "stopOnEntry": false,
       "cwd": "${workspaceFolder}",
-      "terminal": "external",
+      "console": "internalConsole",
       "preLaunchTask": "CMake: Build (ninja-release) - Linux"
     }, 
     {
@@ -32,7 +32,7 @@
   "args": [],
   "stopOnEntry": false,
       "cwd": "${workspaceFolder}",
-      "terminal": "external",
+      "console": "internalConsole",
       "preLaunchTask": "CMake: Build (ninja-optimized) - Linux"
     },
     {
@@ -52,7 +52,7 @@
   "program": "${workspaceFolder}/build/vs-clangpp/release/Ray-Invaders.exe",
   "args": [],
   "cwd": "${workspaceFolder}",
-  "console": "externalTerminal",
+  "console": "internalConsole",
       "preLaunchTask": "CMake: Build (vs-clangpp-release) - Windows"
     },
     {
@@ -62,7 +62,7 @@
   "program": "${workspaceFolder}/build/vs-clangpp/optimized/Ray-Invaders.exe",
   "args": [],
   "cwd": "${workspaceFolder}",
-  "console": "externalTerminal",
+  "console": "internalConsole",
       "preLaunchTask": "CMake: Build (vs-clangpp-optimized) - Windows"
     },
     {
@@ -72,7 +72,7 @@
       "program": "${workspaceFolder}/build/vs/debug/Debug/Ray-Invaders.exe",
   "args": [],
   "cwd": "${workspaceFolder}",
-  "console": "externalTerminal",
+  "console": "internalConsole",
   "preLaunchTask": "CMake: Build (vs-debug-msvc) - Windows"
     },
     {
@@ -82,7 +82,7 @@
       "program": "${workspaceFolder}/build/vs/release/Release/Ray-Invaders.exe",
   "args": [],
   "cwd": "${workspaceFolder}",
-  "console": "externalTerminal",
+  "console": "internalConsole",
   "preLaunchTask": "CMake: Build (vs-release-msvc) - Windows"
     }
   ]
