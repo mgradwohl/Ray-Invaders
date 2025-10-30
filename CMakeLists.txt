@@ -75,12 +75,11 @@ if (WIN32)
     endif()
 endif()
 
-# Try to find raylib first (package config), then fallback to pkg-config, then allow user override
+# Try to find raylib first (package config)
 find_package(raylib CONFIG QUIET)
 
-# If a config-package was found, prefer the imported targets it supplies. Some
-# installations may set raylib_FOUND but not provide an imported target; handle
-# that case by falling back to pkg-config / manual lookup / FetchContent below.
+# On Windows, always fetch raylib via FetchContent.
+# On Linux, only fetch if no config package with imported target is found.
 set(_raylib_target_linked FALSE)
 if (raylib_FOUND)
     if (TARGET raylib::raylib)
@@ -92,38 +91,30 @@ if (raylib_FOUND)
         target_link_libraries(Ray-Invaders PRIVATE raylib)
         set(_raylib_target_linked TRUE)
     else()
-        message(WARNING "find_package(raylib) reported found but did not provide an imported target. Falling back to pkg-config / FetchContent logic.")
+        message(WARNING "find_package(raylib) reported found but did not provide an imported target. Will fetch raylib.")
     endif()
 endif()
 
-# If we didn't successfully link an imported raylib target above, try pkg-config,
-# a user-provided RAYLIB_ROOT, or finally FetchContent to build raylib locally.
-## Always fetch raylib via FetchContent when building from source.
-## This project no longer attempts to detect a user-installed copy under
-## C:/raylib or via pkg-config. If you want to use a system installation,
-## add it to your toolchain or supply a different CMake configuration.
-include(FetchContent)
+if (WIN32 OR NOT _raylib_target_linked)
+    include(FetchContent)
+    set(RAYLIB_GIT_TAG "master" CACHE STRING "Tag or branch of raylib to fetch when not found")
+    message(STATUS "Acquiring raylib via FetchContent (GIT_TAG=${RAYLIB_GIT_TAG})")
+    FetchContent_Declare(
+        raylib
+        GIT_REPOSITORY https://github.com/raysan5/raylib.git
+        GIT_TAG ${RAYLIB_GIT_TAG}
+    )
+    FetchContent_MakeAvailable(raylib)
 
-# Overwrite any existing cached value to a sensible default (do not FORCE in case
-# a user explicitly set a different tag in their cache; leave as CACHE STRING).
-set(RAYLIB_GIT_TAG "master" CACHE STRING "Tag or branch of raylib to fetch when not found")
-
-message(STATUS "Acquiring raylib via FetchContent (GIT_TAG=${RAYLIB_GIT_TAG})")
-FetchContent_Declare(
-    raylib
-    GIT_REPOSITORY https://github.com/raysan5/raylib.git
-    GIT_TAG ${RAYLIB_GIT_TAG}
-)
-FetchContent_MakeAvailable(raylib)
-
-if (TARGET raylib)
-    message(STATUS "Using fetched raylib target")
-    target_link_libraries(Ray-Invaders PRIVATE raylib)
-elseif (TARGET raylib::raylib)
-    message(STATUS "Using fetched raylib::raylib target")
-    target_link_libraries(Ray-Invaders PRIVATE raylib::raylib)
-else()
-    message(WARNING "Fetched raylib but couldn't locate a usable target. You may need to install raylib manually.")
+    if (TARGET raylib)
+        message(STATUS "Using fetched raylib target")
+        target_link_libraries(Ray-Invaders PRIVATE raylib)
+    elseif (TARGET raylib::raylib)
+        message(STATUS "Using fetched raylib::raylib target")
+        target_link_libraries(Ray-Invaders PRIVATE raylib::raylib)
+    else()
+        message(WARNING "Fetched raylib but couldn't locate a usable target. You may need to install raylib manually.")
+    endif()
 endif()
 
 # Clang-tidy support (opt-in)
