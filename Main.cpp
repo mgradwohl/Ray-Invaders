@@ -44,7 +44,7 @@ auto main() -> int
     Player player;
     PowerUpManager powerup("Resources/Images/PowerupBar.png");
     Ufo ufo(random_engine);
-    Bases bases("Resources/Images/Base.png");
+    Bases bases("Resources/Images/Base2.png");
     Popup popupNextLevel;
     popupNextLevel.loadFromFile("Resources/Images/PopupNextLevel.png");
     Popup popupGameOver;
