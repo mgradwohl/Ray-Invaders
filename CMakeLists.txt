@@ -34,35 +34,57 @@ set(CLANG_TIDY_EXECUTABLE "clang-tidy-21" CACHE STRING "clang-tidy executable to
 
 message(STATUS "Configuring Ray-Invaders (C++${CMAKE_CXX_STANDARD})")
 
-# Collect sources (simple wildcard at top level)
+
+# Collect sources (simple wildcard at top level, exclude legacy xoshiro256plusplus sources)
 file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS
     "${CMAKE_SOURCE_DIR}/*.cpp"
 )
 
-# Filter out any files that live under the binary dir (build/) because
-# we run in-tree builds (build/ inside the source tree) for some presets
-# and CMake will generate helper sources there (CompilerIdCXX). Those
-# generated files must not be compiled into the main target.
+# Filter out any files that live under the binary dir (build/) or _deps/xoshiro256plusplus-src (legacy, wrong repo)
 set(_filtered_sources)
 foreach(_src ${PROJECT_SOURCES})
-    # If the source path contains the binary dir path, skip it
     string(FIND "${_src}" "${CMAKE_BINARY_DIR}" _is_in_build_dir)
-    # Also skip any CompilerId / CMakeFiles helper files that might live in
-    # other build directories (e.g. build/ninja-debug-clang/...). Those files
-    # declare a 'main' symbol and will cause duplicate-main link errors.
     string(FIND "${_src}" "CMakeFiles" _has_cmakefiles)
     string(FIND "${_src}" "CompilerId" _has_compilerid)
     string(FIND "${_src}" "CMakeCXXCompilerId.cpp" _has_compilerid_cpp)
-    if(_is_in_build_dir EQUAL -1 AND _has_cmakefiles EQUAL -1 AND _has_compilerid EQUAL -1 AND _has_compilerid_cpp EQUAL -1)
+    string(FIND "${_src}" "_deps/xoshiro256plusplus-src" _is_legacy_xoshiro)
+    if(_is_in_build_dir EQUAL -1 AND _has_cmakefiles EQUAL -1 AND _has_compilerid EQUAL -1 AND _has_compilerid_cpp EQUAL -1 AND _is_legacy_xoshiro EQUAL -1)
         list(APPEND _filtered_sources "${_src}")
     endif()
 endforeach()
 
 set(PROJECT_SOURCES ${_filtered_sources})
 
-add_executable(Ray-Invaders ${PROJECT_SOURCES})
 
+
+
+# --- XOSHIRO random number generator integration ---
+# Try to find xoshiro256plusplus (future-proofing for system install)
+find_package(xoshiro256plusplus CONFIG QUIET)
+
+set(_xoshiro_header_dir "")
+if (xoshiro256plusplus_FOUND)
+    message(STATUS "Found xoshiro256plusplus via config package.")
+    if (TARGET xoshiro256plusplus::xoshiro256plusplus)
+        get_target_property(_xoshiro_header_dir xoshiro256plusplus::xoshiro256plusplus INTERFACE_INCLUDE_DIRECTORIES)
+    endif()
+else()
+    include(FetchContent)
+    FetchContent_Declare(
+        xoshiro256plusplus
+        GIT_REPOSITORY https://github.com/nessan/xoshiro.git
+        GIT_TAG main
+    )
+    FetchContent_MakeAvailable(xoshiro256plusplus)
+    set(_xoshiro_header_dir "${xoshiro256plusplus_SOURCE_DIR}")
+    message(STATUS "Fetched xoshiro256plusplus from nessan/xoshiro: ${_xoshiro_header_dir}")
+endif()
+
+add_executable(Ray-Invaders ${PROJECT_SOURCES})
 target_include_directories(Ray-Invaders PRIVATE ${CMAKE_SOURCE_DIR})
+if(_xoshiro_header_dir)
+    target_include_directories(Ray-Invaders PRIVATE "${_xoshiro_header_dir}/include")
+endif()
 
 # On Windows, prefer lld-link when using LLVM's clang (matches the project's
 # historical build script which passed -fuse-ld=lld-link). Do NOT explicitly
@@ -75,11 +97,10 @@ if (WIN32)
     endif()
 endif()
 
+
 # Try to find raylib first (package config)
 find_package(raylib CONFIG QUIET)
 
-# On Windows, always fetch raylib via FetchContent.
-# On Linux, only fetch if no config package with imported target is found.
 set(_raylib_target_linked FALSE)
 if (raylib_FOUND)
     if (TARGET raylib::raylib)

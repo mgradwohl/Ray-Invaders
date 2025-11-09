@@ -250,7 +250,7 @@ void EnemyManager::reset(GameTypes::Level i_level)
     }
 }
 
-void EnemyManager::update(std::mt19937_64 &i_random_engine)
+void EnemyManager::update()
 {
     std::vector<Enemy>::iterator dead_enemies_start;
 
@@ -278,8 +278,8 @@ void EnemyManager::update(std::mt19937_64 &i_random_engine)
     for (Enemy &enemy : _enemies)
     {
         enemy.update();
-
-        if (_shoot_distribution(i_random_engine) == 0U)
+        // Use XOSHIRO-based random number generator for shooting
+        if (Random::uniform_int(0, GlobalConstant::Int::ENEMY_SHOOT_CHANCE) == 0U)
         {
             enemy.shoot(_enemy_bullets);
         }

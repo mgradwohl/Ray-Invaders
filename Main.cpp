@@ -1,7 +1,7 @@
 // Standard library headers
 #include <chrono>
 // #include <cstdlib>
-#include <random>
+#include "Random.hpp"
 #include <string>
 
 // Third-party headers
@@ -32,8 +32,8 @@ auto main() -> int
     std::chrono::microseconds lag(0);
     std::chrono::steady_clock::time_point previous_time;
 
-    // Setting a random seed to make sure the random engine will randomly generate random numbers.
-    std::mt19937_64 random_engine(std::chrono::system_clock::now().time_since_epoch().count());
+    // Seed XOSHIRO random generator
+    Random::seed(std::chrono::system_clock::now().time_since_epoch().count());
 
     raylib::Window const window(GlobalConstant::Int::SCREEN_WIDTH * GlobalConstant::Int::SCREEN_RESIZE,
                                 GlobalConstant::Int::WINDOW_HEIGHT * GlobalConstant::Int::SCREEN_RESIZE, 60, "Ray Invaders");
@@ -43,7 +43,7 @@ auto main() -> int
     HitManager hit_manager;
     Player player;
     PowerUpManager powerup("Resources/Images/PowerupBar.png");
-    Ufo ufo(random_engine);
+    Ufo ufo;
     Bases bases("Resources/Images/Base2.png");
     Popup popupNextLevel;
     popupNextLevel.loadFromFile("Resources/Images/PopupNextLevel.png");
@@ -109,7 +109,7 @@ auto main() -> int
                         background.reset();
                         player.reset();
                         enemy_manager.reset(level);
-                        ufo.reset(true, random_engine);
+                        ufo.reset(true);
                         bases.reset();
                     }
                     else // Here we're showing the next level transition.
@@ -130,11 +130,11 @@ auto main() -> int
                     if (!popupBlockingActive)
                     {
                         // enemies left, update everything
-                        player.update(random_engine, enemy_manager.get_enemy_bullets(), enemy_manager.get_enemies(), ufo, hit_manager);
+                        player.update(enemy_manager.get_enemy_bullets(), enemy_manager.get_enemies(), ufo, hit_manager);
                         powerup.update(player);
                         background.update(player);
-                        enemy_manager.update(random_engine);
-                        ufo.update(random_engine);
+                        enemy_manager.update();
+                        ufo.update();
                         bases.update(enemy_manager.get_enemy_bullets(), hit_manager);
                         bases.update(player.get_player_bullets(), hit_manager);
                     }
@@ -151,7 +151,7 @@ auto main() -> int
                         // Or should we just empty the real vectors when we show a popup
                         std::vector<Bullet> empty_enemy_bullets;
                         std::vector<Enemy> empty_enemies;
-                        player.update(random_engine, empty_enemy_bullets, empty_enemies, ufo, hit_manager);
+                        player.update(empty_enemy_bullets, empty_enemies, ufo, hit_manager);
                     }
                 }
             }
@@ -174,7 +174,7 @@ auto main() -> int
                     player.set_lives(GlobalConstant::Int::INITIAL_LIVES);
                     player.reset();
                     enemy_manager.reset(level);
-                    ufo.reset(true, random_engine);
+                    ufo.reset(true);
                     bases.reset();
                 }
             }

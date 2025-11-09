@@ -3,7 +3,7 @@
 
 // Standard library headers
 #include <algorithm>
-#include <random>
+#include "Random.hpp"
 #include <string>
 
 // Third-party headers
@@ -18,17 +18,15 @@
 constexpr float UFO_EXPLOSION_Y_OFFSET = 0.5F;
 constexpr float UFO_EXPLOSION_MAGIC_OFFSET = 0.5F;
 
-Ufo::Ufo(std::mt19937_64 &i_random_engine)
-    : _y(GlobalConstant::BASE_SIZE), _powerup_distribution(0, GlobalConstant::Int::POWERUP_TYPES - 1),
-      _timer_distribution(GlobalConstant::Int::UFO_TIMER_MIN, GlobalConstant::Int::UFO_TIMER_MAX),
-      _animation(GlobalConstant::Int::UFO_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/Ufo.png"),
+Ufo::Ufo()
+    : _y(GlobalConstant::BASE_SIZE), _animation(GlobalConstant::Int::UFO_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/Ufo.png"),
       _explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/ExplosionBig.png"),
       _ufoappearsound("Resources/Sounds/UFO Enter.wav"), _ufodestroysound("Resources/Sounds/UFO Destroy.wav")
 {
     // Avoid vector growth during powerup creation and updates
     _powerup_animations.reserve(GlobalConstant::Int::POWERUP_TYPES);
     _powerups.reserve(8);
-    reset(true, i_random_engine);
+    reset(true);
     for (GameTypes::Count puType = 0; puType < GlobalConstant::Int::POWERUP_TYPES; puType++)
     {
         // Use implicit conversion to create the string
@@ -38,7 +36,7 @@ Ufo::Ufo(std::mt19937_64 &i_random_engine)
     }
 }
 
-auto Ufo::check_bullet_collision(std::mt19937_64 &i_random_engine, const Rectangle &i_bullet_hitbox) -> bool
+auto Ufo::check_bullet_collision(const Rectangle &i_bullet_hitbox) -> bool
 {
     if (!_dead)
     {
@@ -49,8 +47,8 @@ auto Ufo::check_bullet_collision(std::mt19937_64 &i_random_engine, const Rectang
             _explosion_x = _x;
             [[maybe_unused]] bool played = _ufodestroysound.Play();
 
-            // Get the powerup type from the distribution and cast to enum
-            GameTypes::Count powerupIndex = _powerup_distribution(i_random_engine) % GlobalConstant::Int::POWERUP_TYPES;
+            // Use XOSHIRO for powerup type
+            GameTypes::Count powerupIndex = Random::uniform_int(0, GlobalConstant::Int::POWERUP_TYPES - 1);
             auto powerupType = static_cast<PowerUpItem::Type>(powerupIndex);
             _powerups.emplace_back(_x + (0.5F * GlobalConstant::BASE_SIZE), _y, powerupType);
 
@@ -98,7 +96,7 @@ void Ufo::draw(raylib::DrawSession &ds) const
     }
 }
 
-void Ufo::reset(bool i_dead, std::mt19937_64 &i_random_engine)
+void Ufo::reset(bool i_dead)
 {
     _dead = i_dead;
     _dead_animation_over = false;
@@ -106,7 +104,8 @@ void Ufo::reset(bool i_dead, std::mt19937_64 &i_random_engine)
     _explosion_x = GlobalConstant::SCREEN_WIDTH;
     _x = GlobalConstant::SCREEN_WIDTH;
 
-    _timer = _timer_distribution(i_random_engine);
+    // Use XOSHIRO for timer
+    _timer = Random::uniform_int(GlobalConstant::Int::UFO_TIMER_MIN, GlobalConstant::Int::UFO_TIMER_MAX);
 
     _powerups.clear();
     _ufoappearsound.Stop();
@@ -115,7 +114,7 @@ void Ufo::reset(bool i_dead, std::mt19937_64 &i_random_engine)
     _explosion.reset();
 }
 
-void Ufo::update(std::mt19937_64 &i_random_engine)
+void Ufo::update()
 {
     if (!_dead)
     {
@@ -144,7 +143,7 @@ void Ufo::update(std::mt19937_64 &i_random_engine)
 
         if (_timer == 0)
         {
-            reset(false, i_random_engine);
+            reset(false);
         }
         else
         {

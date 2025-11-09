@@ -1,5 +1,5 @@
 #pragma once
-#include <random>
+#include "Random.hpp"
 
 #include <raylib.h>
 
@@ -12,14 +12,14 @@
 class Ufo
 {
   public:
-    Ufo(std::mt19937_64 &i_random_engine);
+  Ufo();
 
-    auto check_bullet_collision(std::mt19937_64 &i_random_engine, const Rectangle &i_bullet_hitbox) -> bool;
+  auto check_bullet_collision(const Rectangle &i_bullet_hitbox) -> bool;
 
     auto check_powerup_collision(const Rectangle &i_player_hitbox) noexcept -> GameTypes::Count;
     void draw(raylib::DrawSession &ds) const;
-    void reset(bool i_dead, std::mt19937_64 &i_random_engine);
-    void update(std::mt19937_64 &i_random_engine);
+  void reset(bool i_dead);
+  void update();
 
     [[nodiscard]] auto get_hitbox() const noexcept -> Rectangle;
 

@@ -2,7 +2,7 @@
 #include "Player.hpp"
 
 // Standard library headers
-#include <random>
+#include "Random.hpp"
 
 // Third-party headers
 #include <raylib.h>
@@ -135,7 +135,7 @@ void Player::reset()
     _explosion.reset();
 }
 
-void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_enemy_bullets, std::vector<Enemy> &i_enemies, Ufo &i_ufo,
+void Player::update(std::vector<Bullet> &i_enemy_bullets, std::vector<Enemy> &i_enemies, Ufo &i_ufo,
                     HitManager &i_hits)
 {
     if (!_destroyed)
@@ -271,7 +271,7 @@ void Player::update(std::mt19937_64 &i_random_engine, std::vector<Bullet> &i_ene
 
         if (!bullet.IsDead())
         {
-            if (i_ufo.check_bullet_collision(i_random_engine, bullet.get_hitbox()))
+            if (i_ufo.check_bullet_collision(bullet.get_hitbox()))
             {
                 // Use UFO hitbox center as the impact point (explosion draws around
                 // _explosion_x/_y)
