@@ -40,14 +40,15 @@ file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS
     "${CMAKE_SOURCE_DIR}/*.cpp"
 )
 
-# Filter out any files that live under the binary dir (build/) or _deps/xoshiro256plusplus-src (legacy, wrong repo)
+
+# Filter out any files that live under the binary dir (build/) or _deps/xoshiro-src (legacy, wrong repo)
 set(_filtered_sources)
 foreach(_src ${PROJECT_SOURCES})
     string(FIND "${_src}" "${CMAKE_BINARY_DIR}" _is_in_build_dir)
     string(FIND "${_src}" "CMakeFiles" _has_cmakefiles)
     string(FIND "${_src}" "CompilerId" _has_compilerid)
     string(FIND "${_src}" "CMakeCXXCompilerId.cpp" _has_compilerid_cpp)
-    string(FIND "${_src}" "_deps/xoshiro256plusplus-src" _is_legacy_xoshiro)
+    string(FIND "${_src}" "_deps/xoshiro-src" _is_legacy_xoshiro)
     if(_is_in_build_dir EQUAL -1 AND _has_cmakefiles EQUAL -1 AND _has_compilerid EQUAL -1 AND _has_compilerid_cpp EQUAL -1 AND _is_legacy_xoshiro EQUAL -1)
         list(APPEND _filtered_sources "${_src}")
     endif()
@@ -58,26 +59,27 @@ set(PROJECT_SOURCES ${_filtered_sources})
 
 
 
+
 # --- XOSHIRO random number generator integration ---
-# Try to find xoshiro256plusplus (future-proofing for system install)
-find_package(xoshiro256plusplus CONFIG QUIET)
+# Try to find xoshiro (future-proofing for system install)
+find_package(xoshiro CONFIG QUIET)
 
 set(_xoshiro_header_dir "")
-if (xoshiro256plusplus_FOUND)
-    message(STATUS "Found xoshiro256plusplus via config package.")
-    if (TARGET xoshiro256plusplus::xoshiro256plusplus)
-        get_target_property(_xoshiro_header_dir xoshiro256plusplus::xoshiro256plusplus INTERFACE_INCLUDE_DIRECTORIES)
+if (xoshiro_FOUND)
+    message(STATUS "Found xoshiro via config package.")
+    if (TARGET xoshiro::xoshiro)
+        get_target_property(_xoshiro_header_dir xoshiro::xoshiro INTERFACE_INCLUDE_DIRECTORIES)
     endif()
 else()
     include(FetchContent)
     FetchContent_Declare(
-        xoshiro256plusplus
+        xoshiro
         GIT_REPOSITORY https://github.com/nessan/xoshiro.git
         GIT_TAG main
     )
-    FetchContent_MakeAvailable(xoshiro256plusplus)
-    set(_xoshiro_header_dir "${xoshiro256plusplus_SOURCE_DIR}")
-    message(STATUS "Fetched xoshiro256plusplus from nessan/xoshiro: ${_xoshiro_header_dir}")
+    FetchContent_MakeAvailable(xoshiro)
+    set(_xoshiro_header_dir "${xoshiro_SOURCE_DIR}")
+    message(STATUS "Fetched xoshiro from nessan/xoshiro: ${_xoshiro_header_dir}")
 endif()
 
 add_executable(Ray-Invaders ${PROJECT_SOURCES})
