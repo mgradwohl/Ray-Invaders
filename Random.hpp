@@ -1,9 +1,7 @@
 
 #pragma once
 #include <cstdint>
-#include <array>
 extern "C++" {
-//#include "xoshiro.h"
 #include "xoshiro.h"
 }
 

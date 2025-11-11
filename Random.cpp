@@ -12,20 +12,20 @@ void Random::seed(uint64_t s) {
     state.seed(arr.begin(), arr.end());
 }
 
-uint64_t Random::next() {
+auto Random::next() -> uint64_t {
     // Use the plus scrambler for output
     uint64_t result = state[0] + state[3];
     state.step();
     return result;
 }
 
-int Random::uniform_int(int min, int max) {
+auto Random::uniform_int(int min, int max) -> int {
     uint64_t r = next();
     return min + (r % (max - min + 1));
 }
 
-float Random::uniform_float(float min, float max) {
+auto Random::uniform_float(float min, float max) -> float {
     uint64_t r = next();
     float norm = (r >> 11) * (1.0f / 9007199254740991.0f); // 53 bits
-    return min + norm * (max - min);
+    return min + (norm * (max - min));
 }
