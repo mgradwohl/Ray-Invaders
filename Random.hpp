@@ -1,9 +1,7 @@
 
 #pragma once
 #include <cstdint>
-extern "C++" {
-#include "xoshiro.h"
-}
+#include <xoshiro.h>
 
 class Random {
 public:
