@@ -3,27 +3,21 @@
         "optional": "cpp",
         "cmath": "cpp"
     },
-    "terminal.integrated.env.windows": {
-        // RAYLIB_PATH is intentionally left unset here; raylib discovery is handled by CMake
-        // and the active preset's compile database. Setting this here caused stale overrides.
-    },
-    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
-    "C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy-21",
-    "C_Cpp.codeAnalysis.clangTidy.config": "",
-    "C_Cpp.codeAnalysis.clangTidy.fallbackConfig": "file",
-    "C_Cpp.codeAnalysis.clangTidy.headerFilter": ".*\\.(h|hpp)$",
-    "C_Cpp.codeAnalysis.clangTidy.args": [
-        "-std=c++23"
-    ],
-    "C_Cpp.codeAnalysis.runAutomatically": true,
-    // Ensure clangd reads the compilation database for the active VS Clang++ preset so
-    // editor diagnostics match the compiler. Update this path if you switch presets.
+    // Use clangd exclusively; disable MS C/C++ IntelliSense
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "C_Cpp.autocomplete": "disabled",
+    // Point clangd at the canonical release compile commands (symlink also exists at repo root)
     "clangd.arguments": [
-        "--compile-commands-dir=build/vs-clangpp/debug"
+        "--compile-commands-dir=build/ninja-release",
+        "--background-index",
+        "--clang-tidy",
+        "--header-insertion=never"
     ],
     "clangd.fallbackFlags": ["-std=c++23"],
-    "C_Cpp.intelliSenseEngine": "disabled",
+    // Optional: suppress noisy build tree watching
     "files.watcherExclude": {
         "**/build/**": true
-    }
+    },
+    // Remove C_Cpp.codeAnalysis.* since clangd handles diagnostics
+    "C_Cpp.codeAnalysis.runAutomatically": false
 }
