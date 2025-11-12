@@ -30,6 +30,21 @@ namespace GlobalConstant
 // SECTION: Integer constants
 namespace Int
 {
+// Screen and Window constants
+// Reserved UI strip at top of window for banner (logical pixels)
+constexpr GameTypes::Coordinate SCREEN_WIDTH = 320;
+constexpr GameTypes::Coordinate WINDOW_HEIGHT = 200;
+// SCREEN_RESIZE is derived from the logical window height so scaled layouts stay consistent
+constexpr GameTypes::Size SCREEN_RESIZE = WINDOW_HEIGHT / 40;
+// Banner height is expressed in SCREEN_RESIZE units for clarity
+constexpr GameTypes::Size BANNER_HEIGHT = 4 * SCREEN_RESIZE;
+constexpr GameTypes::Coordinate SCREEN_HEIGHT = WINDOW_HEIGHT - BANNER_HEIGHT;
+
+// Padding for UI elements inside the banner (logical or screen pixels per usage)
+constexpr GameTypes::Size BANNER_PADDING = 12;
+constexpr GameTypes::Size FONT_SIZE_BIG = 32;
+
+// I didn't wanna make PLAYER_SIZE, ENEMY_SIZE, BULLET_SIZE, so I just defined the base size.
 constexpr GameTypes::Size BASE_SIZE = 16;
 constexpr GameTypes::Speed ENEMY_BULLET_SPEED = 2;
 constexpr GameTypes::Timer ENEMY_HIT_TIMER_DURATION = 2;
@@ -52,7 +67,6 @@ constexpr GameTypes::Speed POWERUP_ANIMATION_SPEED = 16;
 constexpr GameTypes::Speed POWERUP_SPEED = 2;
 constexpr GameTypes::Count POWERUP_TYPES = 4;
 constexpr GameTypes::Timer RELOAD_DURATION = 31;
-constexpr GameTypes::Size SCREEN_RESIZE = 5;
 constexpr GameTypes::Level TOTAL_LEVELS = 8;
 constexpr GameTypes::Speed UFO_ANIMATION_SPEED = 8;
 constexpr GameTypes::Speed UFO_MOVE_SPEED = 1;
@@ -60,11 +74,6 @@ constexpr GameTypes::Count BASE_COUNT = 4;
 constexpr GameTypes::Size BASE_WIDTH = 30;
 // Initial number of player lives at the start of a new game
 constexpr int INITIAL_LIVES = 3;
-constexpr GameTypes::Size FONT_SIZE_BIG = 32;
-// Reserved UI strip at top of window for banner (logical pixels)
-constexpr GameTypes::Size BANNER_HEIGHT = 20;
-// Padding for UI elements inside the banner (logical or screen pixels per usage)
-constexpr GameTypes::Size BANNER_PADDING = 12;
 
 // There are 64 enemies. So the probability that at least one of them shoots is 1 - (1 - 1 /
 // 4096)^64 = 1.55% Keep in mind that we do this every frame.
@@ -72,9 +81,6 @@ constexpr GameTypes::Probability ENEMY_SHOOT_CHANCE = 4096;
 constexpr GameTypes::Probability ENEMY_SHOOT_CHANCE_INCREASE = 64;
 constexpr GameTypes::Probability ENEMY_SHOOT_CHANCE_MIN = 1024;
 constexpr GameTypes::Duration POWERUP_DURATION = 512;
-constexpr GameTypes::Coordinate SCREEN_HEIGHT = 180;
-constexpr GameTypes::Coordinate WINDOW_HEIGHT = 200;
-constexpr GameTypes::Coordinate SCREEN_WIDTH = 320;
 // The UFO will appear after this number of frames.
 constexpr GameTypes::Duration UFO_TIMER_MAX = 1024;
 constexpr GameTypes::Duration UFO_TIMER_MIN = 768;
@@ -110,10 +116,10 @@ constexpr float BANNER_HEIGHT = static_cast<float>(Int::BANNER_HEIGHT);
 constexpr float BANNER_PADDING = static_cast<float>(Int::BANNER_PADDING);
 
 // Common position fractions (actually used in code)
-constexpr float HALF = 0.5F;
 constexpr float EIGHTH = 0.125F;
-constexpr float THREE_EIGHTHS = 0.375F;
 constexpr float QUARTER = 0.25F;
+constexpr float THREE_EIGHTHS = 0.375F;
+constexpr float HALF = 0.5F;
 constexpr float THREE_QUARTERS = 0.75F;
 } // namespace GlobalConstant
 
