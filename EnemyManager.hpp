@@ -1,5 +1,4 @@
 #pragma once
-#include "Random.hpp"
 #include <vector>
 
 // Project headers
@@ -19,7 +18,7 @@ class EnemyManager
 
     void draw(raylib::DrawSession &ds) const;
     void reset(GameTypes::Level i_level);
-  void update();
+    void update();
 
     auto get_enemy_bullets() noexcept -> std::vector<Bullet> &;
     auto get_enemies() noexcept -> std::vector<Enemy> &;
@@ -30,7 +29,7 @@ class EnemyManager
     // Pause timer
     int _move_timer{0};
 
-  // Uses XOSHIRO random number generator via Random utility.
+    // Uses XOSHIRO random number generator via Random utility.
     std::uniform_int_distribution<GameTypes::Probability> _shoot_distribution;
     std::vector<Animation> _enemy_animations;
     std::vector<Bullet> _enemy_bullets;

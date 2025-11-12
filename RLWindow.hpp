@@ -2,12 +2,14 @@
 #include <cstdint>
 #include <string>
 
+#include <raylib.h>
+
 namespace raylib
 {
 class Window
 {
   public:
-    Window(uint16_t width, uint16_t height, uint16_t fps, const std::string &title = "raylib::Window");
+    Window(uint16_t width, uint16_t height, uint16_t fps, const std::string &title = "raylib::Window", const std::string &icon = "");
     Window() = delete;
     ~Window();
 
@@ -17,6 +19,9 @@ class Window
     auto operator=(Window &b) -> Window & = delete;
     auto operator=(Window &&b) -> Window & = delete;
 
-    [[nodiscard]] auto ShouldClose() const noexcept -> bool;
+    [[nodiscard]] static auto ShouldClose() noexcept -> bool;
+
+  private:
+    Image imageIcon;
 };
 } // namespace raylib

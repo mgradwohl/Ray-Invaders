@@ -1,7 +1,8 @@
 #pragma once
+#include <cstdint>
 #include <raylib.h>
 
-enum class HitSubject
+enum class HitSubject : std::uint8_t
 {
     Enemy,
     Player,
@@ -9,7 +10,7 @@ enum class HitSubject
     Base
 };
 
-enum class HitOutcome
+enum class HitOutcome : std::uint8_t
 {
     NonFatal,
     Destroyed

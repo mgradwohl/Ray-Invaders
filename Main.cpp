@@ -36,7 +36,7 @@ auto main() -> int
     Random::seed(std::chrono::system_clock::now().time_since_epoch().count());
 
     raylib::Window const window(GlobalConstant::Int::SCREEN_WIDTH * GlobalConstant::Int::SCREEN_RESIZE,
-                                GlobalConstant::Int::WINDOW_HEIGHT * GlobalConstant::Int::SCREEN_RESIZE, 60, "Ray Invaders");
+                                GlobalConstant::Int::WINDOW_HEIGHT * GlobalConstant::Int::SCREEN_RESIZE, 60, "Ray Invaders", "Resources/Images/RayInvadersIcon.png");
 
     Background background("Resources/Images/BigGalaxy.png");
     EnemyManager enemy_manager;

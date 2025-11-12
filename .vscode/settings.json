@@ -19,5 +19,10 @@
         "**/build/**": true
     },
     // Remove C_Cpp.codeAnalysis.* since clangd handles diagnostics
-    "C_Cpp.codeAnalysis.runAutomatically": false
+    "C_Cpp.codeAnalysis.runAutomatically": false,
+    // Clang-Format extension settings
+    "clang-format.style": "file",
+    "clang-format.fallbackStyle": "LLVM",
+    "editor.defaultFormatter": "xaver.clang-format",
+    "editor.formatOnSave": true
 }

@@ -2,8 +2,8 @@
 #include "Ufo.hpp"
 
 // Standard library headers
-#include <algorithm>
 #include "Random.hpp"
+#include <algorithm>
 #include <string>
 
 // Third-party headers
@@ -19,7 +19,8 @@ constexpr float UFO_EXPLOSION_Y_OFFSET = 0.5F;
 constexpr float UFO_EXPLOSION_MAGIC_OFFSET = 0.5F;
 
 Ufo::Ufo()
-    : _y(GlobalConstant::BASE_SIZE), _animation(GlobalConstant::Int::UFO_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/Ufo.png"),
+    : _y(GlobalConstant::BASE_SIZE),
+      _animation(GlobalConstant::Int::UFO_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/Ufo.png"),
       _explosion(GlobalConstant::Int::EXPLOSION_ANIMATION_SPEED, 2 * GlobalConstant::BASE_SIZE, "Resources/Images/ExplosionBig.png"),
       _ufoappearsound("Resources/Sounds/UFO Enter.wav"), _ufodestroysound("Resources/Sounds/UFO Destroy.wav")
 {
@@ -50,7 +51,7 @@ auto Ufo::check_bullet_collision(const Rectangle &i_bullet_hitbox) -> bool
             // Use XOSHIRO for powerup type
             GameTypes::Count powerupIndex = Random::uniform_int(0, GlobalConstant::Int::POWERUP_TYPES - 1);
             auto powerupType = static_cast<PowerUpItem::Type>(powerupIndex);
-            _powerups.emplace_back(_x + (0.5F * GlobalConstant::BASE_SIZE), _y, powerupType);
+            _powerups.emplace_back(_x + (GlobalConstant::HALF * GlobalConstant::BASE_SIZE), _y, powerupType);
 
             return true;
         }
@@ -87,7 +88,7 @@ void Ufo::draw(raylib::DrawSession &ds) const
         _explosion.draw(ds, _explosion_x, _y - (UFO_EXPLOSION_Y_OFFSET * GlobalConstant::BASE_SIZE), GlobalColors::EXPLOSION_ORANGE_RED);
         _explosion.draw(ds, _explosion_x, (_y - (UFO_EXPLOSION_MAGIC_OFFSET * GlobalConstant::BASE_SIZE)),
                         GlobalColors::EXPLOSION_ORANGE_RED);
-        _explosion.draw(ds, _explosion_x, _y - (0.5F * GlobalConstant::BASE_SIZE), GlobalColors::EXPLOSION_ORANGE_RED);
+        _explosion.draw(ds, _explosion_x, _y - (GlobalConstant::HALF * GlobalConstant::BASE_SIZE), GlobalColors::EXPLOSION_ORANGE_RED);
     }
 
     for (const PowerUpItem &powerup : _powerups)
@@ -166,10 +167,11 @@ void Ufo::update()
 
     // Erase-remove idiom: remove dead powerups from the vector
     _powerups.erase(std::remove_if(_powerups.begin(), _powerups.end(),
-                                   [](const PowerUpItem &i_powerup) noexcept {
+                                   [](const PowerUpItem &i_powerup) noexcept
+                                   {
                                        return i_powerup.isdead();
                                    }),
-                     _powerups.end());
+                    _powerups.end());
 }
 
 auto Ufo::get_hitbox() const noexcept -> Rectangle

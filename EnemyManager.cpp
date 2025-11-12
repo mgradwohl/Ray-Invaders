@@ -1,5 +1,6 @@
 // Corresponding header
 #include "EnemyManager.hpp"
+#include "Random.hpp"
 
 // Standard library headers
 #include <algorithm>
@@ -47,9 +48,11 @@ auto EnemyManager::reached_player(float i_player_y) const -> bool
     // Return true if any enemy has crossed the threshold near the player's Y
     // coordinate. Use the C++20 ranges algorithm for clarity.
     // todo this isn't very awesome
-    return std::ranges::any_of(_enemies, [i_player_y](const Enemy &enemy){
-        return enemy.get_y() > i_player_y - (GlobalConstant::HALF * GlobalConstant::BASE_SIZE);
-    });
+    return std::ranges::any_of(_enemies,
+                               [i_player_y](const Enemy &enemy)
+                               {
+                                   return enemy.get_y() > i_player_y - (GlobalConstant::HALF * GlobalConstant::BASE_SIZE);
+                               });
 }
 
 void EnemyManager::draw(raylib::DrawSession &ds) const
@@ -65,7 +68,7 @@ void EnemyManager::draw(raylib::DrawSession &ds) const
         for (std::size_t a = 0; a < tailSize; a++)
         {
             const Vector2 dest{prev_x[a], prev_y[a]}; // prev_x and prev_y are already float
-            // Array index 'a' will be small, implicit conversion is fine here
+                                                      // Array index 'a' will be small, implicit conversion is fine here
             const float sourceX = GlobalConstant::BASE_SIZE * a;
             const Rectangle source{sourceX, 0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
             ds.DrawTexture(_enemy_bullet_sprite.get(), source, dest, GlobalColors::COL_WHITE);
@@ -129,13 +132,13 @@ void EnemyManager::reset(GameTypes::Level i_level)
 
     std::string level_sketch;
     _move_pause = std::max<int>(GlobalConstant::Int::ENEMY_MOVE_PAUSE_START_MIN,
-                                  GlobalConstant::Int::ENEMY_MOVE_PAUSE_START - (GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * i_level));
+                                GlobalConstant::Int::ENEMY_MOVE_PAUSE_START - (GlobalConstant::Int::ENEMY_MOVE_PAUSE_DECREASE * i_level));
     _move_timer = _move_pause;
 
     _shoot_distribution = std::uniform_int_distribution<GameTypes::Probability>(
-        0,
-        std::max<GameTypes::Probability>(GlobalConstant::Int::ENEMY_SHOOT_CHANCE_MIN,
-        GlobalConstant::Int::ENEMY_SHOOT_CHANCE - (GlobalConstant::Int::ENEMY_SHOOT_CHANCE_INCREASE * i_level)));
+        0, std::max<GameTypes::Probability>(GlobalConstant::Int::ENEMY_SHOOT_CHANCE_MIN,
+                                            GlobalConstant::Int::ENEMY_SHOOT_CHANCE -
+                                                (GlobalConstant::Int::ENEMY_SHOOT_CHANCE_INCREASE * i_level)));
 
     for (Animation &enemy_animation : _enemy_animations)
     {

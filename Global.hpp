@@ -30,17 +30,10 @@ namespace GlobalConstant
 // SECTION: Integer constants
 namespace Int
 {
-// I didn't wanna make PLAYER_SIZE, ENEMY_SIZE, BULLET_SIZE, so I just defined the base size.
 constexpr GameTypes::Size BASE_SIZE = 16;
 constexpr GameTypes::Speed ENEMY_BULLET_SPEED = 2;
-// I explained this in "Enemy.hpp". AND I DON'T LIKE TO REPEAT MYSELF!
 constexpr GameTypes::Timer ENEMY_HIT_TIMER_DURATION = 2;
-// The more enemies we kill, the faster they become.
 constexpr GameTypes::Timer ENEMY_MOVE_PAUSE_DECREASE = 1;
-// Setting this to 1 or even 0 results in terrible enemy movement. So don't do it.
-//...
-//...
-// You're gonna do it anyway, aren't you?
 constexpr GameTypes::Timer ENEMY_MOVE_PAUSE_MIN = 3;
 //"Why not 64?" - you may ask. Well, it's because if we set it to 0, they will still have 1 frame
 // pause. So 63 + 1 = 64.
@@ -65,8 +58,8 @@ constexpr GameTypes::Speed UFO_ANIMATION_SPEED = 8;
 constexpr GameTypes::Speed UFO_MOVE_SPEED = 1;
 constexpr GameTypes::Count BASE_COUNT = 4;
 constexpr GameTypes::Size BASE_WIDTH = 30;
-    // Initial number of player lives at the start of a new game
-    constexpr int INITIAL_LIVES = 3;
+// Initial number of player lives at the start of a new game
+constexpr int INITIAL_LIVES = 3;
 constexpr GameTypes::Size FONT_SIZE_BIG = 32;
 // Reserved UI strip at top of window for banner (logical pixels)
 constexpr GameTypes::Size BANNER_HEIGHT = 20;
@@ -128,7 +121,7 @@ constexpr float THREE_QUARTERS = 0.75F;
 namespace GlobalColors
 {
 // Helper: return the given color with a different alpha
-inline constexpr Color withAlpha(Color base, unsigned char alpha)
+constexpr auto withAlpha(Color base, unsigned char alpha) -> Color
 {
     return Color{base.r, base.g, base.b, alpha};
 }

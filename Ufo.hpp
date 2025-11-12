@@ -1,5 +1,4 @@
 #pragma once
-#include "Random.hpp"
 
 #include <raylib.h>
 
@@ -12,14 +11,14 @@
 class Ufo
 {
   public:
-  Ufo();
+    Ufo();
 
-  auto check_bullet_collision(const Rectangle &i_bullet_hitbox) -> bool;
+    auto check_bullet_collision(const Rectangle &i_bullet_hitbox) -> bool;
 
     auto check_powerup_collision(const Rectangle &i_player_hitbox) noexcept -> GameTypes::Count;
     void draw(raylib::DrawSession &ds) const;
-  void reset(bool i_dead);
-  void update();
+    void reset(bool i_dead);
+    void update();
 
     [[nodiscard]] auto get_hitbox() const noexcept -> Rectangle;
 

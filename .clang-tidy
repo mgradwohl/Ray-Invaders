@@ -7,6 +7,7 @@ Checks: >
   cppcoreguidelines-*,
   misc-*,
   portability-*
+  ,-bugprone-easily-swappable-parameters
 WarningsAsErrors: ''
 HeaderFilterRegex: '.*\.(h|hpp)$'
 FormatStyle: file

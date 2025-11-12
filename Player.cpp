@@ -2,7 +2,6 @@
 #include "Player.hpp"
 
 // Standard library headers
-#include "Random.hpp"
 
 // Third-party headers
 #include <raylib.h>
@@ -94,8 +93,7 @@ void Player::draw(raylib::DrawSession &ds) const
     {
         Vector2 dest{_x, _y};
         // Using float constants to avoid static_cast
-        const Rectangle source{GlobalConstant::BASE_SIZE * _current_power,
-                               0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
+        const Rectangle source{GlobalConstant::BASE_SIZE * _current_power, 0.0F, GlobalConstant::BASE_SIZE, GlobalConstant::BASE_SIZE};
         ds.DrawTexture(_player_sprite.get(), source, dest, GlobalColors::COL_WHITE);
 
         for (const Bullet &bullet : _bullets)
@@ -135,8 +133,7 @@ void Player::reset()
     _explosion.reset();
 }
 
-void Player::update(std::vector<Bullet> &i_enemy_bullets, std::vector<Enemy> &i_enemies, Ufo &i_ufo,
-                    HitManager &i_hits)
+void Player::update(std::vector<Bullet> &i_enemy_bullets, std::vector<Enemy> &i_enemies, Ufo &i_ufo, HitManager &i_hits)
 {
     if (!_destroyed)
     {
@@ -145,7 +142,7 @@ void Player::update(std::vector<Bullet> &i_enemy_bullets, std::vector<Enemy> &i_
             if (4 == _current_power)
             {
                 // Mirrored controls power-DOWN!
-                _x = std::min(GlobalConstant::PLAYER_MOVE_SPEED + _x, GlobalConstant::SCREEN_WIDTH - 2.0f * GlobalConstant::BASE_SIZE);
+                _x = std::min(GlobalConstant::PLAYER_MOVE_SPEED + _x, GlobalConstant::SCREEN_WIDTH - (2.0F * GlobalConstant::BASE_SIZE));
             }
             else
             {
@@ -162,7 +159,7 @@ void Player::update(std::vector<Bullet> &i_enemy_bullets, std::vector<Enemy> &i_
             }
             else
             {
-                _x = std::min(GlobalConstant::PLAYER_MOVE_SPEED + _x, GlobalConstant::SCREEN_WIDTH - 2.0f * GlobalConstant::BASE_SIZE);
+                _x = std::min(GlobalConstant::PLAYER_MOVE_SPEED + _x, GlobalConstant::SCREEN_WIDTH - (2.0F * GlobalConstant::BASE_SIZE));
             }
         }
 
@@ -326,9 +323,7 @@ void Player::update(std::vector<Bullet> &i_enemy_bullets, std::vector<Enemy> &i_
 auto Player::get_hitbox() const noexcept -> Rectangle
 {
     // Use the fraction constants from the F namespace
-    return Rectangle{_x + (GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE),
-                        _y + (GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE),
+    return Rectangle{_x + (GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE), _y + (GlobalConstant::EIGHTH * GlobalConstant::BASE_SIZE),
                      GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE,
                      GlobalConstant::THREE_QUARTERS * GlobalConstant::BASE_SIZE};
 }
-

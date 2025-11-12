@@ -2,6 +2,7 @@
 #include "Bullet.hpp"
 
 // Third-party headers
+#include <ranges>
 #include <raylib.h>
 
 // Project headers
@@ -27,18 +28,17 @@ void Bullet::update() noexcept
 {
     if (!_dead)
     {
-        // I hate using floats, so we'll change real_x and _y and work only with integer values.
         _real_x += _step_x;
         _real_y += _step_y;
 
-        for (GameTypes::Count a = 0; a < _previous_x.size() - 1; a++)
-        {
-            _previous_x[a] = _previous_x[1 + a];
-            _previous_y[a] = _previous_y[1 + a];
-        }
+        // Shift previous positions left by one, discarding the oldest
+        // Use std::ranges::views::drop for clarity and safety
+        std::ranges::copy(_previous_x | std::ranges::views::drop(1), _previous_x.begin());
+        std::ranges::copy(_previous_y | std::ranges::views::drop(1), _previous_y.begin());
 
-        _previous_x[_previous_x.size() - 1] = _x;
-        _previous_y[_previous_y.size() - 1] = _y;
+        // Store the current position as the newest history entry
+        _previous_x.back() = _x;
+        _previous_y.back() = _y;
 
         _x = _real_x; // no need for cast, both are float now
         _y = _real_y; // no need for cast, both are float now
