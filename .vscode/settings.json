@@ -6,9 +6,9 @@
     // Use clangd exclusively; disable MS C/C++ IntelliSense
     "C_Cpp.intelliSenseEngine": "disabled",
     "C_Cpp.autocomplete": "disabled",
-    // Point clangd at the canonical release compile commands (symlink also exists at repo root)
+    // Point clangd at the root compile_commands.json (copied from active preset)
     "clangd.arguments": [
-        "--compile-commands-dir=build/ninja-release",
+        "--compile-commands-dir=.",
         "--background-index",
         "--clang-tidy",
         "--header-insertion=never"

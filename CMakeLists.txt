@@ -197,6 +197,17 @@ else()
     target_compile_options(Ray-Invaders PRIVATE $<$<CONFIG:Release>:-O3>)
 endif()
 
+# Copy compile_commands.json to project root for clangd to find consistently
+# This ensures clangd always uses the most recently configured preset's include paths
+if (CMAKE_EXPORT_COMPILE_COMMANDS)
+    add_custom_command(TARGET Ray-Invaders POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_BINARY_DIR}/compile_commands.json"
+            "${CMAKE_SOURCE_DIR}/compile_commands.json"
+        COMMENT "Copying compile_commands.json to project root for clangd"
+    )
+endif()
+
 # Resources: copy Resources/ into the runtime directory after build so the exe can find them
 add_custom_command(TARGET Ray-Invaders POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
