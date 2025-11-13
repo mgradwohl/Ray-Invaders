@@ -88,15 +88,13 @@ if(_xoshiro_header_dir)
     target_include_directories(Ray-Invaders PRIVATE "${_xoshiro_header_dir}/include")
 endif()
 
-# On Windows, prefer lld-link when using LLVM's clang (matches the project's
-# historical build script which passed -fuse-ld=lld-link). Do NOT explicitly
-# re-link common system libs here; the raylib target (or the system) already
+# On Windows, force lld as the linker for all compilers (MSVC, Clang, etc.)
+# This provides faster linking and better compatibility across toolchains.
+# Do NOT explicitly re-link common system libs here; the raylib target (or the system) already
 # declares the necessary system dependencies and duplicating them can lead
 # to symbol replacement / duplicate issues with the linker.
 if (WIN32)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
-        target_compile_options(Ray-Invaders PRIVATE "-fuse-ld=lld-link")
-    endif()
+    target_link_options(Ray-Invaders PRIVATE "-fuse-ld=lld")
 endif()
 
 
@@ -118,9 +116,9 @@ if (raylib_FOUND)
     endif()
 endif()
 
-if (WIN32 OR NOT _raylib_target_linked)
+if (NOT _raylib_target_linked)
     include(FetchContent)
-    set(RAYLIB_GIT_TAG "master" CACHE STRING "Tag or branch of raylib to fetch when not found")
+    set(RAYLIB_GIT_TAG "5.5" CACHE STRING "Tag or branch of raylib to fetch when not found")
     message(STATUS "Acquiring raylib via FetchContent (GIT_TAG=${RAYLIB_GIT_TAG})")
     FetchContent_Declare(
         raylib
@@ -128,6 +126,8 @@ if (WIN32 OR NOT _raylib_target_linked)
         GIT_TAG ${RAYLIB_GIT_TAG}
     )
     FetchContent_MakeAvailable(raylib)
+
+    
 
     if (TARGET raylib)
         message(STATUS "Using fetched raylib target")
@@ -160,19 +160,30 @@ if (ENABLE_NATIVE)
     endif()
 endif()
 
-if (ENABLE_LTO)
-    include(CheckIPOSupported)
-    check_ipo_supported(RESULT ipo_supported OUTPUT ipo_error)
-    if (ipo_supported)
-        set_target_properties(Ray-Invaders PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+if (ENABLE_LTO AND CMAKE_BUILD_TYPE STREQUAL "Release")
+    # Direct LTO implementation that bypasses CMake's unreliable check_ipo_supported()
+    # which often fails to detect LTO support for clang with lld linker.
+    # Only enable LTO for Release builds to avoid debug performance issues.
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        # Enable LTO via compiler flags for Clang
+        target_compile_options(Ray-Invaders PRIVATE -flto)
+        target_link_options(Ray-Invaders PRIVATE -flto)
+        message(STATUS "Enabled LTO via direct compiler flags for Clang (Release build)")
+    elseif (MSVC)
+        # Use CMake's built-in IPO for MSVC which is more reliable
+        include(CheckIPOSupported)
+        check_ipo_supported(RESULT ipo_supported OUTPUT ipo_error)
+        if (ipo_supported)
+            set_target_properties(Ray-Invaders PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+            message(STATUS "Enabled LTO via CMake IPO for MSVC (Release build)")
+        else()
+            message(STATUS "LTO requested but not supported for MSVC: ${ipo_error}")
+        endif()
     else()
-        # Don't escalate this to a CMake WARNING — some toolchains (notably
-        # certain MSVC/clang-cl combinations) don't report IPO support via
-        # CMake's check yet still compile fine without INTERPROCEDURAL_OPTIMIZATION.
-        # Present this as an informational status so configure output is quieter
-        # while still documenting the reason we didn't enable LTO.
-        message(STATUS "LTO requested but not supported: ${ipo_error}. Continuing without LTO.")
+        message(STATUS "LTO requested but compiler ${CMAKE_CXX_COMPILER_ID} not supported")
     endif()
+elseif (ENABLE_LTO)
+    message(STATUS "LTO requested but skipped for ${CMAKE_BUILD_TYPE} build (LTO only enabled for Release)")
 endif()
 
 # Explicit, unambiguous optimization level for Release/optimized builds.

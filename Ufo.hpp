@@ -2,6 +2,9 @@
 
 #include <raylib.h>
 
+#include <random>
+#include <vector>
+
 #include "Animation.hpp"
 #include "Global.hpp"
 #include "PowerUpItem.hpp"
@@ -31,10 +34,10 @@ class Ufo
     float _x{0.0F};
     float _y{0.0F};
 
-    std::uniform_int_distribution<int> _powerup_distribution; // Changed from GameTypes::Count to int for Clang compatibility
+  std::uniform_int_distribution<int> _powerup_distribution; // Changed from GameTypes::Count to int for Clang compatibility
     // The UFO can appear after 12 seconds. Or 16 seconds. Or 14.652 seconds. We don't know for
     // sure.
-    std::uniform_int_distribution<int> _timer_distribution; // Changed from GameTypes::Duration to int for Clang compatibility
+  std::uniform_int_distribution<int> _timer_distribution; // Changed from GameTypes::Duration to int for Clang compatibility
     std::vector<Animation> _powerup_animations;
     // Yes, the UFO is responsible for the powerups too.
     std::vector<PowerUpItem> _powerups;
