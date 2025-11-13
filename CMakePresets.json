@@ -82,7 +82,8 @@
   "CMAKE_BUILD_TYPE": "Debug",
   "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
         "RAYLIB_ROOT": "${sourceDir}/build/vs-clangpp/debug/_deps/raylib-src",
-        "ENABLE_CLANG_TIDY": "OFF"
+        "ENABLE_CLANG_TIDY": "OFF",
+        "CMAKE_CXX_FLAGS": "-target x86_64-pc-windows-msvc"
       }
     }
     ,
@@ -97,7 +98,8 @@
         "RAYLIB_ROOT": "${sourceDir}/build/vs-clangpp/release/_deps/raylib-src",
         "ENABLE_LTO": "ON",
         "ENABLE_NATIVE": "OFF",
-        "ENABLE_CLANG_TIDY": "OFF"
+        "ENABLE_CLANG_TIDY": "OFF",
+        "CMAKE_CXX_FLAGS": "-target x86_64-pc-windows-msvc"
       }
     },
     {
@@ -111,7 +113,8 @@
         "RAYLIB_ROOT": "${sourceDir}/build/vs-clangpp/optimized/_deps/raylib-src",
         "ENABLE_LTO": "ON",
         "ENABLE_NATIVE": "ON",
-        "ENABLE_CLANG_TIDY": "OFF"
+        "ENABLE_CLANG_TIDY": "OFF",
+        "CMAKE_CXX_FLAGS": "-target x86_64-pc-windows-msvc"
       }
     }
   ],
