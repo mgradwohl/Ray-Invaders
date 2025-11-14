@@ -380,3 +380,4 @@ core
 # macOS
 .DS_Store
 *.dSYM/
+compile_commands.json
