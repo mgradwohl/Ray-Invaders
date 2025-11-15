@@ -63,7 +63,7 @@ This repository provides VS Code configuration under `.vscode/`.
 Linux workflow recommendations:
 - Use the provided VS Code tasks which call CMake with presets (`tasks.json`).
 - Debug using the CodeLLDB adapter (launch configurations use `type: "lldb"`).
-- Use `clangd` for language services. A workspace-level symlink `compile_commands.json -> build/ninja-debug-clang/compile_commands.json` is recommended (or set `clangd.arguments` in `.vscode/settings.json`).
+- Use `clangd` for language services. The file `compile_commands.json` is automatically copied to the project root by CMake (see `CMakeLists.txt`), so no symlink is needed. You can also set `clangd.arguments` in `.vscode/settings.json` if you use a custom build directory.
 
 Windows workflow:
 - Existing Windows tasks and launch configurations are left intact for MSVC users.
