@@ -67,6 +67,8 @@ Linux workflow recommendations:
 
 Windows workflow:
 - Existing Windows tasks and launch configurations are left intact for MSVC users.
+- CMake builds do not work in Visual Studio's latest insider preivew yet because CMake does not recognize it.
+- Windows builds do work with VSCode on Windows
 
 ## Project Structure
 
