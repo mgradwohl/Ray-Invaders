@@ -3,9 +3,16 @@
         "optional": "cpp",
         "cmath": "cpp"
     },
+    // Optional: suppress noisy build tree watching
+    "files.watcherExclude": {
+        "**/build/**": true
+    },
+
     // Use clangd exclusively; disable MS C/C++ IntelliSense
     "C_Cpp.intelliSenseEngine": "disabled",
     "C_Cpp.autocomplete": "disabled",
+    "C_Cpp.codeAnalysis.runAutomatically": false,
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     // Point clangd at the root compile_commands.json (copied from active preset)
     "clangd.arguments": [
         "--compile-commands-dir=.",
@@ -13,16 +20,23 @@
         "--clang-tidy",
         "--header-insertion=never"
     ],
-    "clangd.fallbackFlags": ["-std=c++23"],
-    // Optional: suppress noisy build tree watching
-    "files.watcherExclude": {
-        "**/build/**": true
-    },
-    // Remove C_Cpp.codeAnalysis.* since clangd handles diagnostics
-    "C_Cpp.codeAnalysis.runAutomatically": false,
+    "clangd.fallbackFlags": [
+        "-std=c++23"
+    ],
+    "clangd.checkUpdates": true,
+
     // Clang-Format extension settings
     "clang-format.style": "file",
     "clang-format.fallbackStyle": "LLVM",
+
+    "editor.formatOnSave": true,
+    "editor.fontVariations": true,
+    "editor.fontLigatures": true,
+    "editor.fontFamily": "FiraCode Nerd Font, Fira Code, monospace",
     "editor.defaultFormatter": "xaver.clang-format",
-    "editor.formatOnSave": true
+
+    "workbench.colorTheme": "Default Light+",
+    "terminal.integrated.fontFamily": "FiraCode Nerd Font",
+    "git.suggestSmartCommit": false,
+    "notebook.defaultFormatter": "xaver.clang-format"
 }
