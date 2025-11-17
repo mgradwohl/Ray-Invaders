@@ -83,6 +83,12 @@ void DrawSession::DrawText(const std::string &text, const int x, const int y, co
     ::DrawText(text.c_str(), x, y, fontSize, color);
 }
 
+void DrawSession::DrawTextEx(const Font &font, const std::string &text, int x, int y, int fontSize, float spacing,
+                             Color color) const noexcept
+{
+    ::DrawTextEx(font, text.c_str(), Vector2{static_cast<float>(x), static_cast<float>(y)}, static_cast<float>(fontSize), spacing, color);
+}
+
 void DrawSession::DrawTextCentered(const std::string &text, const int x, const int y, const int fontSize, const Color color) noexcept
 {
     const int textWidth = MeasureText(text.c_str(), fontSize);

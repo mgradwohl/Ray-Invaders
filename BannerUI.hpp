@@ -36,4 +36,5 @@ class BannerUI
     raylib::Texture2DFile _life_icon;
     const PowerUpManager *_pum{nullptr};
     int _level{-1};
+    Font _font{};
 };

@@ -18,6 +18,7 @@ BannerUI::BannerUI(const PowerUpManager *pum) noexcept : _pum(pum)
     // Reuse the player sprite as a small life icon (no extra asset required)
     _life_icon.load("Resources/Images/Player.png");
     _life_icon.setPointFiltering();
+    _font = LoadFontEx("Resources/Fonts/abduction2002.ttf", 8, nullptr, 0);
 }
 
 void BannerUI::draw(raylib::DrawSession &ds, const Player &player) const noexcept
@@ -52,6 +53,8 @@ void BannerUI::draw(raylib::DrawSession &ds, const Player &player) const noexcep
         const float drawX = GlobalConstant::BANNER_PADDING;
         const float drawY = (bannerHeightLogical - static_cast<float>(fontSize)) * 0.5F;
         ds.DrawText(text, static_cast<int>(drawX), static_cast<int>(drawY), fontSize, GlobalColors::COL_WHITE);
+
+        // ds.DrawTextEx(_font, text, static_cast<int>(drawX), static_cast<int>(drawY), 8, 2, GlobalColors::COL_WHITE);
     }
 
     // Lives icons (draw to the right of the level text). We'll draw up to a reasonable
@@ -75,26 +78,26 @@ void BannerUI::draw(raylib::DrawSession &ds, const Player &player) const noexcep
 
         // Draw icons scaled to about 75% of banner height
         const Texture2D &iconTex = _life_icon.get();
-            if (iconTex.id > 0)
+        if (iconTex.id > 0)
+        {
+            // Player.png contains multiple frames; use the first frame (BASE_SIZE x BASE_SIZE)
+            const float srcW = GlobalConstant::BASE_SIZE;
+            const float srcH = GlobalConstant::BASE_SIZE;
+
+            const float iconDstH = bannerHeightLogical * GlobalConstant::HALF;
+            const float iconDstW = iconDstH; // square frame
+
+            float x = iconsStartX;
+            const float y = (bannerHeightLogical - iconDstH) * GlobalConstant::HALF;
+
+            for (int i = 0; i < iconsToDraw; ++i)
             {
-                // Player.png contains multiple frames; use the first frame (BASE_SIZE x BASE_SIZE)
-                const float srcW = GlobalConstant::BASE_SIZE;
-                const float srcH = GlobalConstant::BASE_SIZE;
-
-                const float iconDstH = bannerHeightLogical * GlobalConstant::HALF;
-                const float iconDstW = iconDstH; // square frame
-
-                float x = iconsStartX;
-                const float y = (bannerHeightLogical - iconDstH) * GlobalConstant::HALF;
-
-                for (int i = 0; i < iconsToDraw; ++i)
-                {
-                    const Rectangle src{0.0F, 0.0F, srcW, srcH};
-                    const Rectangle dst{x, y, iconDstW, iconDstH};
-                    ds.DrawTexturePro(_life_icon.get(), src, dst, Vector2{0.0F, 0.0F}, 1.0F, GlobalColors::COL_WHITE);
-                    x += iconDstW + 2.0F; // small spacing between icons
-                }
+                const Rectangle src{0.0F, 0.0F, srcW, srcH};
+                const Rectangle dst{x, y, iconDstW, iconDstH};
+                ds.DrawTexturePro(_life_icon.get(), src, dst, Vector2{0.0F, 0.0F}, 1.0F, GlobalColors::COL_WHITE);
+                x += iconDstW + 2.0F; // small spacing between icons
             }
+        }
     }
 
     // Power bar (right) via manager
